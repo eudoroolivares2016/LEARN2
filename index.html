@@ -1,0 +1,119 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+  <meta charset="utf-8">
+  <title>Learn2</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="">
+  <meta property="og:type" content="">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="">
+
+  <link rel="apple-touch-icon" href="icon.png">
+  <!-- Place favicon.ico in the root directory -->
+
+  <link rel="stylesheet" href="css/bootstrap.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <meta name="theme-color" content="#fafafa">
+</head>
+
+<body>
+  <div class="container-fluid main-header">
+    Learn2
+  </div>
+  <div class="container-fluid">
+    <div class="row centered-text">
+      <div class="col-sm-6 map-section extension padding-main">
+        <img src="resources/Vote_20190331_0.5sigma_Day7.png" class="img-fluid padding-image" alt="Responsive image">
+      </div>
+      <div class="col-sm-6 control-panel-section">
+        <div class="control-panel">
+          <div class="control-panel-title">
+            Control Panel
+          </div>
+          <div class="control-panel-settings">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-sm-5 map-section extension padding-main control-panel-label">
+                  Initialization:
+                </div>
+                <div class="col-sm-7 map-section extension padding-main">
+                  <button class="btn btn-secondary" id="init-down1">&#8592;</button>
+                  <button class="btn btn-primary" id="init1">2001 Jan 01</button>
+                  <button class="btn btn-secondary" id="init-up1">&#8594;</button>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-5 map-section extension padding-main control-panel-label">
+                  Forecast Day:
+                </div>
+                <div class="col-sm-7 map-section extension padding-main">
+                  <button class="btn btn-secondary" id="forecast-down">&#8592;</button>
+                  <button class="btn btn-primary button-no-pointer" id="forecast-day">1</button>
+                  <button class="btn btn-secondary" id="forecast-up">&#8594;</button>
+                  <div id="day-selection">
+                    <div class="row">
+                      <div class="col">
+                        <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(1)">1</button>
+                        <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(2)">2</button>
+                        <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(3)">3</button>
+                        <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(4)">4</button>
+                        <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(5)">5</button>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(6)">6</button>
+                        <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(7)">7</button>
+                        <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(8)">8</button>
+                        <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(9)">9</button>
+                        <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(10)">10</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-5 map-section extension padding-main control-panel-label">
+                  Model:
+                </div>
+                <div class="col-sm-7 map-section extension padding-main">
+                  <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" id="button-model-dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Dense
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" id="option-dense">Dense</a></li>
+                      <li><a class="dropdown-item" id="option-cluster">Cluster</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-5 map-section extension padding-main control-panel-label">
+                  Threshold:
+                </div>
+                <div class="col-sm-7 map-section extension padding-main">
+                  Mean +
+                  <button class="btn btn-secondary" id="threshold-down">&#8592;</button>
+                  <div class="btn btn-primary button-no-pointer" id="threshold">0.5</div>
+                  <button class="btn btn-secondary" id="threshold-up">&#8594;</button>
+                  &sigma;
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="extension"></div>
+  </div>
+  <script src="js/bootstrap.bundle.js"></script>
+  <script src="js/main.js"></script>
+</body>
+
+</html>

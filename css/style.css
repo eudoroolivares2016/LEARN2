@@ -1,0 +1,69 @@
+body {
+    background-color: #40444b;
+    color: white;
+}
+
+.button-no-pointer {
+    cursor: default;
+}
+
+.centered-text {
+    text-align: center;
+    font-size: 24px;
+}
+
+.control-panel {
+    background-color: #212121;
+    border: 5px solid black;
+    border-radius: 25px
+}
+
+.control-panel-section {
+    background-color: #292929;
+    padding: 5%;
+}
+
+.control-panel-settings {
+    padding-bottom: 2%;
+    text-align: left;
+}
+
+.control-panel-label {
+    text-align: right;
+}
+
+.control-panel-title {
+    font-size: 36px;
+    padding: 2%;
+}
+
+#day-selection {
+    display: none;
+}
+
+.extension {
+    padding-bottom: 160px;
+}
+
+.fixed-small {
+    width: 30px;
+}
+
+.main-header {
+    font-size: 48px;
+    text-align: center;
+    background-color: #1c2678;
+    padding: 20px;
+}
+
+.map-section {
+    background-color: #212121;
+}
+
+.padding-image {
+    padding: 15%;
+}
+
+.padding-main {
+    padding: 2%;
+}
