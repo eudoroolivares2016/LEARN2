@@ -23,14 +23,39 @@
 
 <body>
   <div class="container-fluid main-header">
-    Learn2
+    Learn&sup2;
+    <img src="resources/logo.png" class="img-fluid" style="width: 200px" alt="Responsive image">
   </div>
   <div class="container-fluid">
     <div class="row centered-text">
-      <div class="col-sm-6 map-section extension padding-main">
-        <img src="resources/Vote_20190331_0.5sigma_Day7.png" class="img-fluid padding-image" alt="Responsive image">
+      <div class="col-sm-7 map-section extension padding-main">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-sm-6">
+              <div id="main-forecast-label">
+                Extreme Precipitation Forecast:
+                <div id="main-forecast-date">
+                  Jan 01, 2001
+                </div>
+              </div>
+              <img src="resources/Vote_20190331_0.5sigma_Day7.png" class="img-fluid padding-image" alt="Responsive image">
+            </div>
+            <div class="col-sm-5">
+              <div id="lower-mean-label">
+                Average + 0 &sigma;
+              </div>
+              <img src="resources/Vote_20190331_0.5sigma_Day7.png" class="img-fluid padding-image" alt="Responsive image">
+              <br>
+              <div id="upper-mean-label">
+                Average + 1 &sigma;
+              </div>
+              <img src="resources/Vote_20190331_0.5sigma_Day7.png" class="img-fluid padding-image" alt="Responsive image">
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="col-sm-6 control-panel-section">
+
+      <div class="col-sm-5 control-panel-section">
         <div class="control-panel">
           <div class="control-panel-title">
             Control Panel
@@ -42,9 +67,9 @@
                   Initialization:
                 </div>
                 <div class="col-sm-7 map-section extension padding-main">
-                  <button class="btn btn-secondary" id="init-down1">&#8592;</button>
-                  <button class="btn btn-primary" id="init1">2001 Jan 01</button>
-                  <button class="btn btn-secondary" id="init-up1">&#8594;</button>
+                  <button class="btn btn-secondary" id="init-down">&#8592;</button>
+                  <button class="btn btn-primary" id="init">2001 Jan 01</button>
+                  <button class="btn btn-secondary" id="init-up">&#8594;</button>
                 </div>
               </div>
               <div class="row">

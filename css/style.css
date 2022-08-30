@@ -20,7 +20,7 @@ body {
 
 .control-panel-section {
     background-color: #292929;
-    padding: 5%;
+    padding: 3%;
 }
 
 .control-panel-settings {
@@ -50,7 +50,7 @@ body {
 }
 
 .main-header {
-    font-size: 48px;
+    font-size: 96px;
     text-align: center;
     background-color: #1c2678;
     padding: 20px;
@@ -60,8 +60,12 @@ body {
     background-color: #212121;
 }
 
+#main-forecast-date {
+    font-size: 16px;
+}
+
 .padding-image {
-    padding: 15%;
+    padding: 0%;
 }
 
 .padding-main {
