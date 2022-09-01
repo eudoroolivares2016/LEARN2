@@ -24,21 +24,20 @@ function updateModel(type) {
     modelButton.textContent = type;
 }
 
-function updateDay(increment) {
+function updateDay(change) {
+    let dateInitialize = document.getElementById('init');
     let forecastDateLabel = document.getElementById('main-forecast-date');
     let forecast = document.getElementById('forecast-day');
-    let currentDateArr = forecastDateLabel.textContent.split(' ');
-    let currentDate = new Date(currentDateArr[1] + ' ' + currentDateArr[2] + ' ' + currentDateArr[0]);
-    let currentDay = forecast.textContent;
-    if(increment === 'up' && currentDay < 10) {
-        forecast.textContent = (parseInt(currentDay) + 1) + '';
-        currentDate.setDate(currentDate.getDate() + 1);
-    } else if(increment === 'down' && currentDay > 1) {
-        forecast.textContent = (parseInt(currentDay) - 1) + '';
-        currentDate.setDate(currentDate.getDate() - 1);
+    let currentDateArr = dateInitialize.textContent.split(' ');
+    let currentDate = new Date(`${currentDateArr[1]} ${currentDateArr[2]} ${currentDateArr[0]}`);
+    let currentDay = parseInt(forecast.textContent);
+    if(currentDay + change >= 1 && currentDay + change <= 10) {
+        let dayOffset = currentDay + change;
+        forecast.textContent = `${dayOffset}`;
+        currentDate.setDate(currentDate.getDate() + dayOffset - 1);
+        let newDateArr = currentDate.toDateString().split(' ');
+        forecastDateLabel.textContent = `${newDateArr[1]} ${newDateArr[2]}, ${newDateArr[3]}`;
     }
-    let newDateArr = currentDate.toDateString().split(' ');
-    //forecastDateLabel.textContent = newDateArr[1] + ' ' + newDateArr[2] + ', ' + newDateArr[3];
 }
 
 function updateMean(increment) {
@@ -47,13 +46,13 @@ function updateMean(increment) {
     let currentThreshold = threshold.textContent;
     if(increment === 'up' && currentThreshold < 2) {
         currentSigma = (parseFloat(currentThreshold) + .5);
-        threshold.textContent = currentSigma.toFixed(1) + '';
-        meanLabel.textContent = 'Average + ' + currentSigma + ' σ';
+        threshold.textContent = `${currentSigma.toFixed(1)}`;
+        meanLabel.textContent = `Average + ${currentSigma} σ`;
         updateThresholdImage();
     } else if(increment === 'down' && currentThreshold > 0) {
         currentSigma = (parseFloat(currentThreshold) - .5);
-        threshold.textContent = currentSigma.toFixed(1) + '';
-        meanLabel.textContent = 'Average + ' + currentSigma + ' σ';
+        threshold.textContent = `${currentSigma.toFixed(1)}`;
+        meanLabel.textContent = `Average + ${currentSigma} σ`;
         updateThresholdImage();
     }
 }
@@ -62,16 +61,17 @@ function updateDate(increment) {
     let currentDateId = document.getElementById('init');
     let forecastDateLabel = document.getElementById('main-forecast-date');
     let currentDateArr = currentDateId.textContent.split(' ');
-    let currentDate = new Date(currentDateArr[1] + ' ' + currentDateArr[2] + ' ' + currentDateArr[0]);
+    let currentDate = new Date(`${currentDateArr[1]} ${currentDateArr[2]} ${currentDateArr[0]}`);
     if(increment === 'up') {
         currentDate.setDate(currentDate.getDate() + 1);
     } else if(increment === 'down') {
         currentDate.setDate(currentDate.getDate() - 1);
     }
     let newDateArr = currentDate.toDateString().split(' ');
-    let newDateLabel = newDateArr[1] + ' ' + newDateArr[2] + ', ' + newDateArr[3];
-    currentDateId.textContent = newDateArr[3] + ' ' + newDateArr[1] + ' ' + newDateArr[2];
+    let newDateLabel = `${newDateArr[1]} ${newDateArr[2]}, ${newDateArr[3]}`;
+    currentDateId.textContent = `${newDateArr[3]} ${newDateArr[1]} ${newDateArr[2]}`;
     forecastDateLabel.textContent = newDateLabel;
+    updateDay(0);
 }
 
 function updateThresholdImage() {
@@ -135,11 +135,11 @@ document.getElementById('button-low-res').addEventListener('click', function() {
 
 // Increment Buttons
 document.getElementById('forecast-up').addEventListener('click', function() {
-    updateDay('up');
+    updateDay(1);
 });
 
 document.getElementById('forecast-down').addEventListener('click', function() {
-    updateDay('down');
+    updateDay(-1);
 });
 
 document.getElementById('threshold-up').addEventListener('click', function() {
