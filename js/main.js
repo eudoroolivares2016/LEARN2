@@ -12,6 +12,7 @@ function setDay(day) {
     let forecast = document.getElementById('forecast-day');
     forecast.textContent = day;
     toggleDaySelection();
+    updateDay(0, false);
 }
 
 function toggleDaySelection() {
@@ -24,16 +25,19 @@ function updateModel(type) {
     modelButton.textContent = type;
 }
 
-function updateDay(change) {
+function updateDay(delta, modifyForecast) {
+    console.log(delta);
     let dateInitialize = document.getElementById('init');
     let forecastDateLabel = document.getElementById('main-forecast-date');
     let forecast = document.getElementById('forecast-day');
     let currentDateArr = dateInitialize.textContent.split(' ');
     let currentDate = new Date(`${currentDateArr[1]} ${currentDateArr[2]} ${currentDateArr[0]}`);
     let currentDay = parseInt(forecast.textContent);
-    if(currentDay + change >= 1 && currentDay + change <= 10) {
-        let dayOffset = currentDay + change;
-        forecast.textContent = `${dayOffset}`;
+    if(currentDay + delta >= 1 && currentDay + delta <= 10) {
+        let dayOffset = currentDay + delta;
+        if(modifyForecast) {
+            forecast.textContent = `${dayOffset}`;
+        }
         currentDate.setDate(currentDate.getDate() + dayOffset - 1);
         let newDateArr = currentDate.toDateString().split(' ');
         forecastDateLabel.textContent = `${newDateArr[1]} ${newDateArr[2]}, ${newDateArr[3]}`;
@@ -135,11 +139,11 @@ document.getElementById('button-low-res').addEventListener('click', function() {
 
 // Increment Buttons
 document.getElementById('forecast-up').addEventListener('click', function() {
-    updateDay(1);
+    updateDay(1, true);
 });
 
 document.getElementById('forecast-down').addEventListener('click', function() {
-    updateDay(-1);
+    updateDay(-1, true);
 });
 
 document.getElementById('threshold-up').addEventListener('click', function() {
