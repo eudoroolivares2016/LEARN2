@@ -1,2 +1,2 @@
 # Learn2
-Front-end for the Learn2 real-time rainfall forecaster
+Front-end for the LEARN2 real-time rainfall forecaster
