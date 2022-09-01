@@ -1,3 +1,9 @@
+let currentResolution = 'high';
+let currentSigma = .5;
+const rootDirectory = 'resources/'
+const sigmaThresholdSuffix = '_sigma_threshold.png';
+const highResPrefix = 'High_res_'
+
 function log(msg) {
     console.log(msg);
 }
@@ -37,16 +43,18 @@ function updateDay(increment) {
 
 function updateMean(increment) {
     let threshold = document.getElementById('threshold');
-    //let lowerMeanLabel = document.getElementById('lower-mean-label');
-    let upperMeanLabel = document.getElementById('upper-mean-label');
+    let meanLabel = document.getElementById('mean-label');
     let currentThreshold = threshold.textContent;
-    if(increment === 'up' && currentThreshold < 2.5) {
-        threshold.textContent = (parseFloat(currentThreshold) + .5).toFixed(1) + '';
-        upperMeanLabel.textContent = 'Average + ' + (2 * (parseFloat(currentThreshold) + .5)) + ' σ';
-
-    } else if(increment === 'down' && currentThreshold > .5) {
-        threshold.textContent = (parseFloat(currentThreshold) - .5).toFixed(1) + '';
-        upperMeanLabel.textContent = 'Average + ' + (2 * (parseFloat(currentThreshold) - .5)) + ' σ';
+    if(increment === 'up' && currentThreshold < 2) {
+        currentSigma = (parseFloat(currentThreshold) + .5);
+        threshold.textContent = currentSigma.toFixed(1) + '';
+        meanLabel.textContent = 'Average + ' + currentSigma + ' σ';
+        updateThresholdImage();
+    } else if(increment === 'down' && currentThreshold > 0) {
+        currentSigma = (parseFloat(currentThreshold) - .5);
+        threshold.textContent = currentSigma.toFixed(1) + '';
+        meanLabel.textContent = 'Average + ' + currentSigma + ' σ';
+        updateThresholdImage();
     }
 }
 
@@ -62,9 +70,40 @@ function updateDate(increment) {
     }
     let newDateArr = currentDate.toDateString().split(' ');
     let newDateLabel = newDateArr[1] + ' ' + newDateArr[2] + ', ' + newDateArr[3];
-    let newDate = newDateArr[3] + ' ' + newDateArr[1] + ' ' + newDateArr[2];
-    currentDateId.textContent = newDate;
+    currentDateId.textContent = newDateArr[3] + ' ' + newDateArr[1] + ' ' + newDateArr[2];
     forecastDateLabel.textContent = newDateLabel;
+}
+
+function updateThresholdImage() {
+    let thresholdImage = document.getElementById('threshold-image');
+    let newURL = 'resource/';
+    if(currentResolution === 'high') {
+        newURL = rootDirectory + highResPrefix + currentSigma + sigmaThresholdSuffix;
+    } else {
+        newURL = rootDirectory + currentSigma + sigmaThresholdSuffix;
+    }
+    thresholdImage.src = newURL;
+}
+
+function updateResolution(quality) {
+    let buttonHighRes = document.getElementById('button-high-res');
+    let buttonLowRes = document.getElementById('button-low-res');
+    if(quality === 'high' && currentResolution === 'low') {
+        currentResolution = 'high';
+        buttonHighRes.style.fontWeight = 'bold';
+        buttonLowRes.style.fontWeight = 'normal';
+        buttonHighRes.style.backgroundColor = '#0d6efd';
+        buttonLowRes.style.backgroundColor = '#212121';
+        updateThresholdImage()
+    } else if(quality === 'low' && currentResolution === 'high') {
+        currentResolution = 'low';
+        buttonLowRes.style.fontWeight = 'bold';
+        buttonHighRes.style.fontWeight = 'normal';
+        buttonLowRes.style.backgroundColor = '#0d6efd';
+        buttonHighRes.style.backgroundColor = '#212121';
+        updateThresholdImage()
+    }
+
 }
 
 // Day Selection
@@ -77,8 +116,21 @@ document.getElementById('option-dense').addEventListener('click', function() {
     updateModel('Dense');
 });
 
-document.getElementById('option-cluster').addEventListener('click', function() {
-    updateModel('Cluster');
+document.getElementById('option-convolutional').addEventListener('click', function() {
+    updateModel('Convolutional');
+});
+
+document.getElementById('option-voting').addEventListener('click', function() {
+    updateModel('Voting');
+});
+
+// Resolution Selection
+document.getElementById('button-high-res').addEventListener('click', function() {
+    updateResolution('high');
+});
+
+document.getElementById('button-low-res').addEventListener('click', function() {
+    updateResolution('low');
 });
 
 // Increment Buttons

@@ -23,7 +23,7 @@
 
 <body>
   <div class="container-fluid main-header">
-    Learn&sup2;
+    LEARN&sup2;
     <img src="resources/logo.png" class="img-fluid" style="width: 200px" alt="Responsive image">
   </div>
   <div class="container-fluid">
@@ -31,25 +31,21 @@
       <div class="col-sm-7 map-section extension padding-main">
         <div class="container-fluid">
           <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-7">
               <div id="main-forecast-label">
                 Extreme Precipitation Forecast:
                 <div id="main-forecast-date">
                   Jan 01, 2001
                 </div>
               </div>
-              <img src="resources/Vote_20190331_0.5sigma_Day7.png" class="img-fluid padding-image" alt="Responsive image">
+              <img id="forecast-image" src="resources/Vote_20190331_0.5sigma_Day7.png" class="img-fluid padding-image" alt="Responsive image padding-image">
             </div>
             <div class="col-sm-5">
-              <div id="lower-mean-label">
-                Average + 0 &sigma;
-              </div>
-              <img src="resources/Vote_20190331_0.5sigma_Day7.png" class="img-fluid padding-image" alt="Responsive image">
               <br>
-              <div id="upper-mean-label">
-                Average + 1 &sigma;
+              <div id="mean-label">
+                Average + 0.5 &sigma;
               </div>
-              <img src="resources/Vote_20190331_0.5sigma_Day7.png" class="img-fluid padding-image" alt="Responsive image">
+              <img id="threshold-image" src="resources/High_res_0.5_sigma_threshold.png" class="img-fluid padding-image" alt="Responsive image padding-image">
             </div>
           </div>
         </div>
@@ -113,7 +109,8 @@
                     </button>
                     <ul class="dropdown-menu">
                       <li><a class="dropdown-item" id="option-dense">Dense</a></li>
-                      <li><a class="dropdown-item" id="option-cluster">Cluster</a></li>
+                      <li><a class="dropdown-item" id="option-convolutional">Convolutional</a></li>
+                      <li><a class="dropdown-item" id="option-voting">Voting</a></li>
                     </ul>
                   </div>
                 </div>
@@ -128,6 +125,15 @@
                   <div class="btn btn-primary button-no-pointer" id="threshold">0.5</div>
                   <button class="btn btn-secondary" id="threshold-up">&#8594;</button>
                   &sigma;
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-5 map-section extension padding-main control-panel-label">
+                  Resolution:
+                </div>
+                <div class="col-sm-7 map-section extension padding-main">
+                  <div class="btn btn-primary button-resolution" id="button-high-res">High</div>&nbsp;&nbsp;
+                  <div class="btn btn-primary button-resolution" id="button-low-res">Low</div>
                 </div>
               </div>
             </div>
