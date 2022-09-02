@@ -22,126 +22,138 @@
 </head>
 
 <body>
-  <div class="container-fluid main-header">
-    LEARN&sup2;
-    <img src="resources/logo.png" class="img-fluid" style="width: 200px" alt="Responsive image">
-  </div>
-  <div class="container-fluid">
-    <div class="row centered-text">
-      <div class="col-sm-7 map-section extension padding-main">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-sm-7">
-              <div id="main-forecast-label">
-                Extreme Precipitation Forecast:
-                <div id="main-forecast-date">
-                  Jan 01, 2001
-                </div>
-              </div>
-              <img id="forecast-image" src="resources/Vote_20190331_0.5sigma_Day7.png" class="img-fluid padding-image" alt="Responsive image padding-image">
-            </div>
-            <div class="col-sm-5">
-              <br>
-              <div id="mean-label">
-                Average + 0.5 &sigma;
-              </div>
-              <img id="threshold-image" src="resources/High_res_0.5_sigma_threshold.png" class="img-fluid padding-image" alt="Responsive image padding-image">
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-sm-5 control-panel-section">
-        <div class="control-panel">
-          <div class="control-panel-title">
-            Control Panel
-          </div>
-          <div class="control-panel-settings">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-sm-5 map-section extension padding-main control-panel-label">
-                  Initialization:
-                </div>
-                <div class="col-sm-7 map-section extension padding-main">
-                  <button class="btn btn-secondary" id="init-down">&#8592;</button>
-                  <button class="btn btn-primary" id="init">2001 Jan 01</button>
-                  <button class="btn btn-secondary" id="init-up">&#8594;</button>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-5 map-section extension padding-main control-panel-label">
-                  Forecast Day:
-                </div>
-                <div class="col-sm-7 map-section extension padding-main">
-                  <button class="btn btn-secondary" id="forecast-down">&#8592;</button>
-                  <button class="btn btn-primary button-no-pointer" id="forecast-day">1</button>
-                  <button class="btn btn-secondary" id="forecast-up">&#8594;</button>
-                  <div id="day-selection">
-                    <div class="row">
-                      <div class="col">
-                        <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(1)">1</button>
-                        <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(2)">2</button>
-                        <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(3)">3</button>
-                        <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(4)">4</button>
-                        <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(5)">5</button>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col">
-                        <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(6)">6</button>
-                        <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(7)">7</button>
-                        <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(8)">8</button>
-                        <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(9)">9</button>
-                        <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(10)">10</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-5 map-section extension padding-main control-panel-label">
-                  Model:
-                </div>
-                <div class="col-sm-7 map-section extension padding-main">
-                  <div class="dropdown">
-                    <button class="btn btn-primary dropdown-toggle" id="button-model-dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Dense
-                    </button>
-                    <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" id="option-dense">Dense</a></li>
-                      <li><a class="dropdown-item" id="option-convolutional">Convolutional</a></li>
-                      <li><a class="dropdown-item" id="option-voting">Voting</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-5 map-section extension padding-main control-panel-label">
-                  Threshold:
-                </div>
-                <div class="col-sm-7 map-section extension padding-main">
-                  Mean +
-                  <button class="btn btn-secondary" id="threshold-down">&#8592;</button>
-                  <div class="btn btn-primary button-no-pointer" id="threshold">0.5</div>
-                  <button class="btn btn-secondary" id="threshold-up">&#8594;</button>
-                  &sigma;
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-5 map-section extension padding-main control-panel-label">
-                  Resolution:
-                </div>
-                <div class="col-sm-7 map-section extension padding-main">
-                  <div class="btn btn-primary button-resolution" id="button-high-res">High</div>&nbsp;&nbsp;
-                  <div class="btn btn-primary button-resolution" id="button-low-res">Low</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div class="page-body" id="page-body-id">
+    <div class="container-fluid main-header" id="main-header-id">
+      LEARN&sup2;
+      <img src="resources/logo.png" class="img-fluid" style="width: 200px" alt="Responsive image">
     </div>
-    <div class="extension"></div>
+    <div class="container-fluid">
+      <div class="row centered-text">
+        <div class="col-sm-7 map-section extension padding-main" id="map-section-id">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-7">
+                <div id="main-forecast-label">
+                  Extreme Precipitation Forecast:
+                  <div id="main-forecast-date">
+                    Jan 01, 2001
+                  </div>
+                </div>
+                <img id="forecast-image" src="resources/High_res_Vote_20191227_0.5_sigma_Day7.png" class="img-fluid padding-image" alt="Responsive image padding-image">
+              </div>
+              <div class="col-sm-5">
+                <br>
+                <div>
+                  Daily Rainfall Threshold
+                  <div id="mean-label" style="font-size: 20px;">PRISM Non-Zero Average + 0.5 &sigma;</div>
+                </div>
+                <img id="threshold-image" src="resources/High_res_0.5_sigma_threshold.png" class="img-fluid padding-image" alt="Responsive image padding-image">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-5 control-panel-section" id="control-panel-section-id">
+          <div class="theme-selection">
+            <label class="theme-switch-label">
+              <input id="theme-switch-id" class="theme-switch" type="checkbox" id="togBtn" checked>
+              <div class="slider round">
+                <span class="on">Dark</span>
+                <span class="off">Light</span>
+              </div>
+            </label>
+          </div>
+          <div class="control-panel" id="control-panel-id">
+            <div class="control-panel-title">
+              Control Panel
+            </div>
+            <div class="control-panel-settings">
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-sm-5 extension padding-main control-panel-label">
+                    Initialization:
+                  </div>
+                  <div class="col-sm-7 extension padding-main">
+                    <button class="btn btn-secondary" id="init-down">&#8592;</button>
+                    <button class="btn btn-primary" id="init">2001 Jan 01</button>
+                    <button class="btn btn-secondary" id="init-up">&#8594;</button>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-5 extension padding-main control-panel-label">
+                    Forecast Day:
+                  </div>
+                  <div class="col-sm-7 extension padding-main">
+                    <button class="btn btn-secondary" id="forecast-down">&#8592;</button>
+                    <button class="btn btn-primary button-no-pointer" id="forecast-day">1</button>
+                    <button class="btn btn-secondary" id="forecast-up">&#8594;</button>
+                    <div id="day-selection">
+                      <div class="row">
+                        <div class="col">
+                          <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(1)">1</button>
+                          <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(2)">2</button>
+                          <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(3)">3</button>
+                          <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(4)">4</button>
+                          <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(5)">5</button>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">
+                          <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(6)">6</button>
+                          <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(7)">7</button>
+                          <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(8)">8</button>
+                          <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(9)">9</button>
+                          <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(10)">10</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-5 extension padding-main control-panel-label">
+                    Model:
+                  </div>
+                  <div class="col-sm-7 extension padding-main">
+                    <div class="dropdown">
+                      <button class="btn btn-primary dropdown-toggle" id="button-model-dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Dense
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" id="option-dense">Dense</a></li>
+                        <li><a class="dropdown-item" id="option-convolutional">Convolutional</a></li>
+                        <li><a class="dropdown-item" id="option-voting">Voting</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-5 extension padding-main control-panel-label">
+                    Threshold:
+                  </div>
+                  <div class="col-sm-7 extension padding-main">
+                    Mean +
+                    <button class="btn btn-secondary" id="threshold-down">&#8592;</button>
+                    <div class="btn btn-primary button-no-pointer" id="threshold">0.5</div>
+                    <button class="btn btn-secondary" id="threshold-up">&#8594;</button>
+                    &sigma;
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-5 extension padding-main control-panel-label">
+                    Resolution:
+                  </div>
+                  <div class="col-sm-7 extension padding-main">
+                    <div class="btn btn-primary button-resolution" id="button-high-res">High</div>&nbsp;&nbsp;
+                    <div class="btn btn-primary button-resolution" id="button-low-res">Low</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="extension"></div>
+    </div>
   </div>
   <script src="js/bootstrap.bundle.js"></script>
   <script src="js/main.js"></script>

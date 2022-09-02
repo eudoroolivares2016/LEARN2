@@ -1,11 +1,65 @@
+const rootDirectory = 'resources/'
+const sigmaThresholdSuffix = '_sigma_threshold';
+const sigmaDaySuffix = '_sigma_Day';
+const highResPrefix = 'High_res_'
+const lowResPrefix = 'Low_res_'
+const extension = '.png'
+
 let currentResolution = 'high';
 let currentSigma = .5;
-const rootDirectory = 'resources/'
-const sigmaThresholdSuffix = '_sigma_threshold.png';
-const highResPrefix = 'High_res_'
+let initializationDate = '20191227_';
+let forecastDay = 1;
+
+// On-Load Functionality
+window.onload = function() {
+    let themeCheckbox = document.getElementById('theme-switch-id');
+    let isChecked = localStorage.getItem("theme");
+    themeCheckbox.checked = isChecked === 'true';
+    updateTheme(isChecked === 'true');
+    initializeDates();
+}
 
 function log(msg) {
     console.log(msg);
+}
+
+function initializeDates() {
+    let forecastDateElement = document.getElementById('main-forecast-date');
+    let initializeDateElement = document.getElementById('init');
+    let today = new Date().toString().split(' ');
+    let forecastDate = today[1] + ' ' + today[2] + ', ' + today[3];
+    let initDate = today[3] + ' ' + today[1] + ' ' + today[2];
+
+    forecastDateElement.textContent = forecastDate;
+    initializeDateElement.textContent = initDate;
+}
+
+function updateTheme(isChecked) {
+    let controlPanel = document.getElementById('control-panel-id');
+    let controlPanelSection = document.getElementById('control-panel-section-id');
+    let mainHeader = document.getElementById('main-header-id');
+    let mapSection = document.getElementById('map-section-id');
+    let pageBody = document.getElementById('page-body-id');
+
+    if(isChecked) {
+        // Set Dark Theme
+        controlPanel.style.backgroundColor = '#212121';
+        controlPanelSection.style.backgroundColor = '#292929';
+        mainHeader.style.backgroundColor = '#1c2678';
+        mapSection.style.backgroundColor = '#212121';
+        pageBody.style.backgroundColor = '#40444b';
+        pageBody.style.color = 'white';
+
+    } else {
+        // Set Light Theme
+        controlPanel.style.backgroundColor = '#ff0000';
+        controlPanelSection.style.backgroundColor = '#0dff00';
+        mainHeader.style.backgroundColor = '#00ffd5';
+        mapSection.style.backgroundColor = '#0019ff';
+        mapSection.style.backgroundColor = '#0019ff';
+        pageBody.style.backgroundColor = '#c800ff';
+        pageBody.style.color = 'black';
+    }
 }
 
 function setDay(day) {
@@ -26,7 +80,6 @@ function updateModel(type) {
 }
 
 function updateDay(delta, modifyForecast) {
-    console.log(delta);
     let dateInitialize = document.getElementById('init');
     let forecastDateLabel = document.getElementById('main-forecast-date');
     let forecast = document.getElementById('forecast-day');
@@ -51,7 +104,7 @@ function updateMean(increment) {
     if(increment === 'up' && currentThreshold < 2) {
         currentSigma = (parseFloat(currentThreshold) + .5);
         threshold.textContent = `${currentSigma.toFixed(1)}`;
-        meanLabel.textContent = `Average + ${currentSigma} σ`;
+        meanLabel.textContent = `PRISM Non-Zero Average + ${currentSigma} σ`;
         updateThresholdImage();
     } else if(increment === 'down' && currentThreshold > 0) {
         currentSigma = (parseFloat(currentThreshold) - .5);
@@ -79,14 +132,24 @@ function updateDate(increment) {
 }
 
 function updateThresholdImage() {
+    let forecastImage = document.getElementById('forecast-image');
     let thresholdImage = document.getElementById('threshold-image');
-    let newURL = 'resource/';
+    let newForecastURL = rootDirectory;
+    let newThresholdURL = rootDirectory;
+
+    // temporary override
+    forecastDay = 7;
+    currentSigma = 0.5;
+
     if(currentResolution === 'high') {
-        newURL = rootDirectory + highResPrefix + currentSigma + sigmaThresholdSuffix;
+        newForecastURL += highResPrefix + 'Vote_' + initializationDate + currentSigma + sigmaDaySuffix + forecastDay + extension;
+        newThresholdURL += highResPrefix + currentSigma + sigmaThresholdSuffix + extension;
     } else {
-        newURL = rootDirectory + currentSigma + sigmaThresholdSuffix;
+        newForecastURL += 'Vote_' + initializationDate + currentSigma + sigmaDaySuffix + forecastDay + extension;
+        newThresholdURL += lowResPrefix + currentSigma + sigmaThresholdSuffix + extension;
     }
-    thresholdImage.src = newURL;
+    forecastImage.src = newForecastURL;
+    thresholdImage.src = newThresholdURL;
 }
 
 function updateResolution(quality) {
@@ -98,14 +161,14 @@ function updateResolution(quality) {
         buttonLowRes.style.fontWeight = 'normal';
         buttonHighRes.style.backgroundColor = '#0d6efd';
         buttonLowRes.style.backgroundColor = '#212121';
-        updateThresholdImage()
+        updateThresholdImage();
     } else if(quality === 'low' && currentResolution === 'high') {
         currentResolution = 'low';
         buttonLowRes.style.fontWeight = 'bold';
         buttonHighRes.style.fontWeight = 'normal';
         buttonLowRes.style.backgroundColor = '#0d6efd';
         buttonHighRes.style.backgroundColor = '#212121';
-        updateThresholdImage()
+        updateThresholdImage();
     }
 
 }
@@ -162,7 +225,10 @@ document.getElementById('init-down').addEventListener('click', function() {
     updateDate('down');
 });
 
-
+document.getElementById('theme-switch-id').addEventListener('change', function() {
+    localStorage.setItem('theme', this.checked);
+    updateTheme(this.checked);
+});
 
 
 
