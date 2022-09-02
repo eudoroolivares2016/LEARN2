@@ -139,13 +139,13 @@ function updateThresholdImage() {
 
     // temporary override
     forecastDay = 7;
-    currentSigma = 0.5;
+    let currentSigmaTemp = 0.5;
 
     if(currentResolution === 'high') {
-        newForecastURL += highResPrefix + 'Vote_' + initializationDate + currentSigma + sigmaDaySuffix + forecastDay + extension;
+        newForecastURL += highResPrefix + 'Vote_' + initializationDate + currentSigmaTemp + sigmaDaySuffix + forecastDay + extension;
         newThresholdURL += highResPrefix + currentSigma + sigmaThresholdSuffix + extension;
     } else {
-        newForecastURL += 'Vote_' + initializationDate + currentSigma + sigmaDaySuffix + forecastDay + extension;
+        newForecastURL += 'Vote_' + initializationDate + currentSigmaTemp + sigmaDaySuffix + forecastDay + extension;
         newThresholdURL += lowResPrefix + currentSigma + sigmaThresholdSuffix + extension;
     }
     forecastImage.src = newForecastURL;
