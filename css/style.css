@@ -51,7 +51,26 @@
 }
 
 #day-selection {
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
     display: none;
+}
+
+.day-slider {
+    width: 80%;
+}
+
+.day-slider-wrapper {
+    accent-color: #0d6efd;
+    stroke: none;
+}
+
+.day-slider-ticks {
+    text-align: center;
+    padding-left: 10%;
+    padding-right: 10%;
+    font-size: 12px;
 }
 
 .extension {
@@ -59,7 +78,12 @@
 }
 
 .fixed-small {
-    width: 30px;
+    width: 60px;
+    height: 60px;
+}
+
+.fixed-small-span {
+    padding: 15px;
 }
 
 .main-header {
@@ -153,7 +177,6 @@
 
 }
 
-
 .theme-switch:checked + .slider {
     background-color: #6c29ff;
 }
@@ -176,5 +199,19 @@
     display: none;
 }
 
+.threshold-slider {
+    width: 70%;
+}
 
+.threshold-slider-ticks {
+    text-align: center;
+    padding-left: 10%;
+    padding-right: 10%;
+    font-size: 12px;
+}
+
+.threshold-slider-wrapper {
+    accent-color: #0d6efd;
+    stroke: none;
+}
 

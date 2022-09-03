@@ -87,25 +87,47 @@
                     <button class="btn btn-secondary" id="forecast-down">&#8592;</button>
                     <button class="btn btn-primary button-no-pointer" id="forecast-day">1</button>
                     <button class="btn btn-secondary" id="forecast-up">&#8594;</button>
-                    <div id="day-selection">
-                      <div class="row">
-                        <div class="col">
-                          <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(1)">1</button>
-                          <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(2)">2</button>
-                          <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(3)">3</button>
-                          <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(4)">4</button>
-                          <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(5)">5</button>
-                        </div>
+                  </div>
+                  <div clas="container-fluid">
+                    <div class="row">
+                      <div class="day-slider-wrapper centered-text">
+                        <input class="day-slider" type="range" id="day-slider-id" name="volume" min="1" max="10" step="1" value="1">
                       </div>
+                    </div>
+                    <div class="day-slider-ticks">
                       <div class="row">
-                        <div class="col">
-                          <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(6)">6</button>
-                          <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(7)">7</button>
-                          <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(8)">8</button>
-                          <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(9)">9</button>
-                          <button class="btn btn-outline-primary btn-sm fixed-small" onclick="setDay(10)">10</button>
-                        </div>
+                        <div class="col-sm">1</div>
+                        <div class="col-sm">2</div>
+                        <div class="col-sm">3</div>
+                        <div class="col-sm">4</div>
+                        <div class="col-sm">5</div>
+                        <div class="col-sm">6</div>
+                        <div class="col-sm">7</div>
+                        <div class="col-sm">8</div>
+                        <div class="col-sm">9</div>
+                        <div class="col-sm">10</div>
                       </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="day-selection">
+                  <div class="row">
+                    <div class="col">
+                      <span class="fixed-small-span"><button class="btn btn-outline-primary btn-lg fixed-small" onclick="setDay(1)">1</button></span>
+                      <span class="fixed-small-span"><button class="btn btn-outline-primary btn-lg fixed-small" onclick="setDay(2)">2</button></span>
+                      <span class="fixed-small-span"><button class="btn btn-outline-primary btn-lg fixed-small" onclick="setDay(3)">3</button></span>
+                      <span class="fixed-small-span"><button class="btn btn-outline-primary btn-lg fixed-small" onclick="setDay(4)">4</button></span>
+                      <span class="fixed-small-span"><button class="btn btn-outline-primary btn-lg fixed-small" onclick="setDay(5)">5</button></span>
+                    </div>
+                  </div>
+                  <br>
+                  <div class="row">
+                    <div class="col">
+                      <span class="fixed-small-span"><button class="btn btn-outline-primary btn-lg fixed-small" onclick="setDay(6)">6</button></span>
+                      <span class="fixed-small-span"><button class="btn btn-outline-primary btn-lg fixed-small" onclick="setDay(7)">7</button></span>
+                      <span class="fixed-small-span"><button class="btn btn-outline-primary btn-lg fixed-small" onclick="setDay(8)">8</button></span>
+                      <span class="fixed-small-span"><button class="btn btn-outline-primary btn-lg fixed-small" onclick="setDay(9)">9</button></span>
+                      <span class="fixed-small-span"><button class="btn btn-outline-primary btn-lg fixed-small" onclick="setDay(10)">10</button></span>
                     </div>
                   </div>
                 </div>
@@ -136,6 +158,22 @@
                     <div class="btn btn-primary button-no-pointer" id="threshold">0.5</div>
                     <button class="btn btn-secondary" id="threshold-up">&#8594;</button>
                     &sigma;
+                  </div>
+                  <div clas="container-fluid">
+                    <div class="row">
+                      <div class="threshold-slider-wrapper centered-text">
+                        <input class="threshold-slider" type="range" id="threshold-slider-id" name="volume" min="0" max="2" step=".5" value=".5">
+                      </div>
+                    </div>
+                    <div class="threshold-slider-ticks">
+                      <div class="row">
+                        <div class="col-sm">0.0</div>
+                        <div class="col-sm">0.5</div>
+                        <div class="col-sm">1.0</div>
+                        <div class="col-sm">1.5</div>
+                        <div class="col-sm">2.0</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="row">

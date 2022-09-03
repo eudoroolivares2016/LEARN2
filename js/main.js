@@ -65,7 +65,8 @@ function updateTheme(isChecked) {
 function setDay(day) {
     let forecast = document.getElementById('forecast-day');
     forecast.textContent = day;
-    toggleDaySelection();
+    let daySelection = document.getElementById('day-selection');
+    daySelection.style.display = 'none';
     updateDay(0, false);
 }
 
@@ -97,19 +98,13 @@ function updateDay(delta, modifyForecast) {
     }
 }
 
-function updateMean(increment) {
+function updateMean(newSigma) {
     let threshold = document.getElementById('threshold');
     let meanLabel = document.getElementById('mean-label');
-    let currentThreshold = threshold.textContent;
-    if(increment === 'up' && currentThreshold < 2) {
-        currentSigma = (parseFloat(currentThreshold) + .5);
+    if(newSigma <= 2 && newSigma >= 0) {
+        currentSigma = parseFloat(newSigma);
         threshold.textContent = `${currentSigma.toFixed(1)}`;
         meanLabel.textContent = `PRISM Non-Zero Average + ${currentSigma} σ`;
-        updateThresholdImage();
-    } else if(increment === 'down' && currentThreshold > 0) {
-        currentSigma = (parseFloat(currentThreshold) - .5);
-        threshold.textContent = `${currentSigma.toFixed(1)}`;
-        meanLabel.textContent = `Average + ${currentSigma} σ`;
         updateThresholdImage();
     }
 }
@@ -200,23 +195,35 @@ document.getElementById('button-low-res').addEventListener('click', function() {
     updateResolution('low');
 });
 
-// Increment Buttons
+// Forecast Increment Buttons
 document.getElementById('forecast-up').addEventListener('click', function() {
     updateDay(1, true);
+});
+
+// Forecast Slider
+document.getElementById('day-slider-id').addEventListener('input', function() {
+    setDay(this.value);
 });
 
 document.getElementById('forecast-down').addEventListener('click', function() {
     updateDay(-1, true);
 });
 
+// Sigma Buttons
 document.getElementById('threshold-up').addEventListener('click', function() {
-    updateMean('up');
+    updateMean(currentSigma + .5);
 });
 
 document.getElementById('threshold-down').addEventListener('click', function() {
-    updateMean('down');
+    updateMean(currentSigma - .5);
 });
 
+// Sigma Slider
+document.getElementById('threshold-slider-id').addEventListener('input', function() {
+    updateMean(this.value);
+});
+
+// Initialize Buttons
 document.getElementById('init-up').addEventListener('click', function() {
     updateDate('up');
 });
@@ -225,6 +232,7 @@ document.getElementById('init-down').addEventListener('click', function() {
     updateDate('down');
 });
 
+// Theme Switch
 document.getElementById('theme-switch-id').addEventListener('change', function() {
     localStorage.setItem('theme', this.checked);
     updateTheme(this.checked);
