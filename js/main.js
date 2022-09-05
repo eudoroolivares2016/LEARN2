@@ -12,15 +12,27 @@ let forecastDay = 1;
 
 // On-Load Functionality
 window.onload = function() {
-    let themeCheckbox = document.getElementById('theme-switch-id');
-    let isChecked = localStorage.getItem("theme");
-    themeCheckbox.checked = isChecked === 'true';
-    updateTheme(isChecked === 'true');
+    initializePreview();
+    initializeTheme();
     initializeDates();
 }
 
 function log(msg) {
     console.log(msg);
+}
+
+function initializePreview() {
+    let themeCheckbox = document.getElementById('preview-switch-id');
+    let isChecked = localStorage.getItem("preview");
+    themeCheckbox.checked = isChecked === 'true';
+    updatePreview(isChecked === 'true');
+}
+
+function initializeTheme() {
+    let themeCheckbox = document.getElementById('theme-switch-id');
+    let isChecked = localStorage.getItem("theme");
+    themeCheckbox.checked = isChecked === 'true';
+    updateTheme(isChecked === 'true');
 }
 
 function initializeDates() {
@@ -32,6 +44,10 @@ function initializeDates() {
 
     forecastDateElement.textContent = forecastDate;
     initializeDateElement.textContent = initDate;
+}
+
+function updatePreview(isChecked) {
+    //console.log(isChecked);
 }
 
 function updateTheme(isChecked) {
@@ -203,6 +219,12 @@ document.getElementById('forecast-up').addEventListener('click', function() {
 // Forecast Slider
 document.getElementById('day-slider-id').addEventListener('input', function() {
     setDay(this.value);
+});
+
+// Forecast Preview Slider
+document.getElementById('preview-switch-id').addEventListener('change', function() {
+    localStorage.setItem('preview', this.checked);
+    updatePreview(this.checked);
 });
 
 document.getElementById('forecast-down').addEventListener('click', function() {
