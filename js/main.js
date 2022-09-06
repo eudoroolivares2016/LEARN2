@@ -74,6 +74,7 @@ function updateTheme(isChecked) {
     let thresholdSlider = document.getElementById('threshold-slider-id');
     let modelButton = document.getElementById('button-model-dropdown');
     let thresholdButton = document.getElementById('threshold');
+    let userManual = document.getElementById('users-manual');
 
 
     if (isChecked) {
@@ -86,6 +87,7 @@ function updateTheme(isChecked) {
         pageBody.style.color = 'white';
         ctrlOff.style.backgroundColor = '#0d6efd';
         thresholdButton.style.backgroundColor = '#0d6efd';
+        userManual.style.backgroundColor = '#0d6efd';
         modelButton.style.backgroundColor = '#0d6efd';
         forecastDay.style.backgroundColor = '#0d6efd';
         daySlider.style.accentColor = '#0d6efd';
@@ -104,6 +106,8 @@ function updateTheme(isChecked) {
         thresholdButton.style.border = '#77c743';
         forecastDay.style.backgroundColor = '#77c743';
         forecastDay.style.border = '#77c743';
+        userManual.style.backgroundColor = '#77c743';
+        userManual.style.border = '#77c743';
         mainHeader.style.backgroundColor = '#2d871933';
         mapSection.style.backgroundColor = '#efefef';
         daySlider.style.accentColor = '#569630';

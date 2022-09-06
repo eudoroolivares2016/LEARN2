@@ -268,3 +268,14 @@
     stroke: none;
 }
 
+.user-preface{
+        display: flex;
+        justify-content: space-between;
+}
+
+.users-manual{
+    position: relative;
+    bottom: 15px;
+    width: 50%;
+    float: left;
+}
