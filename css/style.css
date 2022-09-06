@@ -175,7 +175,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ff8000;
+    background-color: #77c743;
     -webkit-transition: .4s;
     transition: .4s;
 }
@@ -268,3 +268,14 @@
     stroke: none;
 }
 
+.user-preface{
+        display: flex;
+        justify-content: space-between;
+}
+
+.users-manual{
+    position: relative;
+    bottom: 15px;
+    width: 50%;
+    float: left;
+}
