@@ -22,6 +22,10 @@ function log(msg) {
     console.log(msg);
 }
 
+function setWidth(context, size) {
+    context.style.width = size + 'px'
+}
+
 function initializePreview() {
     let themeCheckbox = document.getElementById('preview-switch-id');
     let isChecked = localStorage.getItem("preview");
@@ -114,6 +118,8 @@ function updateDay(delta, modifyForecast) {
     let dateInitialize = document.getElementById('init');
     let forecastDateLabel = document.getElementById('main-forecast-date');
     let forecast = document.getElementById('forecast-day');
+    let daySelection = document.getElementById('day-selection');
+    daySelection.style.display = 'none';
     let currentDateArr = dateInitialize.textContent.split(' ');
     let currentDate = new Date(`${currentDateArr[1]} ${currentDateArr[2]} ${currentDateArr[0]}`);
     let currentDay = parseInt(forecast.textContent);
