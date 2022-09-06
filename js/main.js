@@ -111,6 +111,7 @@ function updateDay(delta, modifyForecast) {
         currentDate.setDate(currentDate.getDate() + dayOffset - 1);
         let newDateArr = currentDate.toDateString().split(' ');
         forecastDateLabel.textContent = `${newDateArr[1]} ${newDateArr[2]}, ${newDateArr[3]}`;
+        updateForecastSlider(dayOffset)
     }
 }
 
@@ -121,8 +122,14 @@ function updateMean(newSigma) {
         currentSigma = parseFloat(newSigma);
         threshold.textContent = `${currentSigma.toFixed(1)}`;
         meanLabel.textContent = `PRISM Non-Zero Average + ${currentSigma} σ`;
+        updateThresholdSlider();
         updateThresholdImage();
     }
+}
+
+function updateThresholdSlider() {
+    let thresholdSlider = document.getElementById('threshold-slider-id');
+    thresholdSlider.value = currentSigma;
 }
 
 function updateDate(increment) {
@@ -184,6 +191,11 @@ function updateResolution(quality) {
 
 }
 
+function updateForecastSlider(day) {
+    let forecastSlider = document.getElementById('day-slider-id');
+    forecastSlider.value = day;
+}
+
 // Day Selection
 document.getElementById('forecast-day').addEventListener('click', function() {
     toggleDaySelection();
@@ -216,6 +228,10 @@ document.getElementById('forecast-up').addEventListener('click', function() {
     updateDay(1, true);
 });
 
+document.getElementById('forecast-down').addEventListener('click', function() {
+    updateDay(-1, true);
+});
+
 // Forecast Slider
 document.getElementById('day-slider-id').addEventListener('input', function() {
     setDay(this.value);
@@ -225,10 +241,6 @@ document.getElementById('day-slider-id').addEventListener('input', function() {
 document.getElementById('preview-switch-id').addEventListener('change', function() {
     localStorage.setItem('preview', this.checked);
     updatePreview(this.checked);
-});
-
-document.getElementById('forecast-down').addEventListener('click', function() {
-    updateDay(-1, true);
 });
 
 // Sigma Buttons
