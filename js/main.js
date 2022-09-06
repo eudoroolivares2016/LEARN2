@@ -9,6 +9,7 @@ let currentResolution = 'high';
 let currentSigma = .5;
 let initializationDate = '20191227_';
 let forecastDay = 1;
+let previewsEnabled = false;
 
 // On-Load Functionality
 window.onload = function() {
@@ -24,7 +25,8 @@ function log(msg) {
 function initializePreview() {
     let themeCheckbox = document.getElementById('preview-switch-id');
     let isChecked = localStorage.getItem("preview");
-    themeCheckbox.checked = isChecked === 'true';
+    previewsEnabled = isChecked === 'true';
+    themeCheckbox.checked = previewsEnabled;
     updatePreview(isChecked === 'true');
 }
 
@@ -47,7 +49,17 @@ function initializeDates() {
 }
 
 function updatePreview(isChecked) {
-    //console.log(isChecked);
+    if(isChecked) {
+        let thumbnails = document.getElementById('preview-thumbnails');
+        let buttonsOnly = document.getElementById('no-preview');
+        thumbnails.style.display = 'block';
+        buttonsOnly.style.display = 'none';
+    } else {
+        let thumbnails = document.getElementById('preview-thumbnails');
+        let buttonsOnly = document.getElementById('no-preview');
+        thumbnails.style.display = 'none';
+        buttonsOnly.style.display = 'block';
+    }
 }
 
 function updateTheme(isChecked) {
@@ -89,6 +101,8 @@ function setDay(day) {
 function toggleDaySelection() {
     let daySelection = document.getElementById('day-selection');
     daySelection.style.display = daySelection.style.display === 'block' ? 'none' : 'block';
+
+    let preview = '';
 }
 
 function updateModel(type) {
