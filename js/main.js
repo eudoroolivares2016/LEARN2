@@ -68,12 +68,12 @@ function updateTheme(isChecked) {
 
     } else {
         // Set Light Theme
-        controlPanel.style.backgroundColor = '#ff0000';
-        controlPanelSection.style.backgroundColor = '#0dff00';
-        mainHeader.style.backgroundColor = '#00ffd5';
-        mapSection.style.backgroundColor = '#0019ff';
-        mapSection.style.backgroundColor = '#0019ff';
-        pageBody.style.backgroundColor = '#c800ff';
+        controlPanel.style.backgroundColor = '#ac5555';
+        controlPanelSection.style.backgroundColor = '#70a56d';
+        mainHeader.style.backgroundColor = '#589085';
+        mapSection.style.backgroundColor = '#53588e';
+        mapSection.style.backgroundColor = '#4f537f';
+        pageBody.style.backgroundColor = '#995aac';
         pageBody.style.color = 'black';
     }
 }
