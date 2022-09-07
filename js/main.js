@@ -84,6 +84,7 @@ function updateTheme(isChecked) {
     if (isChecked) {
         // Set Dark Theme
         controlPanel.style.backgroundColor = '#212121';
+        controlPanel.style.border = '5px solid black';
         controlPanelSection.style.backgroundColor = '#292929';
         mainHeader.style.backgroundColor = '#1c2678';
         mapSection.style.backgroundColor = '#212121';
