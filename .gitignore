@@ -4,5 +4,6 @@
 node_modules
 LEARN2.code-workspace
 dist
+.env
 .cache
 .idea

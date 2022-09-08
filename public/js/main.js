@@ -12,7 +12,7 @@ const dayButtons = document.querySelectorAll('.btn-light');
 
 let currentResolution = 'high';
 let currentSigma = .5;
-let initializationDate = '20191227_';
+let initializationDate = new Date();
 let forecastDay = 1;
 let previewsEnabled = false;
 
@@ -231,6 +231,7 @@ function updateThresholdImage() {
 
     // temporary override
     forecastDay = 7;
+    initializationDate = '20191227_';
     let currentSigmaTemp = 0.5;
 
     if(currentResolution === 'high') {
