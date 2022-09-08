@@ -279,3 +279,10 @@
     width: 50%;
     float: left;
 }
+
+.light-hover{
+    color:#000;
+}
+.light-hover:hover{
+    background:#77c743;
+}

@@ -4,6 +4,11 @@ const sigmaDaySuffix = '_sigma_Day';
 const highResPrefix = 'High_res_'
 const lowResPrefix = 'Low_res_'
 const extension = '.png'
+const dayButtons = document.querySelectorAll('.btn-light');
+
+
+
+
 
 let currentResolution = 'high';
 let currentSigma = .5;
@@ -79,6 +84,11 @@ function updateTheme(isChecked) {
     let modelButton = document.getElementById('button-model-dropdown');
     let thresholdButton = document.getElementById('threshold');
     let userManual = document.getElementById('users-manual');
+    let previewSwitch = document.getElementById('preview-switch-id');
+    
+    
+   
+    
 
 
     if (isChecked) {
@@ -91,12 +101,20 @@ function updateTheme(isChecked) {
         pageBody.style.backgroundColor = '#40444b';
         pageBody.style.color = 'white';
         ctrlOff.style.backgroundColor = '#0d6efd';
+        ctrlOff.style.borderColor = '#0d6efd';
         thresholdButton.style.backgroundColor = '#0d6efd';
         userManual.style.backgroundColor = '#0d6efd';
         modelButton.style.backgroundColor = '#0d6efd';
         forecastDay.style.backgroundColor = '#0d6efd';
+        forecastDay.style.borderColor = '#0d6efd';
+        previewSwitch.style.backgroundColor = '#0d6efd';
         daySlider.style.accentColor = '#0d6efd';
         thresholdSlider.style.accentColor = '#0d6efd';
+        modelButton.style.borderColor = '#0a53be';
+        dayButtons.forEach((dayButtons) => {
+            dayButtons.style.borderColor = "#0a53be";
+            dayButtons.classList.remove('light-hover');
+        });
 
     } else {
         // Set Light Theme
@@ -104,21 +122,27 @@ function updateTheme(isChecked) {
         controlPanel.style.border = '0';
         controlPanelSection.style.backgroundColor = '#efefef';
         ctrlOff.style.backgroundColor = '#77c743';
-        ctrlOff.style.border = '#77c743';
+        ctrlOff.style.borderColor = '#77c743';
         modelButton.style.backgroundColor = '#77c743';
-        modelButton.style.border = '#77c743';
+        modelButton.style.borderColor = '#77c743';
         thresholdButton.style.backgroundColor = '#77c743';
         thresholdButton.style.border = '#77c743';
         forecastDay.style.backgroundColor = '#77c743';
-        forecastDay.style.border = '#77c743';
+        forecastDay.style.borderColor = '#77c743';
+        previewSwitch.style.backgroundColor = '#77c743';
         userManual.style.backgroundColor = '#77c743';
-        userManual.style.border = '#77c743';
+        userManual.style.borderColor = '#77c743';
         mainHeader.style.backgroundColor = '#2d871933';
         mapSection.style.backgroundColor = '#efefef';
         daySlider.style.accentColor = '#569630';
         thresholdSlider.style.accentColor = '#569630';
         pageBody.style.backgroundColor = '#2d871933';
         pageBody.style.color = 'black';
+        dayButtons.forEach((dayButtons) => {
+            dayButtons.style.borderColor = "#77c743";
+            dayButtons.classList.add('light-hover');
+        });
+      
 
     }
 }
