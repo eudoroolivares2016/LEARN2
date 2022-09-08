@@ -15,7 +15,7 @@ AWS.config.update({
 const bucket = process.env.BUCKET_NAME;
 const s3 = new AWS.S3();
 
-app.get('/aws3', async (req, res) => {
+app.get('/aws', async (req, res) => {
     console.log(req.query);
     console.log(bucket);
 
@@ -28,6 +28,7 @@ app.get('/aws3', async (req, res) => {
             res.send(data);
         }
     });
+});
 
 app.listen(8080,()=>{
     console.log('Web Server running on port', 8080);
