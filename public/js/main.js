@@ -6,21 +6,55 @@ const lowResPrefix = 'Low_res_'
 const extension = '.png'
 const dayButtons = document.querySelectorAll('.btn-light');
 
-
-
-
-
 let currentResolution = 'high';
 let currentSigma = .5;
 let initializationDate = new Date();
-let forecastDay = 1;
+let forecastDayIndex = 1;
 let previewsEnabled = false;
+let forecastImageCache = [];
+let isTodayStored = false;
 
 // On-Load Functionality
 window.onload = function() {
     initializePreview();
     initializeTheme();
     initializeDates();
+}
+
+function toBase64(arr) {
+    return btoa(
+        arr.reduce((data, byte) => data + String.fromCharCode(byte), '')
+    );
+}
+
+const temp = {
+    file: '0.5_Vote_2022-1-1_'
+};
+function retrieveImages() {
+    $.getJSON(window.location.href + 'aws', temp, function(data) {
+        forecastImageCache = [];
+        for(let i = 0; i < 10; i++) {
+            forecastImageCache[i] = toBase64(data[i].Body.data);
+        }
+        let img = document.getElementById('forecast-image');
+        img.src = 'data:image/png;base64,' + forecastImageCache[0];
+        if(!isTodayStored) {
+            localStorage.setItem('todayData', 'data:image/png;base64,' + forecastImageCache[0]);
+            isTodayStored = true;
+        }
+    });
+}
+
+function setForecastImage(isInitializing) {
+    let img = document.getElementById('forecast-image');
+    if(isInitializing) {
+        let cachedInitForecast = localStorage.getItem('todayData');
+        if(cachedInitForecast != null) {
+            img.src = cachedInitForecast;
+        }
+        return;
+    }
+    img.src = 'data:image/png;base64,' + forecastImageCache[forecastDayIndex - 1];
 }
 
 function log(msg) {
@@ -85,11 +119,6 @@ function updateTheme(isChecked) {
     let thresholdButton = document.getElementById('threshold');
     let userManual = document.getElementById('users-manual');
     let previewSwitch = document.getElementById('preview-switch-id');
-    
-    
-   
-    
-
 
     if (isChecked) {
         // Set Dark Theme
@@ -159,8 +188,6 @@ function setDay(day) {
 function toggleDaySelection() {
     let daySelection = document.getElementById('day-selection');
     daySelection.style.display = daySelection.style.display === 'block' ? 'none' : 'block';
-
-    let preview = '';
 }
 
 function updateModel(type) {
@@ -186,6 +213,8 @@ function updateDay(delta, modifyForecast) {
         let newDateArr = currentDate.toDateString().split(' ');
         forecastDateLabel.textContent = `${newDateArr[1]} ${newDateArr[2]}, ${newDateArr[3]}`;
         updateForecastSlider(dayOffset)
+        forecastDayIndex = dayOffset;
+        setForecastImage();
     }
 }
 
@@ -220,7 +249,7 @@ function updateDate(increment) {
     let newDateLabel = `${newDateArr[1]} ${newDateArr[2]}, ${newDateArr[3]}`;
     currentDateId.textContent = `${newDateArr[3]} ${newDateArr[1]} ${newDateArr[2]}`;
     forecastDateLabel.textContent = newDateLabel;
-    updateDay(0);
+    setDay(1);
 }
 
 function updateThresholdImage() {
@@ -230,7 +259,7 @@ function updateThresholdImage() {
     let newThresholdURL = rootDirectory;
 
     // temporary override
-    forecastDay = 7;
+    let forecastDay = 7;
     initializationDate = '20191227_';
     let currentSigmaTemp = 0.5;
 
@@ -347,7 +376,10 @@ document.getElementById('theme-switch-id').addEventListener('change', function()
     updateTheme(this.checked);
 });
 
-
+$( window ).on( "load", function() {
+    retrieveImages();
+    setForecastImage(true);
+});
 
 
 
