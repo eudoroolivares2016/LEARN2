@@ -5,6 +5,8 @@ const highResPrefix = 'High_res_'
 const lowResPrefix = 'Low_res_'
 const extension = '.png'
 const dayButtons = document.querySelectorAll('.btn-light');
+const lightPreview = document.querySelectorAll('.preview-switch');
+
 
 
 
@@ -84,7 +86,8 @@ function updateTheme(isChecked) {
     let modelButton = document.getElementById('button-model-dropdown');
     let thresholdButton = document.getElementById('threshold');
     let userManual = document.getElementById('users-manual');
-    let previewSwitch = document.getElementById('preview-switch-id');
+
+
     
     
    
@@ -107,7 +110,7 @@ function updateTheme(isChecked) {
         modelButton.style.backgroundColor = '#0d6efd';
         forecastDay.style.backgroundColor = '#0d6efd';
         forecastDay.style.borderColor = '#0d6efd';
-        previewSwitch.style.backgroundColor = '#0d6efd';
+
         daySlider.style.accentColor = '#0d6efd';
         thresholdSlider.style.accentColor = '#0d6efd';
         modelButton.style.borderColor = '#0a53be';
@@ -115,6 +118,10 @@ function updateTheme(isChecked) {
             dayButtons.style.borderColor = "#0a53be";
             dayButtons.classList.remove('light-hover');
         });
+        lightPreview.forEach((lightPreview) => {
+            lightPreview.classList.remove('light-switch');
+        });
+        
 
     } else {
         // Set Light Theme
@@ -129,7 +136,7 @@ function updateTheme(isChecked) {
         thresholdButton.style.border = '#77c743';
         forecastDay.style.backgroundColor = '#77c743';
         forecastDay.style.borderColor = '#77c743';
-        previewSwitch.style.backgroundColor = '#77c743';
+    
         userManual.style.backgroundColor = '#77c743';
         userManual.style.borderColor = '#77c743';
         mainHeader.style.backgroundColor = '#2d871933';
@@ -142,7 +149,10 @@ function updateTheme(isChecked) {
             dayButtons.style.borderColor = "#77c743";
             dayButtons.classList.add('light-hover');
         });
-      
+       
+        lightPreview.forEach((lightPreview) => {
+            lightPreview.classList.add('light-switch');
+        });
 
     }
 }

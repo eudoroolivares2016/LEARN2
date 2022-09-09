@@ -244,6 +244,10 @@
     background-color: #0d6efd;
 }
 
+.light-switch:checked + .slider {
+    background-color: #77c743;
+} 
+
 .theme-switch:checked + .slider .on {
     display: block;
 }
