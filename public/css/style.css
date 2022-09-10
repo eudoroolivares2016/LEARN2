@@ -78,6 +78,7 @@
 }
 
 .fixed-small {
+    background-color: #212121;
     width: 75px;
     height: 75px;
 }
@@ -285,6 +286,7 @@
 }
 
 .light-hover{
+        background-color: #FFFFFF;
     color:#000;
 }
 .light-hover:hover{
