@@ -14,7 +14,11 @@ let initializationDate = new Date();
 let forecastDayIndex = 1;
 let previewsEnabled = false;
 let forecastImageCache = [];
+let votingCache = [];
+let convolutionalCache = [];
+let denseCache = [];
 let isTodayStored = false;
+let modelType = 'Voting';
 
 // On-Load Functionality
 window.onload = function() {
@@ -49,9 +53,20 @@ function retrieveImages() {
         for(let i = 0; i < 10; i++) {
             forecastImageCache[i] = toBase64(data[i].Body.data);
         }
+        switch(modelType) {
+            case 'Voting':
+                votingCache = forecastImageCache;
+                break;
+            case 'Convolutional':
+                convolutionalCache = forecastImageCache;
+                break;
+            case 'Dense':
+                denseCache = forecastImageCache;
+                break;
+        }
         let img = document.getElementById('forecast-image');
         img.src = 'data:image/png;base64,' + forecastImageCache[0];
-        setPreviewImages();
+        setPreviewImages(forecastImageCache);
         if(!isTodayStored) {
             localStorage.setItem('todayData', 'data:image/png;base64,' + forecastImageCache[0]);
             isTodayStored = true;
@@ -59,15 +74,15 @@ function retrieveImages() {
     });
 }
 
-function setPreviewImages() {
+function setPreviewImages(cache) {
     for(let i = 1; i <= 10; i++) {
         let img = document.getElementById('preview-image-' + i);
-        threadPreviewImage(img, i - 1);
+        threadPreviewImage(cache, img, i - 1);
     }
 }
 
-function threadPreviewImage(img, index) {
-    img.src = 'data:image/png;base64,' + forecastImageCache[index];
+function threadPreviewImage(cache, img, index) {
+    img.src = 'data:image/png;base64,' + cache[index];
 }
 
 function setForecastImage(isInitializing) {
@@ -79,7 +94,7 @@ function setForecastImage(isInitializing) {
         }
         return;
     }
-    setPreviewImages();
+    setPreviewImages(forecastImageCache);
     img.src = 'data:image/png;base64,' + forecastImageCache[forecastDayIndex - 1];
 }
 
@@ -222,6 +237,11 @@ function toggleDaySelection() {
     daySelection.style.display = daySelection.style.display === 'block' ? 'none' : 'block';
 }
 
+function quickUpdateFromCache(cache) {
+    let img = document.getElementById('forecast-image');
+    img.src = 'data:image/png;base64,' + cache[0];
+}
+
 function updateModel(type) {
     if(type === 'Voting') {
         temp = tempVote;
@@ -230,9 +250,35 @@ function updateModel(type) {
     } else {
         temp = tempDense;
     }
+    modelType = type;
     let modelButton = document.getElementById('button-model-dropdown');
     modelButton.textContent = type;
-    retrieveImages();
+    switch(modelType) {
+        case 'Voting':
+            if(votingCache.length > 0) {
+                quickUpdateFromCache(votingCache);
+                setPreviewImages(votingCache);
+            } else {
+                retrieveImages();
+            }
+            break;
+        case 'Convolutional':
+            if(convolutionalCache.length > 0) {
+                quickUpdateFromCache(convolutionalCache);
+                setPreviewImages(convolutionalCache);
+            } else {
+                retrieveImages();
+            }
+            break;
+        case 'Dense':
+            if(denseCache.length > 0) {
+                quickUpdateFromCache(denseCache);
+                setPreviewImages(denseCache);
+            } else {
+                retrieveImages();
+            }
+            break;
+    }
 }
 
 function updateDay(delta, modifyForecast) {
