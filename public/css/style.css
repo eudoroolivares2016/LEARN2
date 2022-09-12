@@ -63,7 +63,7 @@
 }
 
 .day-slider {
-    width: 80%;
+    width: 70%;
 }
 
 .day-slider-wrapper {
@@ -73,8 +73,8 @@
 
 .day-slider-ticks {
     text-align: center;
-    padding-left: 10%;
-    padding-right: 10%;
+    padding-left: 13%;
+    padding-right: 13%;
     font-size: 12px;
 }
 
