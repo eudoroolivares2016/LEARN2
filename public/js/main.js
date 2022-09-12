@@ -255,7 +255,7 @@ function updateModel(type) {
     modelButton.textContent = type;
     switch(modelType) {
         case 'Voting':
-            if(votingCache.length > 0) {
+            if(votingCache.length > 0 && false) {
                 quickUpdateFromCache(votingCache);
                 setPreviewImages(votingCache);
             } else {
@@ -263,7 +263,7 @@ function updateModel(type) {
             }
             break;
         case 'Convolutional':
-            if(convolutionalCache.length > 0) {
+            if(convolutionalCache.length > 0  && false) {
                 quickUpdateFromCache(convolutionalCache);
                 setPreviewImages(convolutionalCache);
             } else {
@@ -271,7 +271,7 @@ function updateModel(type) {
             }
             break;
         case 'Dense':
-            if(denseCache.length > 0) {
+            if(denseCache.length > 0  && false) {
                 quickUpdateFromCache(denseCache);
                 setPreviewImages(denseCache);
             } else {
