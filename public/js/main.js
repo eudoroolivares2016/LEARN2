@@ -6,96 +6,25 @@ const lowResPrefix = 'Low_res_'
 const extension = '.png'
 const dayButtons = document.querySelectorAll('.btn-light');
 const lightPreview = document.querySelectorAll('.preview-switch');
+const resolution = document.querySelectorAll('.button-resolution');
+ 
+
+
+
+
 
 
 let currentResolution = 'high';
 let currentSigma = .5;
 let initializationDate = new Date();
-let forecastDayIndex = 1;
+let forecastDay = 1;
 let previewsEnabled = false;
-let forecastImageCache = [];
-let votingCache = [];
-let convolutionalCache = [];
-let denseCache = [];
-let isTodayStored = false;
-let modelType = 'Voting';
 
 // On-Load Functionality
 window.onload = function() {
     initializePreview();
     initializeTheme();
     initializeDates();
-}
-
-function toBase64(arr) {
-    return btoa(
-        arr.reduce((data, byte) => data + String.fromCharCode(byte), '')
-    );
-}
-
-const tempVote = {
-    file: '0.5_Vote_2022-1-1_'
-};
-
-const tempConvolutional = {
-    file: '0.5_Convolutional_2022-1-1_'
-};
-
-const tempDense = {
-    file: '0.5_Dense_2022-1-1_'
-};
-
-let temp = tempVote;
-
-function retrieveImages() {
-    $.getJSON(window.location.href + 'aws', temp, function(data) {
-        forecastImageCache = [];
-        for(let i = 0; i < 10; i++) {
-            forecastImageCache[i] = toBase64(data[i].Body.data);
-        }
-        switch(modelType) {
-            case 'Voting':
-                votingCache = forecastImageCache;
-                break;
-            case 'Convolutional':
-                convolutionalCache = forecastImageCache;
-                break;
-            case 'Dense':
-                denseCache = forecastImageCache;
-                break;
-        }
-        let img = document.getElementById('forecast-image');
-        img.src = 'data:image/png;base64,' + forecastImageCache[0];
-        setPreviewImages(forecastImageCache);
-        if(!isTodayStored) {
-            localStorage.setItem('todayData', 'data:image/png;base64,' + forecastImageCache[0]);
-            isTodayStored = true;
-        }
-    });
-}
-
-function setPreviewImages(cache) {
-    for(let i = 1; i <= 10; i++) {
-        let img = document.getElementById('preview-image-' + i);
-        threadPreviewImage(cache, img, i - 1);
-    }
-}
-
-function threadPreviewImage(cache, img, index) {
-    img.src = 'data:image/png;base64,' + cache[index];
-}
-
-function setForecastImage(isInitializing) {
-    let img = document.getElementById('forecast-image');
-    if(isInitializing) {
-        let cachedInitForecast = localStorage.getItem('todayData');
-        if(cachedInitForecast != null) {
-            img.src = cachedInitForecast;
-        }
-        return;
-    }
-    setPreviewImages(forecastImageCache);
-    img.src = 'data:image/png;base64,' + forecastImageCache[forecastDayIndex - 1];
 }
 
 function log(msg) {
@@ -159,6 +88,15 @@ function updateTheme(isChecked) {
     let modelButton = document.getElementById('button-model-dropdown');
     let thresholdButton = document.getElementById('threshold');
     let userManual = document.getElementById('users-manual');
+   
+   
+
+
+    
+    
+   
+    
+
 
     if (isChecked) {
         // Set Dark Theme
@@ -176,7 +114,7 @@ function updateTheme(isChecked) {
         modelButton.style.backgroundColor = '#0d6efd';
         forecastDay.style.backgroundColor = '#0d6efd';
         forecastDay.style.borderColor = '#0d6efd';
-
+      
         daySlider.style.accentColor = '#0d6efd';
         thresholdSlider.style.accentColor = '#0d6efd';
         modelButton.style.borderColor = '#0a53be';
@@ -187,6 +125,10 @@ function updateTheme(isChecked) {
         lightPreview.forEach((lightPreview) => {
             lightPreview.classList.remove('light-switch');
         });
+
+        // resolution.forEach((resolution) => {
+        //     resolution.classList.remove('res-light');
+        // });
         
 
     } else {
@@ -202,7 +144,7 @@ function updateTheme(isChecked) {
         thresholdButton.style.border = '#77c743';
         forecastDay.style.backgroundColor = '#77c743';
         forecastDay.style.borderColor = '#77c743';
-    
+        
         userManual.style.backgroundColor = '#77c743';
         userManual.style.borderColor = '#77c743';
         mainHeader.style.backgroundColor = '#2d871933';
@@ -219,7 +161,7 @@ function updateTheme(isChecked) {
         lightPreview.forEach((lightPreview) => {
             lightPreview.classList.add('light-switch');
         });
-
+        
     }
 }
 
@@ -235,50 +177,13 @@ function setDay(day) {
 function toggleDaySelection() {
     let daySelection = document.getElementById('day-selection');
     daySelection.style.display = daySelection.style.display === 'block' ? 'none' : 'block';
-}
 
-function quickUpdateFromCache(cache) {
-    let img = document.getElementById('forecast-image');
-    img.src = 'data:image/png;base64,' + cache[0];
+    let preview = '';
 }
 
 function updateModel(type) {
-    if(type === 'Voting') {
-        temp = tempVote;
-    } else if(type === 'Convolutional') {
-        temp = tempConvolutional;
-    } else {
-        temp = tempDense;
-    }
-    modelType = type;
     let modelButton = document.getElementById('button-model-dropdown');
     modelButton.textContent = type;
-    switch(modelType) {
-        case 'Voting':
-            if(votingCache.length > 0 && false) {
-                quickUpdateFromCache(votingCache);
-                setPreviewImages(votingCache);
-            } else {
-                retrieveImages();
-            }
-            break;
-        case 'Convolutional':
-            if(convolutionalCache.length > 0  && false) {
-                quickUpdateFromCache(convolutionalCache);
-                setPreviewImages(convolutionalCache);
-            } else {
-                retrieveImages();
-            }
-            break;
-        case 'Dense':
-            if(denseCache.length > 0  && false) {
-                quickUpdateFromCache(denseCache);
-                setPreviewImages(denseCache);
-            } else {
-                retrieveImages();
-            }
-            break;
-    }
 }
 
 function updateDay(delta, modifyForecast) {
@@ -299,8 +204,6 @@ function updateDay(delta, modifyForecast) {
         let newDateArr = currentDate.toDateString().split(' ');
         forecastDateLabel.textContent = `${newDateArr[1]} ${newDateArr[2]}, ${newDateArr[3]}`;
         updateForecastSlider(dayOffset)
-        forecastDayIndex = dayOffset;
-        setForecastImage(false);
     }
 }
 
@@ -313,7 +216,6 @@ function updateMean(newSigma) {
         meanLabel.textContent = `PRISM Non-Zero Average + ${currentSigma} σ`;
         updateThresholdSlider();
         updateThresholdImage();
-        setForecastImage(false);
     }
 }
 
@@ -336,8 +238,7 @@ function updateDate(increment) {
     let newDateLabel = `${newDateArr[1]} ${newDateArr[2]}, ${newDateArr[3]}`;
     currentDateId.textContent = `${newDateArr[3]} ${newDateArr[1]} ${newDateArr[2]}`;
     forecastDateLabel.textContent = newDateLabel;
-    setDay(1);
-    setForecastImage(false);
+    updateDay(0);
 }
 
 function updateThresholdImage() {
@@ -347,7 +248,7 @@ function updateThresholdImage() {
     let newThresholdURL = rootDirectory;
 
     // temporary override
-    let forecastDay = 7;
+    forecastDay = 7;
     initializationDate = '20191227_';
     let currentSigmaTemp = 0.5;
 
@@ -362,28 +263,28 @@ function updateThresholdImage() {
     thresholdImage.src = newThresholdURL;
 }
 
-function updateResolution(quality) {
-    let buttonHighRes = document.getElementById('button-high-res');
-    let buttonLowRes = document.getElementById('button-low-res');
-    if(quality === 'high' && currentResolution === 'low') {
-        currentResolution = 'high';
-        buttonHighRes.style.fontWeight = 'bold';
-        buttonLowRes.style.fontWeight = 'normal';
-        buttonHighRes.style.backgroundColor = '#0d6efd';
-        buttonLowRes.style.backgroundColor = '#212121';
-        updateThresholdImage();
-        setForecastImage(false);
-    } else if(quality === 'low' && currentResolution === 'high') {
-        currentResolution = 'low';
-        buttonLowRes.style.fontWeight = 'bold';
-        buttonHighRes.style.fontWeight = 'normal';
-        buttonLowRes.style.backgroundColor = '#0d6efd';
-        buttonHighRes.style.backgroundColor = '#212121';
-        updateThresholdImage();
-        //setForecastImage(false);
-    }
+    function updateResolution(quality) {
+        let buttonHighRes = document.getElementById('button-high-res');
+        let buttonLowRes = document.getElementById('button-low-res');
+        if (quality === 'high' && currentResolution === 'low') {
+            currentResolution = 'high';
+            buttonHighRes.style.fontWeight = 'bold';
+            buttonLowRes.style.fontWeight = 'normal';
+            buttonHighRes.style.backgroundColor = '#0d6efd';
+            buttonLowRes.style.backgroundColor = '#212121';
+            updateThresholdImage();
+        } else if (quality === 'low' && currentResolution === 'high') {
+            currentResolution = 'low';
+            buttonLowRes.style.fontWeight = 'bold';
+            buttonHighRes.style.fontWeight = 'normal';
+            buttonLowRes.style.backgroundColor = '#0d6efd';
+            buttonHighRes.style.backgroundColor = '#212121';
+            updateThresholdImage();
+        }
 
-}
+      
+
+    }
 
 function updateForecastSlider(day) {
     let forecastSlider = document.getElementById('day-slider-id');
@@ -466,10 +367,7 @@ document.getElementById('theme-switch-id').addEventListener('change', function()
     updateTheme(this.checked);
 });
 
-$( window ).on( "load", function() {
-    retrieveImages();
-    setForecastImage(true);
-});
+
 
 
 
