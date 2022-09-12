@@ -307,6 +307,7 @@ function updateResolution(quality) {
         buttonHighRes.style.backgroundColor = '#0d6efd';
         buttonLowRes.style.backgroundColor = '#212121';
         updateThresholdImage();
+        setForecastImage(false);
     } else if(quality === 'low' && currentResolution === 'high') {
         currentResolution = 'low';
         buttonLowRes.style.fontWeight = 'bold';
@@ -314,6 +315,7 @@ function updateResolution(quality) {
         buttonLowRes.style.backgroundColor = '#0d6efd';
         buttonHighRes.style.backgroundColor = '#212121';
         updateThresholdImage();
+        //setForecastImage(false);
     }
 
 }
