@@ -29,9 +29,20 @@ function toBase64(arr) {
     );
 }
 
-const temp = {
+const tempVote = {
     file: '0.5_Vote_2022-1-1_'
 };
+
+const tempConvolutional = {
+    file: '0.5_Convolutional_2022-1-1_'
+};
+
+const tempDense = {
+    file: '0.5_Dense_2022-1-1_'
+};
+
+let temp = tempVote;
+
 function retrieveImages() {
     $.getJSON(window.location.href + 'aws', temp, function(data) {
         forecastImageCache = [];
@@ -212,8 +223,16 @@ function toggleDaySelection() {
 }
 
 function updateModel(type) {
+    if(type === 'Voting') {
+        temp = tempVote;
+    } else if(type === 'Convolutional') {
+        temp = tempConvolutional;
+    } else {
+        temp = tempDense;
+    }
     let modelButton = document.getElementById('button-model-dropdown');
     modelButton.textContent = type;
+    retrieveImages();
 }
 
 function updateDay(delta, modifyForecast) {
