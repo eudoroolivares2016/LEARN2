@@ -116,7 +116,11 @@
 #main-forecast-date {
     font-size: 20px;
 }
-
+ #main-header-id{
+        display: flex;
+        align-items: baseline;
+        justify-content: revert;
+ }
 #no-preview {
     display: block;
 }
