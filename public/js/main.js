@@ -40,11 +40,23 @@ function retrieveImages() {
         }
         let img = document.getElementById('forecast-image');
         img.src = 'data:image/png;base64,' + forecastImageCache[0];
+        setPreviewImages();
         if(!isTodayStored) {
             localStorage.setItem('todayData', 'data:image/png;base64,' + forecastImageCache[0]);
             isTodayStored = true;
         }
     });
+}
+
+function setPreviewImages() {
+    for(let i = 1; i <= 10; i++) {
+        let img = document.getElementById('preview-image-' + i);
+        threadPreviewImage(img, i - 1);
+    }
+}
+
+function threadPreviewImage(img, index) {
+    img.src = 'data:image/png;base64,' + forecastImageCache[index];
 }
 
 function setForecastImage(isInitializing) {
@@ -56,6 +68,7 @@ function setForecastImage(isInitializing) {
         }
         return;
     }
+    setPreviewImages();
     img.src = 'data:image/png;base64,' + forecastImageCache[forecastDayIndex - 1];
 }
 
@@ -222,7 +235,7 @@ function updateDay(delta, modifyForecast) {
         forecastDateLabel.textContent = `${newDateArr[1]} ${newDateArr[2]}, ${newDateArr[3]}`;
         updateForecastSlider(dayOffset)
         forecastDayIndex = dayOffset;
-        setForecastImage();
+        setForecastImage(false);
     }
 }
 
@@ -235,6 +248,7 @@ function updateMean(newSigma) {
         meanLabel.textContent = `PRISM Non-Zero Average + ${currentSigma} σ`;
         updateThresholdSlider();
         updateThresholdImage();
+        setForecastImage(false);
     }
 }
 
@@ -258,6 +272,7 @@ function updateDate(increment) {
     currentDateId.textContent = `${newDateArr[3]} ${newDateArr[1]} ${newDateArr[2]}`;
     forecastDateLabel.textContent = newDateLabel;
     setDay(1);
+    setForecastImage(false);
 }
 
 function updateThresholdImage() {

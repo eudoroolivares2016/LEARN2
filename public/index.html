@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Learn2</title>
+  <title>LEARN&sup2;</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -14,11 +14,9 @@
 
   <link rel="apple-touch-icon" href="resources/logo.png">
   <link rel="icon" href="resources/logo.png">
-  <!-- Place favicon.ico in the root directory -->
   <link rel="stylesheet" href="css/bootstrap.css">
   <link rel="stylesheet" href="css/style.css">
   <meta name="theme-color" content="#fafafa">
-  <script src="js/require.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://sdk.amazonaws.com/js/aws-sdk-2.179.0.min.js"></script>
 </head>
@@ -53,12 +51,11 @@
               </div>
             </div>
           </div>
-          <div class="btn btn-primary button-resolution" onclick="retrieveImages();">Test</div>
         </div>
 
         <div class="col-sm-5 control-panel-section" id="control-panel-section-id">
           <div class="user-preface">
-            <a href='#' style="width:100%"><div class="btn btn-lg btn-primary users-manual" id="users-manual">User's Manual</div></a>
+            <a href='' style="width:100%"><div class="btn btn-lg btn-primary users-manual" id="users-manual">User's Manual</div></a>
           <div class="theme-selection">
             <label class="theme-switch-label">
               <input id="theme-switch-id" class="theme-switch" type="checkbox" checked>
@@ -122,41 +119,41 @@
                       <div class="row padding-main">
                         <div class="col">
                           <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(1)">1</button></span>
-                          <span class="preview-images"><img onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/High_res_Vote_20191227_0.5_sigma_Day7.png"></span>
+                          <span class="preview-images"><img id="preview-image-1" onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
                           <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(6)">6</button></span>
-                          <span class="preview-images"><img onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/High_res_Vote_20191227_0.5_sigma_Day7.png"></span>
+                          <span class="preview-images"><img id="preview-image-6" onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
                         </div>
                       </div>
                       <div class="row padding-main">
                         <div class="col">
                           <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(2)">2</button></span>
-                          <span class="preview-images"><img onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/High_res_Vote_20191227_0.5_sigma_Day7.png"></span>
+                          <span class="preview-images"><img id="preview-image-2" onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
                           <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(7)">7</button></span>
-                          <span class="preview-images"><img onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/High_res_Vote_20191227_0.5_sigma_Day7.png"></span>
+                          <span class="preview-images"><img id="preview-image-7" onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
                         </div>
                       </div>
                       <div class="row padding-main">
                         <div class="col">
                           <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(3)">3</button></span>
-                          <span class="preview-images"><img onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/High_res_Vote_20191227_0.5_sigma_Day7.png"></span>
+                          <span class="preview-images"><img id="preview-image-3" onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
                           <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(8)">8</button></span>
-                          <span class="preview-images"><img onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/High_res_Vote_20191227_0.5_sigma_Day7.png"></span>
+                          <span class="preview-images"><img id="preview-image-8" onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
                         </div>
                       </div>
                       <div class="row padding-main">
                         <div class="col">
                           <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(4)">4</button></span>
-                          <span class="preview-images"><img onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/High_res_Vote_20191227_0.5_sigma_Day7.png"></span>
+                          <span class="preview-images"><img id="preview-image-4" onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
                           <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(9)">9</button></span>
-                          <span class="preview-images"><img onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/High_res_Vote_20191227_0.5_sigma_Day7.png"></span>
+                          <span class="preview-images"><img id="preview-image-9" onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
                         </div>
                       </div>
                       <div class="row padding-main">
                         <div class="col">
                           <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(5)">5</button></span>
-                          <span class="preview-images"><img onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/High_res_Vote_20191227_0.5_sigma_Day7.png"></span>
+                          <span class="preview-images"><img id="preview-image-5"  onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
                           <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(10)">10</button></span>
-                          <span class="preview-images"><img onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/High_res_Vote_20191227_0.5_sigma_Day7.png"></span>
+                          <span class="preview-images"><img id="preview-image-10"  onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
                         </div>
                       </div>
                     </div>
@@ -263,7 +260,7 @@
                     Jan 01, 2001
                   </div>
                 </div>
-                <img id="forecast-image-mirror" src="resources/High_res_Vote_20191227_0.5_sigma_Day7.png" class="img-fluid padding-image" alt="Responsive image padding-image">
+                <img id="forecast-image-mirror" src="resources/blankForecast.png" class="img-fluid padding-image" alt="Responsive image padding-image">
               </div>
               <div class="col-sm-5">
                 <br>
@@ -283,5 +280,4 @@
   <script src="js/bootstrap.bundle.js"></script>
   <script src="js/main.js"></script>
 </body>
-
 </html>
