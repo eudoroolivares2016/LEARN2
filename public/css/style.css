@@ -73,6 +73,10 @@
     font-size: 12px;
 }
 
+.date-time-label {
+    font-size: 12px;
+}
+
 .extension {
     padding-bottom: 160px;
 }
@@ -105,7 +109,7 @@
 }
 
 #main-forecast-date {
-    font-size: 16px;
+    font-size: 20px;
 }
 
 #no-preview {
