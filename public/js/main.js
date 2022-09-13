@@ -77,6 +77,7 @@ function retrieveImages() {
             localStorage.setItem('todayData', 'data:image/png;base64,' + forecastImageCache[0]);
             isTodayStored = true;
         }
+        setDay(1);
     });
 }
 
@@ -132,7 +133,7 @@ function initializeDates() {
     let initializeDateElement = document.getElementById('init');
     let today = new Date().toString().split(' ');
     let forecastDate = today[1] + ' ' + today[2] + ', ' + today[3];
-    let initDate = today[3] + ' ' + today[1] + ' ' + today[2];
+    let initDate = today[3] + ' ' + today[1] + ' ' + today[2] + ' (00Z)';
 
     forecastDateElement.textContent = forecastDate;
     initializeDateElement.textContent = initDate;
@@ -353,7 +354,7 @@ function updateDate(increment) {
     }
     let newDateArr = currentDate.toDateString().split(' ');
     let newDateLabel = `${newDateArr[1]} ${newDateArr[2]}, ${newDateArr[3]}`;
-    currentDateId.textContent = `${newDateArr[3]} ${newDateArr[1]} ${newDateArr[2]}`;
+    currentDateId.textContent = `${newDateArr[3]} ${newDateArr[1]} ${newDateArr[2]} (00Z)`;
     forecastDateLabel.textContent = newDateLabel;
     setDay(1);
     setForecastImage(false);
