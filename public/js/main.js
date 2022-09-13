@@ -251,11 +251,13 @@ function updateModel(type) {
         temp = tempDense;
     }
     modelType = type;
+    setDay(1);
     let modelButton = document.getElementById('button-model-dropdown');
     modelButton.textContent = type;
     switch(modelType) {
         case 'Voting':
-            if(votingCache.length > 0 && false) {
+            if(votingCache.length > 0) {
+                forecastImageCache = votingCache;
                 quickUpdateFromCache(votingCache);
                 setPreviewImages(votingCache);
             } else {
@@ -263,7 +265,8 @@ function updateModel(type) {
             }
             break;
         case 'Convolutional':
-            if(convolutionalCache.length > 0  && false) {
+            if(convolutionalCache.length > 0 ) {
+                forecastImageCache = convolutionalCache;
                 quickUpdateFromCache(convolutionalCache);
                 setPreviewImages(convolutionalCache);
             } else {
@@ -271,7 +274,8 @@ function updateModel(type) {
             }
             break;
         case 'Dense':
-            if(denseCache.length > 0  && false) {
+            if(denseCache.length > 0) {
+                forecastImageCache = denseCache;
                 quickUpdateFromCache(denseCache);
                 setPreviewImages(denseCache);
             } else {
