@@ -163,6 +163,10 @@
 
 }
 
+.preview-background {
+    background-color: #474747;
+}
+
 .preview-size {
     width: 75px;
 }
@@ -189,10 +193,6 @@
     background-color: #77c743;
     -webkit-transition: .4s;
     transition: .4s;
-}
-
-.preview-background {
-    background-color: #474747;
 }
 
 .slider.round {

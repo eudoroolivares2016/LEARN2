@@ -54,7 +54,10 @@ const tempDense = {
 let temp = tempVote;
 
 function retrieveImages() {
+    let img = document.getElementById('forecast-image');
+    img.src = 'resources/blankForecast.png';
     $.getJSON(window.location.href + 'aws', temp, function(data) {
+
         forecastImageCache = [];
         for(let i = 0; i < 10; i++) {
             forecastImageCache[i] = toBase64(data[i].Body.data);
@@ -70,7 +73,6 @@ function retrieveImages() {
                 denseCache = forecastImageCache;
                 break;
         }
-        let img = document.getElementById('forecast-image');
         img.src = 'data:image/png;base64,' + forecastImageCache[0];
         setPreviewImages(forecastImageCache);
         if(!isTodayStored) {
@@ -275,7 +277,7 @@ function updateModel(type) {
     modelButton.textContent = type;
     switch(modelType) {
         case 'Voting':
-            if(votingCache.length > 0 && false) {
+            if(votingCache.length > 0) {
                 quickUpdateFromCache(votingCache);
                 setPreviewImages(votingCache);
             } else {
@@ -283,7 +285,7 @@ function updateModel(type) {
             }
             break;
         case 'Convolutional':
-            if(convolutionalCache.length > 0  && false) {
+            if(convolutionalCache.length > 0) {
                 quickUpdateFromCache(convolutionalCache);
                 setPreviewImages(convolutionalCache);
             } else {
@@ -291,7 +293,7 @@ function updateModel(type) {
             }
             break;
         case 'Dense':
-            if(denseCache.length > 0  && false) {
+            if(denseCache.length > 0) {
                 quickUpdateFromCache(denseCache);
                 setPreviewImages(denseCache);
             } else {
