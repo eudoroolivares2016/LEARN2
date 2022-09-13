@@ -23,13 +23,11 @@
 
 <body>
   <div class="page-body" id="page-body-id">
-   
     <div class="container-fluid main-header" id="main-header-id">
       <div class="learn2-logo">
       <img src="resources/logo.png" class="img-fluid" style="width: 200px" alt="Responsive image">
       LEARN&sup2;
       </div>
-      
       <h3 class="learn2">Landfalling Event Atmospheric River Neural Network</h3>
     </div>
     <div class="container-fluid">
@@ -123,9 +121,9 @@
                     <div class="col">
                       <label class="scale-switch-label">
                         <input id="preview-switch-id" class="theme-switch preview-switch" type="checkbox">
-                        <div class="slider round preview-background">
-                          <span class="on">Preview</span>
-                          <span class="off">Preview</span>
+                        <div class="slider round" id="preview-switch-background-id">
+                          <span class="on preview-on">Preview</span>
+                          <span class="off preview-off">Preview</span>
                         </div>
                       </label>
                     </div>
@@ -212,6 +210,9 @@
                         <li><a class="dropdown-item" id="option-convolutional">Convolutional</a></li>
                         <li><a class="dropdown-item" id="option-dense">Dense</a></li>
                       </ul>
+                      <span class="spinner-border text-primary loading-spinner" id="loading-spinner-id">
+                        <span class="visually-hidden "></span>
+                      </span>
                     </div>
                   </div>
                 </div>

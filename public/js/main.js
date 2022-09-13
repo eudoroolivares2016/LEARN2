@@ -8,14 +8,9 @@ const dayButtons = document.querySelectorAll('.btn-light');
 const lightPreview = document.querySelectorAll('.preview-switch');
 const resolution = document.querySelectorAll('.button-resolution');
 
-
-
-
-
-
-
 let currentResolution = 'high';
 let currentSigma = .5;
+let dark = true;
 let initializationDate = new Date();
 let forecastDayIndex = 1;
 let previewsEnabled = false;
@@ -54,10 +49,13 @@ const tempDense = {
 let temp = tempVote;
 
 function retrieveImages() {
+    let spinner = document.getElementById('loading-spinner-id');
     let img = document.getElementById('forecast-image');
-    img.src = 'resources/blankForecast.png';
-    $.getJSON(window.location.href + 'aws', temp, function(data) {
 
+    img.src = 'resources/blankForecast.png';
+    spinner.style.display = 'block';
+
+    $.getJSON(window.location.href + 'aws', temp, function(data) {
         forecastImageCache = [];
         for(let i = 0; i < 10; i++) {
             forecastImageCache[i] = toBase64(data[i].Body.data);
@@ -79,6 +77,7 @@ function retrieveImages() {
             localStorage.setItem('todayData', 'data:image/png;base64,' + forecastImageCache[0]);
             isTodayStored = true;
         }
+        spinner.style.display = 'none';
         setDay(1);
     });
 }
@@ -95,11 +94,13 @@ function threadPreviewImage(cache, img, index) {
 }
 
 function setForecastImage(isInitializing) {
+    let spinner = document.getElementById('loading-spinner-id');
     let img = document.getElementById('forecast-image');
     if(isInitializing) {
         let cachedInitForecast = localStorage.getItem('todayData');
         if(cachedInitForecast != null) {
             img.src = cachedInitForecast;
+            spinner.style.display = 'none';
         }
         return;
     }
@@ -117,9 +118,15 @@ function setWidth(context, size) {
 
 function initializePreview() {
     let themeCheckbox = document.getElementById('preview-switch-id');
+    let previewCheckbox = document.getElementById('preview-switch-background-id');
     let isChecked = localStorage.getItem("preview");
     previewsEnabled = isChecked === 'true';
     themeCheckbox.checked = previewsEnabled;
+    if(dark) {
+        previewCheckbox.style.backgroundColor = previewsEnabled ? previewCheckbox.style.backgroundColor = '#0d6efd' : previewCheckbox.style.backgroundColor = '#393939';
+    } else {
+        previewCheckbox.style.backgroundColor = previewsEnabled ? previewCheckbox.style.backgroundColor = '#77c743' : previewCheckbox.style.backgroundColor = '#393939';
+    }
     updatePreview(isChecked === 'true');
 }
 
@@ -127,7 +134,8 @@ function initializeTheme() {
     let themeCheckbox = document.getElementById('theme-switch-id');
     let isChecked = localStorage.getItem("theme");
     themeCheckbox.checked = isChecked === 'true';
-    updateTheme(isChecked === 'true');
+    dark = isChecked === 'true';
+    updateTheme(dark);
 }
 
 function initializeDates() {
@@ -142,6 +150,13 @@ function initializeDates() {
 }
 
 function updatePreview(isChecked) {
+    previewsEnabled = isChecked;
+    let previewCheckbox = document.getElementById('preview-switch-background-id');
+    if(dark) {
+        previewCheckbox.style.backgroundColor = isChecked ? previewCheckbox.style.backgroundColor = '#0d6efd' : previewCheckbox.style.backgroundColor = '#393939';
+    } else {
+        previewCheckbox.style.backgroundColor = isChecked ? previewCheckbox.style.backgroundColor = '#77c743' : previewCheckbox.style.backgroundColor = '#393939';
+    }
     if(isChecked) {
         let thumbnails = document.getElementById('preview-thumbnails');
         let buttonsOnly = document.getElementById('no-preview');
@@ -168,15 +183,7 @@ function updateTheme(isChecked) {
     let modelButton = document.getElementById('button-model-dropdown');
     let thresholdButton = document.getElementById('threshold');
     let userManual = document.getElementById('users-manual');
-
-
-
-
-
-
-
-
-
+    let previewCheckbox = document.getElementById('preview-switch-background-id');
 
     if (isChecked) {
         // Set Dark Theme
@@ -194,10 +201,11 @@ function updateTheme(isChecked) {
         modelButton.style.backgroundColor = '#0d6efd';
         forecastDay.style.backgroundColor = '#0d6efd';
         forecastDay.style.borderColor = '#0d6efd';
-
         daySlider.style.accentColor = '#0d6efd';
         thresholdSlider.style.accentColor = '#0d6efd';
         modelButton.style.borderColor = '#0a53be';
+        previewCheckbox.style.backgroundColor = previewsEnabled ? previewCheckbox.style.backgroundColor = '#0d6efd' : previewCheckbox.style.backgroundColor = '#393939';
+
         dayButtons.forEach((dayButtons) => {
             dayButtons.style.borderColor = "#0a53be";
             dayButtons.classList.remove('light-hover');
@@ -205,11 +213,6 @@ function updateTheme(isChecked) {
         lightPreview.forEach((lightPreview) => {
             lightPreview.classList.remove('light-switch');
         });
-
-        // resolution.forEach((resolution) => {
-        //     resolution.classList.remove('res-light');
-        // });
-
 
     } else {
         // Set Light Theme
@@ -233,6 +236,8 @@ function updateTheme(isChecked) {
         thresholdSlider.style.accentColor = '#569630';
         pageBody.style.backgroundColor = '#2d871933';
         pageBody.style.color = 'black';
+        previewCheckbox.style.backgroundColor = previewsEnabled ? previewCheckbox.style.backgroundColor = '#77c743' : previewCheckbox.style.backgroundColor = '#393939';
+
         dayButtons.forEach((dayButtons) => {
             dayButtons.style.borderColor = "#77c743";
             dayButtons.classList.add('light-hover');
@@ -241,7 +246,6 @@ function updateTheme(isChecked) {
         lightPreview.forEach((lightPreview) => {
             lightPreview.classList.add('light-switch');
         });
-
     }
 }
 
@@ -485,6 +489,7 @@ document.getElementById('init-down').addEventListener('click', function() {
 // Theme Switch
 document.getElementById('theme-switch-id').addEventListener('change', function() {
     localStorage.setItem('theme', this.checked);
+    dark = this.checked;
     updateTheme(this.checked);
 });
 

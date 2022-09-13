@@ -98,11 +98,19 @@
     padding: 15px;
 }
 
+.loading-spinner {
+    display: none;
+    position: absolute;
+    left: 170px;
+    top: 5px;
+}
+
 .main-header {
     font-size: 96px;
     text-align: center;
     background-color: #1c2678;
-    padding: 20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
 }
 
 .map-section {
@@ -164,7 +172,7 @@
 }
 
 .preview-background {
-    background-color: #474747;
+    background-color: #505050;
 }
 
 .preview-size {
@@ -231,10 +239,6 @@
 
 }
 
-.theme-switch:checked + .slider {
-    background-color: #6c29ff;
-}
-
 .theme-switch:focus + .slider {
     box-shadow: 0 0 1px #2196F3;
 }
@@ -243,6 +247,10 @@
     -webkit-transform: translateX(86px);
     -ms-transform: translateX(86px);
     transform: translateX(86px);
+}
+
+.preview-switch + .off {
+    background-color: #0d6efd;
 }
 
 .preview-switch:checked + .slider:before {
@@ -300,6 +308,6 @@
     color:#000;
 }
 .light-hover:hover{
-    background:#77c743;
+    background: #aeafae;
 }
 
