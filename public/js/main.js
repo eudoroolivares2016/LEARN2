@@ -6,6 +6,12 @@ const lowResPrefix = 'Low_res_'
 const extension = '.png'
 const dayButtons = document.querySelectorAll('.btn-light');
 const lightPreview = document.querySelectorAll('.preview-switch');
+const resolution = document.querySelectorAll('.button-resolution');
+
+
+
+
+
 
 
 let currentResolution = 'high';
@@ -160,6 +166,15 @@ function updateTheme(isChecked) {
     let thresholdButton = document.getElementById('threshold');
     let userManual = document.getElementById('users-manual');
 
+
+
+
+
+
+
+
+
+
     if (isChecked) {
         // Set Dark Theme
         controlPanel.style.backgroundColor = '#212121';
@@ -187,7 +202,11 @@ function updateTheme(isChecked) {
         lightPreview.forEach((lightPreview) => {
             lightPreview.classList.remove('light-switch');
         });
-        
+
+        // resolution.forEach((resolution) => {
+        //     resolution.classList.remove('res-light');
+        // });
+
 
     } else {
         // Set Light Theme
@@ -202,7 +221,7 @@ function updateTheme(isChecked) {
         thresholdButton.style.border = '#77c743';
         forecastDay.style.backgroundColor = '#77c743';
         forecastDay.style.borderColor = '#77c743';
-    
+
         userManual.style.backgroundColor = '#77c743';
         userManual.style.borderColor = '#77c743';
         mainHeader.style.backgroundColor = '#2d871933';
@@ -215,7 +234,7 @@ function updateTheme(isChecked) {
             dayButtons.style.borderColor = "#77c743";
             dayButtons.classList.add('light-hover');
         });
-       
+
         lightPreview.forEach((lightPreview) => {
             lightPreview.classList.add('light-switch');
         });
@@ -251,13 +270,11 @@ function updateModel(type) {
         temp = tempDense;
     }
     modelType = type;
-    setDay(1);
     let modelButton = document.getElementById('button-model-dropdown');
     modelButton.textContent = type;
     switch(modelType) {
         case 'Voting':
-            if(votingCache.length > 0) {
-                forecastImageCache = votingCache;
+            if(votingCache.length > 0 && false) {
                 quickUpdateFromCache(votingCache);
                 setPreviewImages(votingCache);
             } else {
@@ -265,8 +282,7 @@ function updateModel(type) {
             }
             break;
         case 'Convolutional':
-            if(convolutionalCache.length > 0 ) {
-                forecastImageCache = convolutionalCache;
+            if(convolutionalCache.length > 0  && false) {
                 quickUpdateFromCache(convolutionalCache);
                 setPreviewImages(convolutionalCache);
             } else {
@@ -274,8 +290,7 @@ function updateModel(type) {
             }
             break;
         case 'Dense':
-            if(denseCache.length > 0) {
-                forecastImageCache = denseCache;
+            if(denseCache.length > 0  && false) {
                 quickUpdateFromCache(denseCache);
                 setPreviewImages(denseCache);
             } else {
@@ -474,6 +489,10 @@ $( window ).on( "load", function() {
     retrieveImages();
     setForecastImage(true);
 });
+
+
+
+
 
 
 
