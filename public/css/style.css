@@ -7,10 +7,14 @@
  #button-high-res {
     background-color: #0d6efd;
     font-weight: bold;
-}  
+}
 
 #button-low-res {
     background-color: #212121;
+}
+
+.button-home {
+    width: 200px;
 }
 
 #button-model-dropdown {
@@ -265,7 +269,15 @@
 
 .light-switch:checked + .slider {
     background-color: #77c743;
-} 
+}
+
+.light-hover{
+    background-color: #FFFFFF;
+    color:#000;
+}
+.light-hover:hover{
+    background: #aeafae;
+}
 
 .theme-switch:checked + .slider .on {
     display: block;
@@ -291,6 +303,27 @@
     stroke: none;
 }
 
+.user-guide-control-panel {
+    font-size: 30px;
+}
+
+.user-guide-section {
+    background-color: #212121;
+}
+
+.user-guide-title {
+    font-size: 48px;
+    text-align: center;
+}
+
+.user-guide-left {
+    text-align: right;
+}
+
+.user-guide-right {
+    text-align: left;
+}
+
 .user-preface{
         display: flex;
         justify-content: space-between;
@@ -301,13 +334,5 @@
     bottom: 15px;
     width: 50%;
     float: left;
-}
-
-.light-hover{
-    background-color: #FFFFFF;
-    color:#000;
-}
-.light-hover:hover{
-    background: #aeafae;
 }
 

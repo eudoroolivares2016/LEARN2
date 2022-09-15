@@ -1,5 +1,5 @@
 require('dotenv').config();
-
+const fs = require('fs');
 const express = require('express');
 const app = express();
 const AWS = require('aws-sdk');
@@ -10,6 +10,12 @@ AWS.config.update({
     accessKeyId: process.env.ACCESS_KEY,
     secretAccessKey: process.env.SECRET_KEY,
     region: process.env.AWS_REGION
+});
+app.get('/user_guide', function(req,res) {
+    fs.readFile('public/user_guide.html',   function (err, data) {
+        res.setHeader('Content-Type', 'text/html');
+        res.send(data);
+    });
 });
 
 const bucket = process.env.BUCKET_NAME;
