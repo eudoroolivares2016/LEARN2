@@ -371,7 +371,7 @@ function updateDate(increment) {
     currentDateId.textContent = `${newDateArr[3]} ${newDateArr[1]} ${newDateArr[2]} (00Z)`;
     forecastDateLabel.textContent = newDateLabel;
     setDay(1);
-    setForecastImage(false);
+    updateImages();
 }
 
 function updateThresholdImage() {
