@@ -265,7 +265,7 @@ function toggleDaySelection() {
 
 function quickUpdateFromCache(cache) {
     let img = document.getElementById('forecast-image');
-    img.src = 'data:image/png;base64,' + cache[0];
+    img.src = 'data:image/png;base64,' + cache[forecastDayIndex - 1];
 }
 
 function updateModel(type) {
@@ -279,9 +279,15 @@ function updateModel(type) {
     modelType = type;
     let modelButton = document.getElementById('button-model-dropdown');
     modelButton.textContent = type;
+    setDay(1);
+    updateImages();
+}
+
+function updateImages() {
     switch(modelType) {
         case 'Voting':
             if(votingCache.length > 0) {
+                setForecastImage(false);
                 quickUpdateFromCache(votingCache);
                 setPreviewImages(votingCache);
             } else {
@@ -290,6 +296,7 @@ function updateModel(type) {
             break;
         case 'Convolutional':
             if(convolutionalCache.length > 0) {
+                setForecastImage(false);
                 quickUpdateFromCache(convolutionalCache);
                 setPreviewImages(convolutionalCache);
             } else {
@@ -298,6 +305,7 @@ function updateModel(type) {
             break;
         case 'Dense':
             if(denseCache.length > 0) {
+                setForecastImage(false);
                 quickUpdateFromCache(denseCache);
                 setPreviewImages(denseCache);
             } else {
@@ -326,7 +334,7 @@ function updateDay(delta, modifyForecast) {
         forecastDateLabel.textContent = `${newDateArr[1]} ${newDateArr[2]}, ${newDateArr[3]}`;
         updateForecastSlider(dayOffset)
         forecastDayIndex = dayOffset;
-        setForecastImage(false);
+        updateImages();
     }
 }
 
@@ -406,9 +414,8 @@ function updateResolution(quality) {
         buttonLowRes.style.backgroundColor = '#0d6efd';
         buttonHighRes.style.backgroundColor = '#212121';
         updateThresholdImage();
-        //setForecastImage(false);
+        setForecastImage(false);
     }
-
 }
 
 function updateForecastSlider(day) {
