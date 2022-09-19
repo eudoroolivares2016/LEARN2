@@ -14,12 +14,15 @@ let dark = true;
 let initializationDate = new Date();
 let forecastDayIndex = 1;
 let previewsEnabled = false;
+let isTodayStored = false;
+let modelType = 'Voting';
+
 let forecastImageCache = [];
 let votingCache = [];
 let convolutionalCache = [];
 let denseCache = [];
-let isTodayStored = false;
-let modelType = 'Voting';
+let ecmwfCache = [];
+let gefsCache = [];
 
 // On-Load Functionality
 window.onload = function() {
@@ -35,18 +38,30 @@ function toBase64(arr) {
 }
 
 const tempVote = {
-    file: '0.5_Vote_2022-1-1_'
+    file: '1.5_Vote_2022-1-1_'
 };
 
 const tempConvolutional = {
-    file: '0.5_Convolutional_2022-1-1_'
+    file: '1.5_Convolutional_2022-1-1_'
 };
 
 const tempDense = {
-    file: '0.5_Dense_2022-1-1_'
+    file: '1.5_Dense_2022-1-1_'
+};
+
+const tempECMWF = {
+    file: '1.5_ECMWF_2022-1-1_'
+};
+
+const tempGEFS = {
+    file: '1.5_GEFS_2022-1-1_'
 };
 
 let temp = tempVote;
+
+function test() {
+
+}
 
 function retrieveImages() {
     let spinner = document.getElementById('loading-spinner-id');
@@ -54,11 +69,13 @@ function retrieveImages() {
 
     img.src = 'resources/blankForecast.png';
     spinner.style.display = 'block';
-
-    $.getJSON(window.location.href + 'aws', temp, function(data) {
+    $.get(window.location.href + 'aws', temp, function(data) {
         forecastImageCache = [];
-        for(let i = 0; i < 10; i++) {
-            forecastImageCache[i] = toBase64(data[i].Body.data);
+        for(let i = 0; i < 50; i++) {
+            forecastImageCache[i] = data[i];
+        }
+        if(spinner == null) {
+            return;
         }
         switch(modelType) {
             case 'Voting':
@@ -70,11 +87,17 @@ function retrieveImages() {
             case 'Dense':
                 denseCache = forecastImageCache;
                 break;
+            case 'ECMWF':
+                ecmwfCache = forecastImageCache;
+                break;
+            case 'GEFS':
+                gefsCache = forecastImageCache;
+                break;
         }
-        img.src = 'data:image/png;base64,' + forecastImageCache[0];
+        img.src = forecastImageCache[(10 * currentSigma * 2)];
         setPreviewImages(forecastImageCache);
         if(!isTodayStored) {
-            localStorage.setItem('todayData', 'data:image/png;base64,' + forecastImageCache[0]);
+            localStorage.setItem('todayData', forecastImageCache[10]);
             isTodayStored = true;
         }
         spinner.style.display = 'none';
@@ -85,12 +108,12 @@ function retrieveImages() {
 function setPreviewImages(cache) {
     for(let i = 1; i <= 10; i++) {
         let img = document.getElementById('preview-image-' + i);
-        threadPreviewImage(cache, img, i - 1);
+        threadPreviewImage(cache, img, i - 1 + (10 * currentSigma * 2));
     }
 }
 
 function threadPreviewImage(cache, img, index) {
-    img.src = 'data:image/png;base64,' + cache[index];
+    img.src = cache[index];
 }
 
 function setForecastImage(isInitializing) {
@@ -99,13 +122,14 @@ function setForecastImage(isInitializing) {
     if(isInitializing) {
         let cachedInitForecast = localStorage.getItem('todayData');
         if(cachedInitForecast != null) {
-            img.src = cachedInitForecast;
-            spinner.style.display = 'none';
+            // TODO: Will add instant image loading back later
+            //img.src = cachedInitForecast;
+            //spinner.style.display = 'none';
         }
         return;
     }
     setPreviewImages(forecastImageCache);
-    img.src = 'data:image/png;base64,' + forecastImageCache[forecastDayIndex - 1];
+    img.src = forecastImageCache[forecastDayIndex - 1 + (10 * currentSigma * 2)];
 }
 
 function log(msg) {
@@ -265,16 +289,26 @@ function toggleDaySelection() {
 
 function quickUpdateFromCache(cache) {
     let img = document.getElementById('forecast-image');
-    img.src = 'data:image/png;base64,' + cache[forecastDayIndex - 1];
+    img.src = cache[forecastDayIndex - 1 + (10 * currentSigma * 2)];
 }
 
 function updateModel(type) {
-    if(type === 'Voting') {
-        temp = tempVote;
-    } else if(type === 'Convolutional') {
-        temp = tempConvolutional;
-    } else {
-        temp = tempDense;
+    switch(modelType) {
+        case 'Voting':
+            temp = tempVote;
+            break;
+        case 'Convolutional':
+            temp = tempConvolutional;
+            break;
+        case 'Dense':
+            temp = tempDense;
+            break;
+        case 'ECMWF':
+            temp = tempECMWF;
+            break;
+        case 'GEFS':
+            temp = tempGEFS;
+            break;
     }
     modelType = type;
     let modelButton = document.getElementById('button-model-dropdown');
@@ -312,6 +346,24 @@ function updateImages() {
                 retrieveImages();
             }
             break;
+        case 'ECMWF':
+            if(ecmwfCache.length > 0) {
+                setForecastImage(false);
+                quickUpdateFromCache(ecmwfCache);
+                setPreviewImages(ecmwfCache);
+            } else {
+                retrieveImages();
+            }
+            break;
+        case 'GEFS':
+            if(gefsCache.length > 0) {
+                setForecastImage(false);
+                quickUpdateFromCache(gefsCache);
+                setPreviewImages(gefsCache);
+            } else {
+                retrieveImages();
+            }
+            break;
     }
 }
 
@@ -345,9 +397,10 @@ function updateMean(newSigma) {
         currentSigma = parseFloat(newSigma);
         threshold.textContent = `${currentSigma.toFixed(1)}`;
         meanLabel.textContent = `PRISM Non-Zero Average + ${currentSigma} σ`;
-        updateThresholdSlider();
+        updateImages();
         updateThresholdImage();
-        setForecastImage(false);
+        updateThresholdSlider();
+        //setForecastImage(false);
     }
 }
 
@@ -375,24 +428,14 @@ function updateDate(increment) {
 }
 
 function updateThresholdImage() {
-    let forecastImage = document.getElementById('forecast-image');
     let thresholdImage = document.getElementById('threshold-image');
-    let newForecastURL = rootDirectory;
     let newThresholdURL = rootDirectory;
 
-    // temporary override
-    let forecastDay = 7;
-    initializationDate = '20191227_';
-    let currentSigmaTemp = 0.5;
-
     if(currentResolution === 'high') {
-        newForecastURL += highResPrefix + 'Vote_' + initializationDate + currentSigmaTemp + sigmaDaySuffix + forecastDay + extension;
         newThresholdURL += highResPrefix + currentSigma + sigmaThresholdSuffix + extension;
     } else {
-        newForecastURL += 'Vote_' + initializationDate + currentSigmaTemp + sigmaDaySuffix + forecastDay + extension;
         newThresholdURL += lowResPrefix + currentSigma + sigmaThresholdSuffix + extension;
     }
-    forecastImage.src = newForecastURL;
     thresholdImage.src = newThresholdURL;
 }
 
@@ -406,7 +449,7 @@ function updateResolution(quality) {
         buttonHighRes.style.backgroundColor = '#0d6efd';
         buttonLowRes.style.backgroundColor = '#212121';
         updateThresholdImage();
-        setForecastImage(false);
+        //setForecastImage(false);
     } else if(quality === 'low' && currentResolution === 'high') {
         currentResolution = 'low';
         buttonLowRes.style.fontWeight = 'bold';
@@ -414,7 +457,7 @@ function updateResolution(quality) {
         buttonLowRes.style.backgroundColor = '#0d6efd';
         buttonHighRes.style.backgroundColor = '#212121';
         updateThresholdImage();
-        setForecastImage(false);
+        //setForecastImage(false);
     }
 }
 
@@ -439,6 +482,14 @@ document.getElementById('option-convolutional').addEventListener('click', functi
 
 document.getElementById('option-voting').addEventListener('click', function() {
     updateModel('Voting');
+});
+
+document.getElementById('option-ecmwf').addEventListener('click', function() {
+    updateModel('ECMWF');
+});
+
+document.getElementById('option-gefs').addEventListener('click', function() {
+    updateModel('GEFS');
 });
 
 // Resolution Selection

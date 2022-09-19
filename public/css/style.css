@@ -149,7 +149,7 @@
 }
 
 .padding-image {
-    padding: 3%;
+    padding: 1%;
 }
 
 .padding-main {
@@ -318,6 +318,7 @@
 
 .user-guide-left {
     text-align: right;
+    font-weight: bold;
 }
 
 .user-guide-right {
