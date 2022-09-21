@@ -1,0 +1,82 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+    <meta charset="utf-8">
+    <title>LEARN&sup2;</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+
+    <link rel="apple-touch-icon" href="resources/logo.png">
+    <link rel="icon" href="resources/logo.png">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="theme-color" content="#fafafa">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.179.0.min.js"></script>
+</head>
+
+<body>
+<div class="page-body" id="page-body-id">
+    <div class="container-fluid main-header" id="main-header-id">
+        <div class="learn2-logo">
+            <img src="resources/logo.png" class="img-fluid" style="width: 200px" alt="Responsive image">
+            LEARN&sup2;
+        </div>
+        <h3 class="learn2">Landfalling Event Atmospheric River Neural Network</h3>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row centered-text">
+            <div class="col-sm-12">
+                Interactive Map:
+            </div>
+        </div>
+        <div class="row centered-text">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+                <img id="forecast-image-id" src="resources/testForecastDark.png" usemap="#forecast-map" class="img-fluid padding-image" alt="Responsive image padding-image">
+                <span id="interactive-map-id">
+
+                </map>
+                </span>
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-8">
+                            <div class="container-fluid">
+                                <table style="width:100%" class="value-table">
+                                    <tr>
+                                        <th>Value</th>
+                                        <th>Coordinate</th>
+                                    </tr>
+                                    <tr>
+                                        <td id="value-id">--</td>
+                                        <td id="coordinate-id">( , )</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-sm-2"></div>
+
+                    </div>
+                </div>
+                <br>
+                <button class="btn btn-primary" style="width: 150px;" onclick="enableInteraction();">Enable</button>
+            </div>
+            <div class="col-sm-4"></div>
+        </div>
+    </div>
+
+    <div style="padding-bottom: 50%;"></div>
+</div>
+<script src="js/bootstrap.bundle.js"></script>
+<script src="js/map.js"></script>
+</body>
+</html>

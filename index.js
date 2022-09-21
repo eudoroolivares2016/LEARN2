@@ -19,12 +19,18 @@ app.get('/user_guide', function(req,res) {
     });
 });
 
+app.get('/test', function(req,res) {
+    fs.readFile('public/interactive_map_test.html',   function (err, data) {
+        res.setHeader('Content-Type', 'text/html');
+        res.send(data);
+    });
+});
+
 const bucket = process.env.BUCKET_NAME;
 const s3 = new AWS.S3();
 
 let imageData = Array(50);
 function getImageData(params, index) {
-    // console.log(params);
     return new Promise(resolve => {
         s3.getObject(params, function(err, data) {
             if(err) {
@@ -62,7 +68,6 @@ function gatherImageData(fileNames, _callback) {
     const promise4 = Promise.resolve(makePromiseSet(fileNames, 40));
     Promise.all([promise0, promise1, promise2, promise3, promise4
     ]).then((values) => {
-        console.log('done');
         _callback();
     });
 }
@@ -78,6 +83,15 @@ function gatherURL(fileNames, _callback) {
     }
     _callback();
 }
+let csv = [];
+app.get('/testaws2', async (req, res) => {
+    let fileName = req.query.file;
+    const s3Stream = s3.getObject({Bucket: bucket, Key: fileName}).createReadStream();
+    require('fast-csv').parseStream(s3Stream)
+        .on('data', (data) => {
+            csv.push(data);
+        }).on('end', count => res.send(csv));
+});
 
 app.get('/aws', async (req, res) => {
     let rootName = req.query.file;
@@ -106,7 +120,6 @@ app.get('/aws', async (req, res) => {
         }
     }
     gatherURL(fileNames, function() {
-        console.log('sending');
         res.send(imageURLS);
     });
 });

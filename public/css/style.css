@@ -279,12 +279,20 @@
     background: #aeafae;
 }
 
+table, th, td {
+    border: 3px solid black;
+}
+
 .theme-switch:checked + .slider .on {
     display: block;
 }
 
 .theme-switch:checked + .slider .off {
     display: none;
+}
+
+#threshold-image {
+
 }
 
 .threshold-slider {
@@ -335,5 +343,9 @@
     bottom: 15px;
     width: 50%;
     float: left;
+}
+
+.value-table {
+    background-color: #212121;
 }
 

@@ -20,6 +20,7 @@
     "aws-sdk": "^2.1212.0",
     "dotenv": "^16.0.2",
     "express": "^4.18.1",
+    "fast-csv": "^4.3.6",
     "node.js": "^0.0.1-security",
     "nodejs": "^0.0.0"
   },

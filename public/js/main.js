@@ -119,15 +119,6 @@ function threadPreviewImage(cache, img, index) {
 function setForecastImage(isInitializing) {
     let spinner = document.getElementById('loading-spinner-id');
     let img = document.getElementById('forecast-image');
-    if(isInitializing) {
-        let cachedInitForecast = localStorage.getItem('todayData');
-        if(cachedInitForecast != null) {
-            // TODO: Will add instant image loading back later
-            //img.src = cachedInitForecast;
-            //spinner.style.display = 'none';
-        }
-        return;
-    }
     setPreviewImages(forecastImageCache);
     img.src = forecastImageCache[forecastDayIndex - 1 + (10 * currentSigma * 2)];
 }
