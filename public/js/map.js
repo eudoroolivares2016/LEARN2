@@ -63,3 +63,8 @@ function createGrid() {
 function enableInteraction() {
     readCSV('1.5_Vote_2022-1-1_1.csv_0.5.csv');
 }
+
+
+$( window ).on( "load", function() {
+    enableInteraction();
+});
