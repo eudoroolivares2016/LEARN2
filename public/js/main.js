@@ -372,16 +372,19 @@ function updateDay(delta, modifyForecast) {
     let daySelection = document.getElementById('day-selection');
     daySelection.style.display = 'none';
     let currentDateArr = dateInitialize.textContent.split(' ');
-    let currentDate = new Date(`${currentDateArr[1]} ${currentDateArr[2]} ${currentDateArr[0]}`);
+    let currentDate1 = new Date(`${currentDateArr[1]} ${currentDateArr[2]} ${currentDateArr[0]}`);
+    let currentDate2 = new Date(`${currentDateArr[1]} ${currentDateArr[2]} ${currentDateArr[0]}`);
     let currentDay = parseInt(forecast.textContent);
     if(currentDay + delta >= 1 && currentDay + delta <= 10) {
         let dayOffset = currentDay + delta;
         if(modifyForecast) {
             forecast.textContent = `${dayOffset}`;
         }
-        currentDate.setDate(currentDate.getDate() + dayOffset - 1);
-        let newDateArr = currentDate.toDateString().split(' ');
-        forecastDateLabel.textContent = `${newDateArr[1]} ${newDateArr[2]}, ${newDateArr[3]}`;
+        currentDate1.setDate(currentDate1.getDate() + dayOffset - 1);
+        currentDate2.setDate(currentDate2.getDate() + dayOffset);
+        let newDateArr1 = currentDate1.toDateString().split(' ');
+        let newDateArr2 = currentDate2.toDateString().split(' ');
+        forecastDateLabel.textContent = `${newDateArr1[1]} ${newDateArr1[2]}, ${newDateArr1[3]} (12Z) - ${newDateArr2[1]} ${newDateArr2[2]}, ${newDateArr2[3]} (12Z)`;
         updateForecastSlider(dayOffset)
         forecastDayIndex = dayOffset;
         updateImages();
