@@ -93,8 +93,22 @@ app.get('/testaws2', async (req, res) => {
         }).on('end', count => res.send(csv));
 });
 
+app.get('/aws3', async (req, res) => {
+    let rootName = req.query.file;
+    let dateObject = new Date();
+    let today = dateObject.getFullYear() + '-' + dateObject.getMonth() + '-' + dateObject.getDay();
+
+    s3.listObjects({Bucket: bucket}, function (err, data) {
+        if(err)throw err;
+        res.send(data.Contents);
+    });
+});
+
 app.get('/aws', async (req, res) => {
     let rootName = req.query.file;
+    let dateObject = new Date();
+    let today = dateObject.getFullYear() + '-' + dateObject.getMonth() + '-' + dateObject.getDay();
+
     let fileNames = [];
     for(let j = 0; j < 5; j++) {
         let sigma = '';
@@ -119,6 +133,7 @@ app.get('/aws', async (req, res) => {
             fileNames.push(rootName + i + sigma + '.png');
         }
     }
+
     gatherURL(fileNames, function() {
         res.send(imageURLS);
     });

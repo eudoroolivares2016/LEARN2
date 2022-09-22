@@ -67,6 +67,10 @@ function retrieveImages() {
     let spinner = document.getElementById('loading-spinner-id');
     let img = document.getElementById('forecast-image');
 
+    $.get(window.location.href + 'aws3', temp, function(data) {
+        console.log(data);
+    });
+
     img.src = 'resources/blankForecast.png';
     spinner.style.display = 'block';
     $.get(window.location.href + 'aws', temp, function(data) {
@@ -106,10 +110,13 @@ function retrieveImages() {
 }
 
 function setPreviewImages(cache) {
-    for(let i = 1; i <= 10; i++) {
-        let img = document.getElementById('preview-image-' + i);
-        threadPreviewImage(cache, img, i - 1 + (10 * currentSigma * 2));
+    if(cache.length > 0) {
+        for(let i = 1; i <= 10; i++) {
+            let img = document.getElementById('preview-image-' + i);
+            threadPreviewImage(cache, img, i - 1 + (10 * currentSigma * 2));
+        }
     }
+
 }
 
 function threadPreviewImage(cache, img, index) {
@@ -544,7 +551,6 @@ document.getElementById('theme-switch-id').addEventListener('change', function()
 
 $( window ).on( "load", function() {
     retrieveImages();
-    setForecastImage(true);
 });
 
 
