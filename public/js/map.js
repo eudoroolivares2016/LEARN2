@@ -5,7 +5,7 @@ function log(msg) {
 }
 
 function updateValueBox(x, y) {
-    let value = document.getElementById('value-id');
+    let value = document.getElementById('exceedance-id');
     let coordinates = document.getElementById('coordinate-id');
     value.innerHTML = mapArray[y][x] < 0 ? '--' : mapArray[y][x];
     coordinates.innerHTML = `(${x}, ${y})`;

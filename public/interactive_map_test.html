@@ -42,37 +42,36 @@
             <div class="col-sm-4">
                 <img id="forecast-image-id" src="resources/Low_res_0.5_sigma_threshold.png" usemap="#forecast-map" class="img-fluid padding-image" alt="Responsive image padding-image">
                 <span id="interactive-map-id">
-
+                    <map name="forecast-map"></map>
                 </span>
-                <div style="padding-top: 10px;"></div>
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-sm-2"></div>
-                        <div class="col-sm-8">
-                            <div class="container-fluid">
-                                <table style="width:100%" class="value-table">
-                                    <tr>
-                                        <th>Value</th>
-                                        <th>Coordinate</th>
-                                    </tr>
-                                    <tr>
-                                        <td id="value-id">--</td>
-                                        <td id="coordinate-id">( , )</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="col-sm-2"></div>
-
-                    </div>
-                </div>
                 <br>
-                
             </div>
             <div class="col-sm-4"></div>
         </div>
     </div>
-
+    <div style="padding-top: 10px;"></div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-4"></div>
+            <div class="col-sm-4">
+                <div class="container-fluid">
+                    <table style="width:100%" class="value-table">
+                        <tr>
+                            <th>Likelihood of Exceedance</th>
+                            <th>Threshold Value</th>
+                            <th>Coordinate</th>
+                        </tr>
+                        <tr>
+                            <td id="exceedance-id">--</td>
+                            <td id="threshold-value-id">--</td>
+                            <td id="coordinate-id">( , )</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="col-4"></div>
+        </div>
+    </div>
     <div style="padding-bottom: 50%;"></div>
 </div>
 <script src="js/bootstrap.bundle.js"></script>

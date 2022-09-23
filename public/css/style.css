@@ -350,6 +350,8 @@ table, th, td {
 }
 
 .value-table {
+    text-align: center;
+    font-size: 20px;
     background-color: #212121;
 }
 
