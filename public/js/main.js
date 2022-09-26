@@ -277,6 +277,7 @@ function updateTheme(isChecked) {
     let previewCheckbox = document.getElementById('preview-switch-background-id');
     let buttonHighRes = document.getElementById('button-high-res');
     let buttonLowRes = document.getElementById('button-low-res');
+    let mappedValues = document.getElementById('value-table');
 
     if (isChecked) {
         // Set Dark Theme
@@ -302,6 +303,7 @@ function updateTheme(isChecked) {
         thresholdSlider.style.accentColor = '#0d6efd';
         modelButton.style.borderColor = '#0a53be';
         previewCheckbox.style.backgroundColor = previewsEnabled ? previewCheckbox.style.backgroundColor = '#0d6efd' : previewCheckbox.style.backgroundColor = '#393939';
+        mappedValues.style.backgroundColor = '#212121';
 
         dayButtons.forEach((dayButtons) => {
             dayButtons.style.borderColor = "#0a53be";
@@ -337,6 +339,7 @@ function updateTheme(isChecked) {
         pageBody.style.backgroundColor = '#2d871933';
         pageBody.style.color = 'black';
         previewCheckbox.style.backgroundColor = previewsEnabled ? previewCheckbox.style.backgroundColor = '#77c743' : previewCheckbox.style.backgroundColor = '#393939';
+        mappedValues.style.backgroundColor = '#fff';
 
         dayButtons.forEach((dayButtons) => {
             dayButtons.style.borderColor = "#77c743";
