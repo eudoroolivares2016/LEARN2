@@ -225,9 +225,9 @@ function updateTheme(isChecked) {
         thresholdButton.style.backgroundColor = '#0d6efd';
         userManual.style.backgroundColor = '#0d6efd';
         modelButton.style.backgroundColor = '#0d6efd';
-        buttonHighRes.style.backgroundColor = '#0d6efd'
+        buttonHighRes.style.backgroundColor = currentResolution === 'high' ? '#0d6efd' : '#212121';
         buttonHighRes.style.borderColor = '#0d6efd'
-        buttonLowRes.style.backgroundColor = '#0d6efd'
+        buttonLowRes.style.backgroundColor = currentResolution === 'low' ? '#0d6efd' : '#212121';
         buttonLowRes.style.borderColor = '#0d6efd'
         daySlider.style.accentColor = '#0d6efd';
         thresholdSlider.style.accentColor = '#0d6efd';
@@ -255,10 +255,10 @@ function updateTheme(isChecked) {
         modelButton.style.borderColor = '#77c743';
         thresholdButton.style.backgroundColor = '#77c743';
         thresholdButton.style.border = '#77c743';
-        buttonHighRes.style.backgroundColor = '#77c743'
-        buttonHighRes.style.borderColor = '#77c743'
-        buttonLowRes.style.backgroundColor = '#77c743'
-        buttonLowRes.style.borderColor = '#77c743'
+        buttonHighRes.style.backgroundColor = currentResolution === 'high' ? '#77c743' : '#6c757d';
+        buttonHighRes.style.borderColor = '#77c743';
+        buttonLowRes.style.backgroundColor = currentResolution  === 'low' ? '#77c743' : '#6c757d';
+        buttonLowRes.style.borderColor = '#77c743';
         userManual.style.backgroundColor = '#77c743';
         userManual.style.borderColor = '#77c743';
         mainHeader.style.backgroundColor = '#2d871933';
@@ -456,16 +456,16 @@ function updateResolution(quality) {
         currentResolution = 'high';
         buttonHighRes.style.fontWeight = 'bold';
         buttonLowRes.style.fontWeight = 'normal';
-        buttonHighRes.style.backgroundColor = '#0d6efd';
-        buttonLowRes.style.backgroundColor = '#212121';
+        buttonHighRes.style.backgroundColor = dark ? '#0d6efd' : '#77c743';
+        buttonLowRes.style.backgroundColor = dark ? '#212121' : '#6c757d';
         updateThresholdImage();
         //setForecastImage(false);
     } else if(quality === 'low' && currentResolution === 'high') {
         currentResolution = 'low';
         buttonLowRes.style.fontWeight = 'bold';
         buttonHighRes.style.fontWeight = 'normal';
-        buttonLowRes.style.backgroundColor = '#0d6efd';
-        buttonHighRes.style.backgroundColor = '#212121';
+        buttonLowRes.style.backgroundColor = dark ? '#0d6efd' : '#77c743';
+        buttonHighRes.style.backgroundColor = dark ? '#212121' : '#6c757d';
         updateThresholdImage();
         //setForecastImage(false);
     }
