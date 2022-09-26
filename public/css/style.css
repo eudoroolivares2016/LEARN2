@@ -315,6 +315,10 @@ table, th, td {
     stroke: none;
 }
 
+.user-guide-content {
+    display:flex;
+    justify-content:center;
+}
 .user-guide-control-panel {
     font-size: 30px;
 }
