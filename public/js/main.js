@@ -206,6 +206,8 @@ function updateTheme(isChecked) {
     let thresholdButton = document.getElementById('threshold');
     let userManual = document.getElementById('users-manual');
     let previewCheckbox = document.getElementById('preview-switch-background-id');
+    let buttonHighRes = document.getElementById('button-high-res');
+    let buttonLowRes = document.getElementById('button-low-res');
 
     if (isChecked) {
         // Set Dark Theme
@@ -218,11 +220,15 @@ function updateTheme(isChecked) {
         pageBody.style.color = 'white';
         ctrlOff.style.backgroundColor = '#0d6efd';
         ctrlOff.style.borderColor = '#0d6efd';
+        forecastDay.style.backgroundColor = '#0d6efd';
+        forecastDay.style.borderColor = '#0d6efd';
         thresholdButton.style.backgroundColor = '#0d6efd';
         userManual.style.backgroundColor = '#0d6efd';
         modelButton.style.backgroundColor = '#0d6efd';
-        forecastDay.style.backgroundColor = '#0d6efd';
-        forecastDay.style.borderColor = '#0d6efd';
+        buttonHighRes.style.backgroundColor = '#0d6efd'
+        buttonHighRes.style.borderColor = '#0d6efd'
+        buttonLowRes.style.backgroundColor = '#0d6efd'
+        buttonLowRes.style.borderColor = '#0d6efd'
         daySlider.style.accentColor = '#0d6efd';
         thresholdSlider.style.accentColor = '#0d6efd';
         modelButton.style.borderColor = '#0a53be';
@@ -243,13 +249,16 @@ function updateTheme(isChecked) {
         controlPanelSection.style.backgroundColor = '#efefef';
         ctrlOff.style.backgroundColor = '#77c743';
         ctrlOff.style.borderColor = '#77c743';
+        forecastDay.style.backgroundColor = '#77c743';
+        forecastDay.style.borderColor = '#77c743';
         modelButton.style.backgroundColor = '#77c743';
         modelButton.style.borderColor = '#77c743';
         thresholdButton.style.backgroundColor = '#77c743';
         thresholdButton.style.border = '#77c743';
-        forecastDay.style.backgroundColor = '#77c743';
-        forecastDay.style.borderColor = '#77c743';
-
+        buttonHighRes.style.backgroundColor = '#77c743'
+        buttonHighRes.style.borderColor = '#77c743'
+        buttonLowRes.style.backgroundColor = '#77c743'
+        buttonLowRes.style.borderColor = '#77c743'
         userManual.style.backgroundColor = '#77c743';
         userManual.style.borderColor = '#77c743';
         mainHeader.style.backgroundColor = '#2d871933';
