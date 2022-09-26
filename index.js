@@ -30,6 +30,9 @@ const bucket = process.env.BUCKET_NAME;
 const s3 = new AWS.S3();
 
 let imageData = Array(50);
+let csv = [];
+let csvData = [];
+
 function getImageData(params, index) {
     return new Promise(resolve => {
         s3.getObject(params, function(err, data) {
@@ -43,17 +46,17 @@ function getImageData(params, index) {
     });
 }
 
-async function makePromiseSet(fileNames, start) {
-    const promise0 = getImageData({Bucket: bucket, Key: fileNames[start + 0]}, start + 0);
-    const promise1 = getImageData({Bucket: bucket, Key: fileNames[start + 1]}, start + 1);
-    const promise2 = getImageData({Bucket: bucket, Key: fileNames[start + 2]}, start + 2);
-    const promise3 = getImageData({Bucket: bucket, Key: fileNames[start + 3]}, start + 3);
-    const promise4 = getImageData({Bucket: bucket, Key: fileNames[start + 4]}, start + 4);
-    const promise5 = getImageData({Bucket: bucket, Key: fileNames[start + 5]}, start + 5);
-    const promise6 = getImageData({Bucket: bucket, Key: fileNames[start + 6]}, start + 6);
-    const promise7 = getImageData({Bucket: bucket, Key: fileNames[start + 7]}, start + 7);
-    const promise8 = getImageData({Bucket: bucket, Key: fileNames[start + 8]}, start + 8);
-    const promise9 = getImageData({Bucket: bucket, Key: fileNames[start + 9]}, start + 9);
+async function makePromiseSet(fileNames, functionName, start) {
+    const promise0 = functionName({Bucket: bucket, Key: fileNames[start + 0]}, start + 0);
+    const promise1 = functionName({Bucket: bucket, Key: fileNames[start + 1]}, start + 1);
+    const promise2 = functionName({Bucket: bucket, Key: fileNames[start + 2]}, start + 2);
+    const promise3 = functionName({Bucket: bucket, Key: fileNames[start + 3]}, start + 3);
+    const promise4 = functionName({Bucket: bucket, Key: fileNames[start + 4]}, start + 4);
+    const promise5 = functionName({Bucket: bucket, Key: fileNames[start + 5]}, start + 5);
+    const promise6 = functionName({Bucket: bucket, Key: fileNames[start + 6]}, start + 6);
+    const promise7 = functionName({Bucket: bucket, Key: fileNames[start + 7]}, start + 7);
+    const promise8 = functionName({Bucket: bucket, Key: fileNames[start + 8]}, start + 8);
+    const promise9 = functionName({Bucket: bucket, Key: fileNames[start + 9]}, start + 9);
     return [await promise0, await promise1, await promise2, await promise3,
         await promise4, await promise5, await promise6,
         await promise7, await promise8, await promise9,
@@ -61,11 +64,11 @@ async function makePromiseSet(fileNames, start) {
 }
 
 function gatherImageData(fileNames, _callback) {
-    const promise0 = Promise.resolve(makePromiseSet(fileNames, 0));
-    const promise1 = Promise.resolve(makePromiseSet(fileNames, 10));
-    const promise2 = Promise.resolve(makePromiseSet(fileNames, 20));
-    const promise3 = Promise.resolve(makePromiseSet(fileNames, 30));
-    const promise4 = Promise.resolve(makePromiseSet(fileNames, 40));
+    const promise0 = Promise.resolve(makePromiseSet(fileNames, getImageData, 0));
+    const promise1 = Promise.resolve(makePromiseSet(fileNames, getImageData, 10));
+    const promise2 = Promise.resolve(makePromiseSet(fileNames, getImageData, 20));
+    const promise3 = Promise.resolve(makePromiseSet(fileNames, getImageData, 30));
+    const promise4 = Promise.resolve(makePromiseSet(fileNames, getImageData, 40));
     Promise.all([promise0, promise1, promise2, promise3, promise4
     ]).then((values) => {
         _callback();
@@ -83,7 +86,7 @@ function gatherURL(fileNames, _callback) {
     }
     _callback();
 }
-let csv = [];
+
 app.get('/testaws2', async (req, res) => {
     let fileName = req.query.file;
     const s3Stream = s3.getObject({Bucket: bucket, Key: fileName}).createReadStream();
@@ -91,6 +94,56 @@ app.get('/testaws2', async (req, res) => {
         .on('data', (data) => {
             csv.push(data);
         }).on('end', count => res.send(csv));
+});
+
+function gatherCSV(csvNames, _callback) {
+    let csvStreams = [];
+    for(let i = 0; i < 50; i++) {
+        let fileData = [];
+        csvStreams[i] = s3.getObject({Bucket: bucket, Key: csvNames[i]}).createReadStream();
+        require('fast-csv').parseStream(csvStreams[i])
+            .on('data', (data) => {
+                fileData.push(data);
+            }).on('end', count => {
+                csvData[i] = fileData;
+                if(i === 49) {
+                    _callback();
+                }
+        });
+    }
+}
+
+app.get('/aws2', async (req, res) => {
+    let fileName = req.query.file;
+    let fileBase = req.query.fileBase;
+    let csvNames = [];
+    for(let j = 0; j < 5; j++) {
+        let sigma = '';
+        switch(j) {
+            case 0:
+                sigma = '_0';
+                break;
+            case 1:
+                sigma = '_0.5';
+                break;
+            case 2:
+                sigma = '_1.0';
+                break;
+            case 3:
+                sigma = '_1.5';
+                break;
+            case 4:
+                sigma = '_2.0';
+                break;
+        }
+        for(let i = 1; i <= 10; i++) {
+            csvNames.push(fileBase + i + '.csv' + sigma + '.csv');
+        }
+    }
+
+    gatherCSV(csvNames, function() {
+        res.send(csvData);
+    });
 });
 
 app.get('/aws3', async (req, res) => {
