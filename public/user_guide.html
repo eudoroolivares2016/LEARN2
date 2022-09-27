@@ -102,8 +102,8 @@
                         <li><i>iii.</i> Interacting with the Control Panel</li>
                         </ul>
                         </li>
-                        <li>Learn2 Troubleshooting</li>
-                        <li>Learn2 FAQ</li>
+                        <li><a href='#troubleshooting'>Troubleshooting</a></li>
+                        <li><a href='#faq'>FAQ</a></li>
                         
                         
                     </ol>
@@ -171,7 +171,7 @@
          </div>  
          <br>
          <br>
-        <h2 id="#intended-audience">Intended Audience</h2>
+        <h2 id="intended-audience">Intended Audience</h2>
         <hr>
         <p>The Landfalling Event Atmospheric River Neural Network (LEARN2) forecast tool was developed to provided decision
             makers,
@@ -184,7 +184,7 @@
 
             <br>
             <br>
-            <h2 id="#scope">Scope</h2>
+            <h2 id="scope">Scope</h2>
             <hr>
             <p>This version of the Users’ Guide describes the LEARN2 tool and how to interact with it to achieve near-real-time
             forecasts of potential rain events in the western United States for “look-aheads” of 1-10 days.</p>
@@ -194,33 +194,148 @@
             
             <br>
             <br>
-            <h2 id="#architecture">Overall Systems Architecture</h2>
+            <h2 id="architecture">Overall Systems Architecture</h2>
             <hr>
             <img src="/resources/Systems-arch-description.png">
 
             <br>
             <br>
-            <h2 id="#gui">Using the Graphical Interface</h2>
+            <h2 id="gui">Using the Graphical Interface</h2>
             <hr>
             <img src="/resources/gui.png">
 
             <br>
             <br>
-            <h2 id="#control-panel">Control Panel</h2>
+            <h2 id="control-panel">Control Panel</h2>
             <hr>
             <img src="/resources/control-panel.png">
 
 
             <br>
             <br>
-            <h2 id="#troubleshooting">Troubleshooting</h2>
+            <h2 id="troubleshooting">Troubleshooting</h2>
             <hr>
             <p>TBD</p>
 
             <br>
             <br>
-            <h2 id="#FAQ">FAQ</h2>
+            <h2 id="faq">FAQ</h2>
             <hr>
+            <h3><b style="color:#e0f42b">What is the general description of this tool?</b></h3>
+            <p>Predictions made by the LEARN2 system are the result of postprocessing and recombining ECMWF forecasts, GEFS forecasts,
+            and subseasonal-to-seasonal teleconnection indices using a neural network specifically trained to identify rainfall
+            events exceeding defined thresholds of interest. The neural network is tested and trained on 20 years of historical
+            data, split randomly into 80% training and 20% testing data. These splits are performed multiple times and the F1-score
+            (calculated as described below) on each split to achieve a statistically stable average F1-score for the classification
+            behavior of the neural network.</p>
+            <p>Broadly speaking, training the neural network consists of series of forwards and backwards passes through the network.
+            With each forward pass through the network, input data is used to make a prediction of rainfall exceedance at the output
+            layer of the network. As the data passes through the network, weights within the network as well as biased “activation
+            functions” determine the result at the output layer. This prediction is then compared to a ground truth provided by the
+            PRISM dataset. The success or failure of the predictions informs the way in which the weights and biases within the
+            network are adjusted on the subsequent backwards pass through the network. The process then repeats until the process is
+            terminated by a stopping condition (e.g., a fixed number of forward/backward passes have been made or evidence of
+            overfitting begins to appear).</p>
+            
+            <p>The LEARN2 system is composed of two different neural networks combined in a “voting” algorithm. All of which are
+            described below.</p>
+<br>
+            <h3><b style="color:#e0f42b">What are the inputs to the tool?</b></h3>
+
+            <p>Inputs provided to the neural network come in two types: reforecast products and teleconnection products.
+            Teleconnections consist of a single number representing the magnitude of the teleconnection index for date from which
+            the prediction is being made. Reforecast products come from the GEFS and ECMWF and are one of: 24-hour cumulative rain,
+            temperature, IVT, convergence, vorticity, geopotential height. Each of these products are Z-normalized over the training
+            data. That is, they are converted such that the mean is removed and then the product is normalized by the standard
+            deviation. In the case of 24-hour rain accumulation, we take the cube root before performing the Z-normalization in an
+            effort to better approximate a Gaussian distribution. The net result is that all input products are on approximately the
+            same scale, improving the functionality of the neural network. Because the GEFS and ECMWF reforecasts are ensemble
+            models, we examine the raw values from each ensemble member, as well as the mean and standard deviation for each
+            product. For details on which products are selected, the geographic area in which they are used and the predictively
+            lookaheads used, refer to the Genetic Algorithm section of this document (below).</p>
+<br>
+            <h3><b style="color:#e0f42b">What are the output products of the tool?</b></h3>
+
+            <p>The output of the neural network is a one-dimensional vector. Each value in the vector represents a point in our
+            prediction grid. In the terminology of classification, we have reduced the problem to a multi-class binary
+            classification problem. That is, given a particular set of inputs, we aim to discover to which of the possible classes
+            does this input belong (if any). For this problem, each class is “anomalous rainfall at a specified latitude, longitude
+            pair.” The ground truth is created by examining each point of interest (a regular grid of points in Washington, Oregon,
+            and California) and determining the average and standard deviation of the 24-hour rainfall (removing 0 rain days) at
+            that point. A positive case is defined as a specified number of standard deviations (σ) above the mean. LEARN2 has been
+            trained using σ values of 0, 0.5, 1, 1.5, and 2. The output of neural network for a given point will fall between 0 and
+            1. Numbers closer to 1 indicate a prediction of the positive class (i.e., the network predicts rainfall amounts will
+            cross the mean+ σ threshold at that point).</p>
+<br>
+            <h3><b style="color:#e0f42b">What is the definition of the “F1-score”?</b></h3>
+
+            <p>Rainfall prediction is known to be a difficult problem. One difficulty is that it rains far less than it doesn’t rain.
+            Though performing a cube root on the rainfall begins to address this problem, it remains the case that the dataset is
+            highly unbalanced. Therefore, simple metrics like accuracy of prediction can distort the reported efficacy of the
+            system. To evaluate the LEARN2 system more fairly and compare it against state-of-the-art weather prediction such as
+            GEFS and ECMWF, we use the commonly used F1-score. This score attempts to balance “recall” in which the system can
+            correctly identify all positive cases with “precision” in which the system attempts to avoid “false alarms.” Expressed
+            in terms of true positives (TP), false positives (FP), and false negatives (FN), the F1-score can be computed as:
+            
+            F_1=TP/(TP+0.5*(FP+FN) )</p>
+<br>
+            <h3><b style="color:#e0f42b">What is the Dense Network?</b></h3>
+
+            <p>This network is a fully-connected neural network. Each two-dimensional reforecast product input is run independently
+            through its own fully-connected, 24-node network, followed by a batch normalization to help prevent over fitting. The
+            teleconnection input (if any) is run through a smaller, 3-node dense layer. Subsequently, all independent dense networks
+            are flattened and concatenated. The concatenated inputs are run through a another fully-connected, 48-node network with
+            a rectified linear activation function. The final layer in the dense network is another fully connected layer with a
+            node for each output class. This final layer uses a sigmoid activation function to ensure that all outputs fall in the
+            range 0 to 1. This network is a Phase-II refinement on the similar Phase-I network.</p>
+<br>
+            <h3><b style="color:#e0f42b">What is the Convolutional Network?</b></h3>
+
+            <p>This network uses a convolutional kernel to convolve subsets of the input before passing entering the fully-connection
+            portions of the neural network. Up to three products from a given source may be
+            
+            convolved together to find patterns across products that may be useful in predicting rain. The input to the convolution
+            network is a series of three-dimensional sets of reforecast products. The convolution layer for each set of products
+            consists of 8 filters with 3x3x3 kernels with a stride of 1 in each dimension. Subsequent to this convolution, the
+            network behaves similarly to the dense network. All of the networks are flattened and concatenated (possibly with a
+            teleconnection). As in the dense network, the concatenated inputs are run through a fully-connected, 48-node network
+            with a rectified linear activation function. Once again, the final layer in the network is a fully-connected layer with
+            a node for each output class. This final layer again uses a sigmoid activation function to ensure that all outputs fall
+            in the range 0 to 1. Though a convolutional network appeared in the Phase-I system, this configuration in new for the
+            second reporting period of the Phase-II system.</p>
+<br>
+            <h3><b style="color:#e0f42b">How does the Voting Algorithm work?</b></h3>
+
+            <p>Ultimately, LEARN2 provides a binary prediction based on a final “voting” algorithm. This algorithm has been more fully
+            explored in this quarter of Phase-II. In this algorithm, the results of the Dense and Convolutional networks (described
+            above) are combined with a prediction from the ECMWF ensemble model to provide a final, binary prediction of rain.
+            Experiments with the GEFS model were not shown to improve the performance of this model and so are omitted from the
+            final algorithm. To combine the Dense, Convolution, and ECMWF model, the three models need to be on the same scale. The
+            Dense and Convolutional models each pass through a final sigmoid activation function and are therefore guaranteed to be
+            in the range 0 to 1. However, ECMWF provides as continuous, not a binary prediction of rainfall. Further, as an ensemble
+            model, it provides multiple predictions. Our solution is to threshold each of the members of the ensemble: 0 indicates
+            that the ensemble member predicts rainfall quantities below the threshold while 1 indicates that the ensemble member
+            predicts rainfall above the threshold. Averaging the threshold ensemble members then guarantees a number a number
+            between 0 and 1 (in essence providing the percentage of ensemble members predicting anomalous rain). We then combine the
+            Dense, Convolution, and ECMWF models via an average. The final result is a likelihood of rain, where 0 indicates a
+            confident prediction of no rain while 1 indicated very high confidence of rain.</p>
+
+            <p>To compare the voting algorithm against ECMWF, and GEFS, we threshold the predictions made by each of the three systems.
+            Although each system tips from more confident in no rain to more confident in rain at 0.5, a plot of precision vs.
+            recall indicates that all three system err on the side of caution, maximizing precision at the expensive of recall
+            (i.e., ensuring that there are few false alarms while missing heavy rain events). In fact, selecting a likelihood
+            threshold of 0.3 provides the best F1 score for each system by capture more heavy rain events at the expensive of some
+            false positives. Using 0.3 as a likelihood threshold, we have seen that the LEARN2 system outperforms the GEFS by
+            providing 2-3 days more lead time with predictions and the ECMWF by 1-2 days.</p>
+<br>
+            <h3><b style="color:#e0f42b">What is the Genetic Algorithm and how does it work?</b></h3>
+
+            <p>At the heart of the efficacy of the LEARN2 system are the input parameters to the neural networks. In the Phase-I
+            system, these inputs were chosen according to controlled information exclusion experiments to determine the candidate
+            reanalysis products for optimum neural network performance. However, in Phase-II, the state space for such explorations
+            has grown much larger. In addition to</p>
+
+            <p>TBD</p>
             <!-- End User Guide -->
          </div>
        
