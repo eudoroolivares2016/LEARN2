@@ -35,7 +35,7 @@ window.onload = function() {
 function updateValueBox(x, y) {
     let value = document.getElementById('exceedance-id');
     let coordinates = document.getElementById('coordinate-id');
-    value.innerHTML = mapArray[y][x] < 0 ? '--' : mapArray[y][x] + ' (' + (100 * mapArray[y][x]).toFixed(1) + '%)';
+    value.innerHTML = mapArray[y][x] < 0 ? '--' : ' (' + (100 * mapArray[y][x]).toFixed(1) + '%)';
 
     let latitude = 49.5 - (y * 1.375) - .6875;
     let longitude = -124.5 + (x * 8 / 7) + ((8 / 7) / 2);
