@@ -121,7 +121,7 @@
                     <br>
                     <h2 id="purpose">Purpose</h2>
                     <hr>
-                  <p>Atmospheric rivers are the main phenomena driving extreme rain events in the western United States during the rainy
+                  <p>Atmospheric rivers are the main phenomena driving extreme rain events in the Western United States during the rainy
                 season (October-April). Their impacts are near the top of episodic weather events in the West. Accurately forecasting
                 rainfall from these events is critical due to the impacts they have on the water supply as well as the severe flooding
                 risks they pose. The greatest challenge of mitigating the associated impacts is reducing uncertainty in the medium-range
@@ -132,9 +132,9 @@
                 beneficial, especially if, indeed, equivalent forecast skill is pushed out an additional 1 to 2 days.</p>
                 <br>
             <p>The Landfalling Event Atmospheric River Neural Network (LEARN2) is a neural-network-based decision support tool that
-            considers Numerical Weather Prediction (NWP) forecast guidance from NOAA/National Centers for Environmental Prediction
-            (NCEP’s) Global Ensemble Forecast System (GEFS) and the European Center for Medium-Range Weather Forecasting Ensembles
-            (ECMWF), remotely sensed fields, and several subseasonal-to-seasonal teleconnection indices, to produce extreme rainfall
+            considers Numerical Weather Prediction (NWP) forecast guidance from <a class='content-links' href='https://www.noaa.gov/' target="_blank">NOAA</a>/National Centers for Environmental Prediction
+            <a class='content-links' href='https://www.weather.gov/ncep/' target="_blank">(NCEP’s)</a> Global Ensemble Forecast System <a class='content-links' href='https://www.ncei.noaa.gov/products/weather-climate-models/global-ensemble-forecast' target="_blank">(GEFS)</a> and the European Center for Medium-Range Weather Forecasting Ensembles
+            <a class='content-links' href='https://www.ecmwf.int/' target="_blank">(ECMWF)</a>, remotely sensed fields, and several subseasonal-to-seasonal teleconnection indices, to produce extreme rainfall
             predictions. In LEARN2, products are run through both convolutional and fully connected neural networks and a novel
             “voting” algorithm that leverages the power of ensemble forecast systems to predict whether rainfall will exceed
             thresholds of interest at discrete points in a grid for lookaheads of up to 10 days. The structure of each neural
@@ -168,8 +168,8 @@
             ensemble members — both NCEP GEFS and ECMWF (the latter via Open Data Creative Commons CC-4.0-BY license and ECMWF Terms
             of Use).</p>
 <br>
-            <p>This project was funded by the NOAA Office of Oceanic and Atmospheric Research (OAR) under the Small Business Innovative
-            Research (SBIR) program.</p>
+            <p>This project was funded by the NOAA Office of Oceanic and Atmospheric Research <a class='content-links' href='https://research.noaa.gov/' target="_blank">(OAR)</a> under the Small Business Innovative
+            Research <a class='content-links' href='https://www.sbir.gov/' target='_blank'>(SBIR)</a> program.</p>
     <div class="row">
             <div class="col-md-6">  
             <img src="resources/Userguide-example-1..png">
@@ -231,7 +231,7 @@
             <h2 id="faq">FAQ</h2>
             <hr>
             <h3><b style="color:#e0f42b">What is the general description of this tool?</b></h3>
-            <p>Predictions made by the LEARN2 system are the result of postprocessing and recombining ECMWF forecasts, GEFS forecasts,
+            <p>Predictions made by the LEARN2 system are the result of postprocessing and recombining <a class='content-links' href='ecmwf.int' target="_blank"> ECMWF</a> forecasts, <a class='content-links' href='https://www.ncei.noaa.gov/products/weather-climate-models/global-ensemble-forecast' target='_blank'>GEFS</a> forecasts,
             and subseasonal-to-seasonal teleconnection indices using a neural network specifically trained to identify rainfall
             events exceeding defined thresholds of interest. The neural network is tested and trained on 20 years of historical
             data, split randomly into 80% training and 20% testing data. These splits are performed multiple times and the F1-score
@@ -242,7 +242,7 @@
             With each forward pass through the network, input data is used to make a prediction of rainfall exceedance at the output
             layer of the network. As the data passes through the network, weights within the network as well as biased “activation
             functions” determine the result at the output layer. This prediction is then compared to a ground truth provided by the
-            PRISM dataset. The success or failure of the predictions informs the way in which the weights and biases within the
+            <a class='content-links' href='https://prism.oregonstate.edu/' target='_blank'>PRISM</a> dataset. The success or failure of the predictions informs the way in which the weights and biases within the
             network are adjusted on the subsequent backwards pass through the network. The process then repeats until the process is
             terminated by a stopping condition (e.g., a fixed number of forward/backward passes have been made or evidence of
             overfitting begins to appear).</p>
@@ -262,7 +262,7 @@
             same scale, improving the functionality of the neural network. Because the GEFS and ECMWF reforecasts are ensemble
             models, we examine the raw values from each ensemble member, as well as the mean and standard deviation for each
             product. For details on which products are selected, the geographic area in which they are used and the predictively
-            lookaheads used, refer to the Genetic Algorithm section of this document (below).</p>
+            lookaheads used, refer to the <a class='content-links' href= '#genetic-algorythm'>Genetic Algorithm</a> section of this document (below).</p>
 <br>
             <h3><b style="color:#e0f42b">What are the output products of the tool?</b></h3>
 
@@ -338,7 +338,7 @@
             false positives. Using 0.3 as a likelihood threshold, we have seen that the LEARN2 system outperforms the GEFS by
             providing 2-3 days more lead time with predictions and the ECMWF by 1-2 days.</p>
 <br>
-            <h3><b style="color:#e0f42b">What is the Genetic Algorithm and how does it work?</b></h3>
+           <a id="genetic-algorythm"> <h3><b style="color:#e0f42b">What is the Genetic Algorithm and how does it work?</b></h3></a>
 
             <p>At the heart of the efficacy of the LEARN2 system are the input parameters to the neural networks. In the Phase-I
             system, these inputs were chosen according to controlled information exclusion experiments to determine the candidate
