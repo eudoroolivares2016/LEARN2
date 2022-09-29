@@ -51,7 +51,7 @@
                 <!-- <br> -->
                 <div>
                   Daily Rainfall Threshold
-                  <div id="mean-label" style="font-size: 20px; padding-bottom: 2%;">PRISM Non-Zero Average + 0.5 &sigma;</div>
+                  <div id="mean-label" style="font-size: 20px; padding-bottom: 2%;">PRISM Threshold Percentile: 60</div>
                 </div>
                 <img id="threshold-image" src="resources/High_res_0.5_sigma_threshold.png" class="img-fluid image-main-border" alt="Responsive image padding-image">
               </div>
@@ -250,11 +250,10 @@
                     Threshold:
                   </div>
                   <div class="col-sm-7 extension padding-main">
-                    Mean +
                     <button class="btn btn-secondary" id="threshold-down">&#8592;</button>
-                    <div class="btn btn-primary button-no-pointer" id="threshold">0.5</div>
+                    <div class="btn btn-primary button-no-pointer" id="threshold">60</div>
                     <button class="btn btn-secondary" id="threshold-up">&#8594;</button>
-                    &sigma;
+                    Percentile
                   </div>
                   <div clas="container-fluid">
                     <div class="row">
@@ -264,11 +263,11 @@
                     </div>
                     <div class="threshold-slider-ticks">
                       <div class="row">
-                        <div class="col-sm">0.0</div>
-                        <div class="col-sm">0.5</div>
-                        <div class="col-sm">1.0</div>
-                        <div class="col-sm">1.5</div>
-                        <div class="col-sm">2.0</div>
+                        <div class="col-sm">50</div>
+                        <div class="col-sm">60</div>
+                        <div class="col-sm">70</div>
+                        <div class="col-sm">80</div>
+                        <div class="col-sm">90</div>
                       </div>
                     </div>
                   </div>

@@ -29,13 +29,12 @@ let mapArray = [];
 window.onload = function() {
     initializePreview();
     initializeTheme();
-    initializeDates();
 }
 
 function updateValueBox(x, y) {
     let value = document.getElementById('exceedance-id');
     let coordinates = document.getElementById('coordinate-id');
-    value.innerHTML = mapArray[y][x] < 0 ? '--' : ' (' + (100 * mapArray[y][x]).toFixed(1) + '%)';
+    value.innerHTML = mapArray[y][x] < 0 ? '--' : (100 * mapArray[y][x]).toFixed(0) + '%';
 
     let latitude = 49.5 - (y * 1.375) - .6875;
     let longitude = -124.5 + (x * 8 / 7) + ((8 / 7) / 2);
@@ -45,11 +44,10 @@ function updateValueBox(x, y) {
 
 function readCSV(fileName) {
     let params = {
-        file: '1.5_Vote_2022-1-1_1.csv_0.5.csv',
+        file: '1.5_Vote_2022-1-1_1.csv_0.5.csv', // fileName
         fileBase: temp.file
     }
     $.get(window.location.href + 'aws2', params, function(data) {
-        log(data);
         mapArray = data[0];
         createGrid();
     });
@@ -74,8 +72,6 @@ function createGrid() {
 
     let xOffset = width * (604 / 3265);
     let yOffset = height * (129 / 3517);
-
-    log(width + ', ' + height);
 
     let grid = '';
 
@@ -130,51 +126,57 @@ function test() {
 
 }
 
+function correctModelType() {
+    return modelType === 'Voting' ? 'Vote' : modelType;
+}
+
 function retrieveImages() {
     let spinner = document.getElementById('loading-spinner-id');
     let img = document.getElementById('forecast-image');
 
     enableInteraction();
 
-    $.get(window.location.href + 'aws3', temp, function(data) {
-        //console.log(data);
-    });
-
-    img.src = 'resources/blankForecast.png';
-    spinner.style.display = 'block';
-    $.get(window.location.href + 'aws', temp, function(data) {
-        forecastImageCache = [];
-        for(let i = 0; i < 50; i++) {
-            forecastImageCache[i] = data[i];
-        }
-        if(spinner == null) {
-            return;
-        }
-        switch(modelType) {
-            case 'Voting':
-                votingCache = forecastImageCache;
-                break;
-            case 'Convolutional':
-                convolutionalCache = forecastImageCache;
-                break;
-            case 'Dense':
-                denseCache = forecastImageCache;
-                break;
-            case 'ECMWF':
-                ecmwfCache = forecastImageCache;
-                break;
-            case 'GEFS':
-                gefsCache = forecastImageCache;
-                break;
-        }
-        img.src = forecastImageCache[(10 * currentSigma * 2)];
-        setPreviewImages(forecastImageCache);
-        if(!isTodayStored) {
-            localStorage.setItem('todayData', forecastImageCache[10]);
-            isTodayStored = true;
-        }
-        spinner.style.display = 'none';
-        setDay(1);
+    $.get(window.location.href + 'aws3', temp, function(date) {
+        temp = {
+            file: '1.5_' + correctModelType() + '_' + date + '_'
+        };
+        initializeDates(date);
+        img.src = 'resources/blankForecast.png';
+        spinner.style.display = 'block';
+        $.get(window.location.href + 'aws', temp, function(data) {
+            forecastImageCache = [];
+            for(let i = 0; i < 50; i++) {
+                forecastImageCache[i] = data[i];
+            }
+            if(spinner == null) {
+                return;
+            }
+            switch(modelType) {
+                case 'Voting':
+                    votingCache = forecastImageCache;
+                    break;
+                case 'Convolutional':
+                    convolutionalCache = forecastImageCache;
+                    break;
+                case 'Dense':
+                    denseCache = forecastImageCache;
+                    break;
+                case 'ECMWF':
+                    ecmwfCache = forecastImageCache;
+                    break;
+                case 'GEFS':
+                    gefsCache = forecastImageCache;
+                    break;
+            }
+            img.src = forecastImageCache[(10 * currentSigma * 2)];
+            setPreviewImages(forecastImageCache);
+            if(!isTodayStored) {
+                localStorage.setItem('todayData', forecastImageCache[10]);
+                isTodayStored = true;
+            }
+            spinner.style.display = 'none';
+            setDay(1);
+        });
     });
 }
 
@@ -229,12 +231,14 @@ function initializeTheme() {
     updateTheme(dark);
 }
 
-function initializeDates() {
+function initializeDates(date) {
     let forecastDateElement = document.getElementById('main-forecast-date');
     let initializeDateElement = document.getElementById('init');
-    let today = new Date().toString().split(' ');
-    let forecastDate = today[1] + ' ' + today[2] + ', ' + today[3];
-    let initDate = today[3] + ' ' + today[1] + ' ' + today[2] + ' (00Z)';
+    let today = date.split('-');
+    let currentDate = new Date(`${today[0]} ${today[1]} ${today[2]}`);
+    currentDate = currentDate.toDateString().split(' ')
+    let forecastDate = currentDate[3] + ' ' + currentDate[1] + ', ' + currentDate[2];
+    let initDate = currentDate[3] + ' ' + currentDate[1] + ' ' + currentDate[2] + ' (00Z)';
 
     forecastDateElement.textContent = forecastDate;
     initializeDateElement.textContent = initDate;
@@ -477,12 +481,12 @@ function updateMean(newSigma) {
     let meanLabel = document.getElementById('mean-label');
     if(newSigma <= 2 && newSigma >= 0) {
         currentSigma = parseFloat(newSigma);
-        threshold.textContent = `${currentSigma.toFixed(1)}`;
-        meanLabel.textContent = `PRISM Non-Zero Average + ${currentSigma} σ`;
+        let thresholdValue = 50 + (currentSigma * 20);
+        threshold.textContent = `${thresholdValue}`;
+        meanLabel.textContent = `PRISM Threshold Percentile: ${thresholdValue}`;
         updateImages();
         updateThresholdImage();
         updateThresholdSlider();
-        //setForecastImage(false);
     }
 }
 

@@ -87,15 +87,6 @@ function gatherURL(fileNames, _callback) {
     _callback();
 }
 
-app.get('/testaws2', async (req, res) => {
-    let fileName = req.query.file;
-    const s3Stream = s3.getObject({Bucket: bucket, Key: fileName}).createReadStream();
-    require('fast-csv').parseStream(s3Stream)
-        .on('data', (data) => {
-            csv.push(data);
-        }).on('end', count => res.send(csv));
-});
-
 function gatherCSV(csvNames, _callback) {
     let csvStreams = [];
     for(let i = 0; i < 50; i++) {
@@ -146,6 +137,21 @@ app.get('/aws2', async (req, res) => {
     });
 });
 
+let recentDate = '';
+function mostRecentAvailableDate(dataArray, _callback) {
+    let latest = dataArray[0].Key.split('_');
+    latest = latest[2];
+    for(let i = 0; i < dataArray.length; i++) {
+        let tempDate = dataArray[i].Key.split('_');
+        tempDate = tempDate[2];
+        if(tempDate > latest) {
+            latest = tempDate;
+        }
+    }
+    recentDate = latest;
+    _callback();
+}
+
 app.get('/aws3', async (req, res) => {
     let rootName = req.query.file;
     let dateObject = new Date();
@@ -153,7 +159,9 @@ app.get('/aws3', async (req, res) => {
 
     s3.listObjects({Bucket: bucket}, function (err, data) {
         if(err)throw err;
-        res.send(data.Contents);
+        mostRecentAvailableDate(data.Contents, function() {
+            res.send(recentDate);
+        });
     });
 });
 
