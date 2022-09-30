@@ -19,6 +19,7 @@
   <meta name="theme-color" content="#fafafa">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://sdk.amazonaws.com/js/aws-sdk-2.179.0.min.js"></script>
+  <script src="js/jquery-csv.js"></script>
 </head>
 
 <body>
@@ -35,7 +36,7 @@
         <div class="col-sm-7 map-section extension" id="map-section-id" style="padding: 1% 0;">
           <div class="container-fluid">
             <div class="row">
-              <div class="col-sm-6">
+              <div class="col-sm">
                 <div style="padding-bottom: 2%;" id="main-forecast-label">
                   Extreme Precipitation Forecast
                   <div id="main-forecast-date">
@@ -47,13 +48,13 @@
                     <map name="forecast-map"></map>
                 </span>
               </div>
-              <div class="col-sm-6">
+              <div class="col-sm">
                 <!-- <br> -->
                 <div>
                   Daily Rainfall Threshold
                   <div id="mean-label" style="font-size: 20px; padding-bottom: 2%;">PRISM Threshold Percentile: 60</div>
                 </div>
-                <img id="threshold-image" src="resources/High_res_0.5_sigma_threshold.png" class="img-fluid image-main-border" alt="Responsive image padding-image">
+                <img id="threshold-image" src="resources/High_res_60th_percentile_threshold.png" class="img-fluid image-main-border" alt="Responsive image padding-image">
               </div>
             </div>
             <div style="padding-top: 10px;"></div>

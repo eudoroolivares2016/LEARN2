@@ -140,6 +140,10 @@
     padding: 15px;
 }
 
+#threshold-image {
+    width: 85%;
+}
+
 .image-main-border {
     border: 3px solid grey;
 }

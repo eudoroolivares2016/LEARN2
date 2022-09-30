@@ -1,5 +1,5 @@
 const rootDirectory = 'resources/'
-const sigmaThresholdSuffix = '_sigma_threshold';
+const percentileThreshold = '_percentile_threshold';
 const sigmaDaySuffix = '_sigma_Day';
 const highResPrefix = 'High_res_'
 const lowResPrefix = 'Low_res_'
@@ -24,6 +24,7 @@ let denseCache = [];
 let ecmwfCache = [];
 let gefsCache = [];
 let mapArray = [];
+let csvCache = Array(10);;
 
 // On-Load Functionality
 window.onload = function() {
@@ -32,14 +33,57 @@ window.onload = function() {
 }
 
 function updateValueBox(x, y) {
-    let value = document.getElementById('exceedance-id');
+    let exceedanceValue = document.getElementById('exceedance-id');
     let coordinates = document.getElementById('coordinate-id');
-    value.innerHTML = mapArray[y][x] < 0 ? '--' : (100 * mapArray[y][x]).toFixed(0) + '%';
+    exceedanceValue.innerHTML = mapArray[y][x] < 0 ? '--' : (100 * mapArray[y][x]).toFixed(0) + '%';
 
     let latitude = 49.5 - (y * 1.375) - .6875;
     let longitude = -124.5 + (x * 8 / 7) + ((8 / 7) / 2);
-
     coordinates.innerHTML = `(${latitude.toFixed(2)}, ${longitude.toFixed(2)})`;
+
+    let thresholdValue = document.getElementById('threshold-value-id');
+    thresholdValue.innerHTML = csvCache[currentSigma * 2][y][x];
+
+}
+
+function loadAllCSVFiles(_callback) {
+    // Wait for the initial CSV to load
+    $.get('resources/Low_res_60th_percentile_threshold.csv', undefined, function(data) {
+        let arrayOuter = data.split('\r\n');
+        let array = [];
+        for(let i = 0; i < arrayOuter.length; i++) {
+            if(arrayOuter[i].length > 0) {
+                array.push(arrayOuter[i].split(','));
+            }
+        }
+        csvCache[1] = array;
+        _callback();
+    });
+
+    // Load the rest of the CSVs in the background
+    loadCSVFile('resources/Low_res_50th_percentile_threshold.csv', 0);
+    loadCSVFile('resources/Low_res_70th_percentile_threshold.csv', 2);
+    loadCSVFile('resources/Low_res_80th_percentile_threshold.csv', 3);
+    loadCSVFile('resources/Low_res_90th_percentile_threshold.csv', 4);
+
+    loadCSVFile('resources/High_res_50th_percentile_threshold.csv', 5);
+    loadCSVFile('resources/High_res_60th_percentile_threshold.csv', 6);
+    loadCSVFile('resources/High_res_70th_percentile_threshold.csv', 7);
+    loadCSVFile('resources/High_res_80th_percentile_threshold.csv', 8);
+    loadCSVFile('resources/High_res_90th_percentile_threshold.csv', 9);
+}
+
+function loadCSVFile(fileName, index) {
+    $.get(fileName, undefined, function(data) {
+        let arrayOuter = data.split('\r\n');
+        let array = [];
+        for(let i = 0; i < arrayOuter.length; i++) {
+            if(arrayOuter[i].length > 0) {
+                array.push(arrayOuter[i].split(','));
+            }
+        }
+        csvCache[index] = array;
+    });
 }
 
 function readCSV(fileName) {
@@ -47,9 +91,12 @@ function readCSV(fileName) {
         file: '1.5_Vote_2022-1-1_1.csv_0.5.csv', // fileName
         fileBase: temp.file
     }
+
     $.get(window.location.href + 'aws2', params, function(data) {
         mapArray = data[0];
-        createGrid();
+        loadAllCSVFiles(function() {
+            createGrid();
+        });
     });
 }
 
@@ -187,7 +234,6 @@ function setPreviewImages(cache) {
             threadPreviewImage(cache, img, i - 1 + (10 * currentSigma * 2));
         }
     }
-
 }
 
 function threadPreviewImage(cache, img, index) {
@@ -513,14 +559,22 @@ function updateDate(increment) {
     updateImages();
 }
 
+function sigmaToPercentile(suffix) {
+    if(suffix) {
+        return 50 + (currentSigma * 20) + 'th';
+    } else {
+        return 50 + (currentSigma * 20);
+    }
+}
+
 function updateThresholdImage() {
     let thresholdImage = document.getElementById('threshold-image');
     let newThresholdURL = rootDirectory;
 
     if(currentResolution === 'high') {
-        newThresholdURL += highResPrefix + currentSigma + sigmaThresholdSuffix + extension;
+        newThresholdURL += highResPrefix + sigmaToPercentile(true) + percentileThreshold + extension;
     } else {
-        newThresholdURL += lowResPrefix + currentSigma + sigmaThresholdSuffix + extension;
+        newThresholdURL += lowResPrefix + sigmaToPercentile(true) + percentileThreshold + extension;
     }
     thresholdImage.src = newThresholdURL;
 }
