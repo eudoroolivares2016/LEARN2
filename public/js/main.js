@@ -7,15 +7,17 @@ const extension = '.png'
 const dayButtons = document.querySelectorAll('.btn-light');
 const lightPreview = document.querySelectorAll('.preview-switch');
 const resolution = document.querySelectorAll('.button-resolution');
+const INITIALIZE_HISTORY_LIMIT = 5;
 
 let currentResolution = 'high';
 let currentSigma = .5;
 let dark = true;
-let initializationDate = new Date();
 let forecastDayIndex = 1;
 let previewsEnabled = false;
 let isTodayStored = false;
 let modelType = 'Voting';
+let currentInitialize = 5;
+let timeSeriesCanvas = null;
 
 let forecastImageCache = [];
 let votingCache = [];
@@ -24,12 +26,155 @@ let denseCache = [];
 let ecmwfCache = [];
 let gefsCache = [];
 let mapArray = [];
-let csvCache = Array(10);;
+let allCSVArray = [];
+let csvCache = Array(10);
 
 // On-Load Functionality
 window.onload = function() {
     initializePreview();
     initializeTheme();
+}
+
+function getChartArrays(x, y) {
+    let tempArray = [];
+    for(let i = 0; i < 5; i++) {
+        tempArray.push(
+            [allCSVArray[(10 * i)][y][x] * 100,
+            allCSVArray[(10 * i) + 1][y][x] * 100,
+            allCSVArray[(10 * i) + 2][y][x] * 100,
+            allCSVArray[(10 * i) + 3][y][x] * 100,
+            allCSVArray[(10 * i) + 4][y][x] * 100,
+            allCSVArray[(10 * i) + 5][y][x] * 100,
+            allCSVArray[(10 * i) + 6][y][x] * 100,
+            allCSVArray[(10 * i) + 7][y][x] * 100,
+            allCSVArray[(10 * i) + 8][y][x] * 100,
+            allCSVArray[(10 * i) + 9][y][x] * 100]
+        );
+    }
+    return tempArray;
+}
+
+const forecastLabels = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+function showTimeSeries(x, y) {
+    if(mapArray[y][x] < 0) {
+        return;
+    }
+    let timeSeriesChart = document.getElementById('time-series-id');
+    timeSeriesChart.style.display = 'block';
+
+    let chartArrays = getChartArrays(x, y);
+    const chartData = {
+        labels: forecastLabels,
+        datasets: [{
+                label: '50th Percentile',
+                backgroundColor: 'rgb(0,197,255)',
+                borderColor: 'rgb(0,196,255)',
+                borderWidth: 1.5,
+                data: chartArrays[0],
+            },
+            {
+                label: '60th Percentile',
+                backgroundColor: 'rgb(0,255,64)',
+                borderColor: 'rgb(0,255,64)',
+                borderWidth: 1.5,
+                data: chartArrays[1],
+            },
+            {
+                label: '70th Percentile',
+                backgroundColor: 'rgb(186,255,0)',
+                borderColor: 'rgb(186,255,0)',
+                borderWidth: 1.5,
+                data: chartArrays[2],
+            },
+            {
+                label: '80th Percentile',
+                backgroundColor: 'rgb(255,111,0)',
+                borderColor: 'rgb(255,111,0)',
+                borderWidth: 1.5,
+                data: chartArrays[3],
+            },
+            {
+                label: '90th Percentile',
+                backgroundColor: 'rgb(255,0,0)',
+                borderColor: 'rgb(255,0,0)',
+                borderWidth: 1.5,
+                data: chartArrays[4],
+            },
+        ],
+    };
+
+    const config = {
+        type: 'line',
+        data: chartData,
+        options: {
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 14
+                        },
+                        color: 'white'
+                    }
+                },
+                tooltip: {
+                    titleFont: {
+                        size: 24
+                    },
+                    bodyFont: {
+                        size: 18
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    title: {
+                        display: true,
+                        text: 'Likelihood of Exceedance',
+                        color: 'white',
+                        font: {
+                            size: 20
+                        },
+                    },
+                    ticks: {
+                        color: 'white',
+                        font: {
+                            size: 14
+                        },
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Forecast Day',
+                        color: 'white',
+                        font: {
+                            size: 20
+                        },
+                    },
+                    ticks: {
+                        color: 'white',
+                        font: {
+                            size: 14
+                        },
+                    }
+                }
+            }
+        }
+    };
+    if(timeSeriesCanvas != null) {
+        timeSeriesCanvas.destroy();
+    }
+    timeSeriesCanvas = new Chart(
+        document.getElementById('time-series-chart-id'),
+        config
+    );
+}
+
+function toggleTimeSeriesVisibility() {
+    let timeSeriesDisplay = document.getElementById('time-series-id');
+    timeSeriesDisplay.style.display = timeSeriesDisplay.style.display === 'none' ? 'block' : 'none';
 }
 
 function updateValueBox(x, y) {
@@ -42,7 +187,7 @@ function updateValueBox(x, y) {
     coordinates.innerHTML = `(${latitude.toFixed(2)}, ${longitude.toFixed(2)})`;
 
     let thresholdValue = document.getElementById('threshold-value-id');
-    thresholdValue.innerHTML = csvCache[currentSigma * 2][y][x];
+    thresholdValue.innerHTML = csvCache[currentSigma * 2][y][x] === '-1.00' ? '--' : csvCache[currentSigma * 2][y][x];
 
 }
 
@@ -93,7 +238,10 @@ function readCSV(fileName) {
     }
 
     $.get(window.location.href + 'aws2', params, function(data) {
-        mapArray = data[0];
+        allCSVArray = data;
+
+        let offset = 10 * (currentSigma * 2);
+        mapArray = data[offset];
         loadAllCSVFiles(function() {
             createGrid();
         });
@@ -128,7 +276,7 @@ function createGrid() {
             let x2 = xOffset + (x * j) + x;
             let y1 = yOffset + (y * i);
             let y2 = yOffset + (y * i) + y;
-            grid += `<area shape="rect" coords="${x1}, ${y1}, ${x2}, ${y2}" alt="grid" onmouseover="updateValueBox(${j}, ${i})">\n`;
+            grid += `<area shape="rect" coords="${x1}, ${y1}, ${x2}, ${y2}" alt="grid" onclick="showTimeSeries(${j}, ${i});" onmouseover="updateValueBox(${j}, ${i});">\n`;
         }
     }
     mapSpan.innerHTML = '<map name="forecast-map">\n' +
@@ -518,6 +666,8 @@ function updateDay(delta, modifyForecast) {
         forecastDateLabel.textContent = `${newDateArr1[1]} ${newDateArr1[2]}, ${newDateArr1[3]} (12Z) - ${newDateArr2[1]} ${newDateArr2[2]}, ${newDateArr2[3]} (12Z)`;
         updateForecastSlider(dayOffset)
         forecastDayIndex = dayOffset;
+        let offset = (10 * (currentSigma * 2)) + (forecastDayIndex - 1);
+        mapArray = allCSVArray[offset];
         updateImages();
     }
 }
@@ -530,6 +680,10 @@ function updateMean(newSigma) {
         let thresholdValue = 50 + (currentSigma * 20);
         threshold.textContent = `${thresholdValue}`;
         meanLabel.textContent = `PRISM Threshold Percentile: ${thresholdValue}`;
+
+        let offset = (10 * (currentSigma * 2)) + (forecastDayIndex - 1);
+        mapArray = allCSVArray[offset];
+
         updateImages();
         updateThresholdImage();
         updateThresholdSlider();
@@ -677,11 +831,17 @@ document.getElementById('threshold-slider-id').addEventListener('input', functio
 
 // Initialize Buttons
 document.getElementById('init-up').addEventListener('click', function() {
-    updateDate('up');
+    if(currentInitialize < INITIALIZE_HISTORY_LIMIT) {
+        updateDate('up');
+        currentInitialize++;
+    }
 });
 
 document.getElementById('init-down').addEventListener('click', function() {
-    updateDate('down');
+    if(currentInitialize > 0) {
+        updateDate('down');
+        currentInitialize--;
+    }
 });
 
 // Theme Switch
@@ -690,6 +850,11 @@ document.getElementById('theme-switch-id').addEventListener('change', function()
     dark = this.checked;
     updateTheme(this.checked);
 });
+
+// If user resizes browser window, fix Forecast map coordinate positions
+window.addEventListener('resize', function(){
+    enableInteraction();
+}, true);
 
 $( window ).on( "load", function() {
     retrieveImages();

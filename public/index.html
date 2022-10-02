@@ -20,6 +20,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://sdk.amazonaws.com/js/aws-sdk-2.179.0.min.js"></script>
   <script src="js/jquery-csv.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -80,10 +81,14 @@
                 <div class="col-2"></div>
               </div>
             </div>
-            <!--- <button class="btn btn-primary" style="width: 150px;" onclick="enableInteraction();">Test</button> --->
+            <br>
+            <!--- <button class="btn btn-primary" style="width: 150px;" onclick="showTimeSeries(0, 0);">Test</button> --->
+          </div>
+          <div id="time-series-id">
+            <br>
+            <canvas id="time-series-chart-id"></canvas>
           </div>
         </div>
-
         <div class="col-sm-5 control-panel-section" id="control-panel-section-id">
           <div class="user-preface">
             <a href='/user_guide' target="_blank" style ="width:100%"><div class="btn btn-lg btn-primary users-manual" id="users-manual">User's Guide</div></a>

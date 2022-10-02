@@ -299,6 +299,11 @@
     transform: translateX(86px);
 }
 
+#time-series-id {
+    display: none;
+    padding: 3%;
+}
+
 .preview-switch + .off {
     background-color: #0d6efd;
 }

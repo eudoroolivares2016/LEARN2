@@ -30,7 +30,6 @@ const bucket = process.env.BUCKET_NAME;
 const s3 = new AWS.S3();
 
 let imageData = Array(50);
-let csv = [];
 let csvData = [];
 
 function getImageData(params, index) {
