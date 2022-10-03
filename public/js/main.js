@@ -231,19 +231,125 @@ function loadCSVFile(fileName, index) {
     });
 }
 
-function readCSV(fileName) {
-    let params = {
-        file: '1.5_Vote_2022-1-1_1.csv_0.5.csv', // fileName
-        fileBase: temp.file
+function cleanTimeSeries() {
+    const chartData = {
+        labels: forecastLabels,
+        datasets: [{
+            label: '50th Percentile',
+            backgroundColor: 'rgb(0,197,255)',
+            borderColor: 'rgb(0,196,255)',
+            borderWidth: 1.5,
+        },
+            {
+                label: '60th Percentile',
+                backgroundColor: 'rgb(0,255,64)',
+                borderColor: 'rgb(0,255,64)',
+                borderWidth: 1.5,
+            },
+            {
+                label: '70th Percentile',
+                backgroundColor: 'rgb(186,255,0)',
+                borderColor: 'rgb(186,255,0)',
+                borderWidth: 1.5,
+            },
+            {
+                label: '80th Percentile',
+                backgroundColor: 'rgb(255,111,0)',
+                borderColor: 'rgb(255,111,0)',
+                borderWidth: 1.5,
+            },
+            {
+                label: '90th Percentile',
+                backgroundColor: 'rgb(255,0,0)',
+                borderColor: 'rgb(255,0,0)',
+                borderWidth: 1.5,
+            },
+        ],
+    };
+
+    const config = {
+        type: 'line',
+        data: chartData,
+        options: {
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 14
+                        },
+                        color: 'white'
+                    }
+                },
+                tooltip: {
+                    titleFont: {
+                        size: 24
+                    },
+                    bodyFont: {
+                        size: 18
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    title: {
+                        display: true,
+                        text: 'Likelihood of Exceedance',
+                        color: 'white',
+                        font: {
+                            size: 20
+                        },
+                    },
+                    ticks: {
+                        color: 'white',
+                        font: {
+                            size: 14
+                        },
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Forecast Day',
+                        color: 'white',
+                        font: {
+                            size: 20
+                        },
+                    },
+                    ticks: {
+                        color: 'white',
+                        font: {
+                            size: 14
+                        },
+                    }
+                }
+            }
+        }
+    };
+    if(timeSeriesCanvas != null) {
+        timeSeriesCanvas.destroy();
     }
+    timeSeriesCanvas = new Chart(
+        document.getElementById('time-series-chart-id'),
+        config
+    );
+}
 
-    $.get(window.location.href + 'aws2', params, function(data) {
-        allCSVArray = data;
+function readCSV() {
+    $.get(window.location.href + 'aws3', temp, function(date) {
+        let csvParam = {
+            file: '1.5_' + correctModelType() + '_' + date + '_'
+        };
 
-        let offset = 10 * (currentSigma * 2);
-        mapArray = data[offset];
-        loadAllCSVFiles(function() {
-            createGrid();
+        $.get(window.location.href + 'aws2', csvParam, function(data) {
+            allCSVArray = data;
+
+            let offset = 10 * (currentSigma * 2);
+            mapArray = data[offset];
+            loadAllCSVFiles(function() {
+                createGrid();
+            });
         });
     });
 }
@@ -286,7 +392,7 @@ function createGrid() {
 
 
 function enableInteraction() {
-    readCSV('1.5_Vote_2022-1-1_1.csv_0.5.csv');
+    readCSV();
 }
 
 function toBase64(arr) {
@@ -590,6 +696,10 @@ function updateModel(type) {
     modelType = type;
     let modelButton = document.getElementById('button-model-dropdown');
     modelButton.textContent = type;
+    if(timeSeriesCanvas != null) {
+        timeSeriesCanvas.destroy();
+        cleanTimeSeries();
+    }
     setDay(1);
     updateImages();
 }
@@ -642,6 +752,7 @@ function updateImages() {
             }
             break;
     }
+    readCSV();
 }
 
 function updateDay(delta, modifyForecast) {
@@ -684,6 +795,7 @@ function updateMean(newSigma) {
         let offset = (10 * (currentSigma * 2)) + (forecastDayIndex - 1);
         mapArray = allCSVArray[offset];
 
+        readCSV();
         updateImages();
         updateThresholdImage();
         updateThresholdSlider();

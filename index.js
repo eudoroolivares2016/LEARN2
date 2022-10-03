@@ -104,8 +104,7 @@ function gatherCSV(csvNames, _callback) {
 }
 
 app.get('/aws2', async (req, res) => {
-    let fileName = req.query.file;
-    let fileBase = req.query.fileBase;
+    let fileBase = req.query.file;
     let csvNames = [];
     for(let j = 0; j < 5; j++) {
         let sigma = '';
@@ -130,7 +129,6 @@ app.get('/aws2', async (req, res) => {
             csvNames.push(fileBase + i + '.csv' + sigma + '.csv');
         }
     }
-
     gatherCSV(csvNames, function() {
         res.send(csvData);
     });
