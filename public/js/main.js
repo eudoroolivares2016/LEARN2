@@ -248,7 +248,8 @@ function loadAllCSVFiles(_callback) {
 
 function loadCSVFile(fileName, index) {
     $.get(fileName, undefined, function(data) {
-        let arrayOuter = data.split('\r\n');
+        data = data.replace('\r', '');
+        let arrayOuter = data.split('\n');
         let array = [];
         for(let i = 0; i < arrayOuter.length; i++) {
             if(arrayOuter[i].length > 0) {
