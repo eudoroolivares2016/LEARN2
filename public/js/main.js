@@ -222,7 +222,8 @@ function updateValueBox(x, y) {
 function loadAllCSVFiles(_callback) {
     // Wait for the initial CSV to load
     $.get('resources/Low_res_60th_percentile_threshold.csv', undefined, function(data) {
-        let arrayOuter = data.split('\r\n');
+        data = data.replace('\r', '');
+        let arrayOuter = data.split('\n');
         let array = [];
         for(let i = 0; i < arrayOuter.length; i++) {
             if(arrayOuter[i].length > 0) {
