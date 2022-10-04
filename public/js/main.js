@@ -39,16 +39,18 @@ function getChartArrays(x, y) {
     let tempArray = [];
     for(let i = 0; i < 5; i++) {
         tempArray.push(
-            [allCSVArray[(10 * i)][y][x] * 100,
-            allCSVArray[(10 * i) + 1][y][x] * 100,
-            allCSVArray[(10 * i) + 2][y][x] * 100,
-            allCSVArray[(10 * i) + 3][y][x] * 100,
-            allCSVArray[(10 * i) + 4][y][x] * 100,
-            allCSVArray[(10 * i) + 5][y][x] * 100,
-            allCSVArray[(10 * i) + 6][y][x] * 100,
-            allCSVArray[(10 * i) + 7][y][x] * 100,
-            allCSVArray[(10 * i) + 8][y][x] * 100,
-            allCSVArray[(10 * i) + 9][y][x] * 100]
+            [
+                (allCSVArray[(10 * i)][y][x] * 100).toFixed(0),
+                (allCSVArray[(10 * i) + 1][y][x] * 100).toFixed(0),
+                (allCSVArray[(10 * i) + 2][y][x] * 100).toFixed(0),
+                (allCSVArray[(10 * i) + 3][y][x] * 100).toFixed(0),
+                (allCSVArray[(10 * i) + 4][y][x] * 100).toFixed(0),
+                (allCSVArray[(10 * i) + 5][y][x] * 100).toFixed(0),
+                (allCSVArray[(10 * i) + 6][y][x] * 100).toFixed(0),
+                (allCSVArray[(10 * i) + 7][y][x] * 100).toFixed(0),
+                (allCSVArray[(10 * i) + 8][y][x] * 100).toFixed(0),
+                (allCSVArray[(10 * i) + 9][y][x] * 100).toFixed(0)
+            ]
         );
     }
     return tempArray;
@@ -59,6 +61,7 @@ function showTimeSeries(x, y) {
     if(mapArray[y][x] < 0) {
         return;
     }
+    let ctx = document.getElementById('time-series-chart-id');
     let timeSeriesChart = document.getElementById('time-series-id');
     timeSeriesChart.style.display = 'block';
 
@@ -102,12 +105,24 @@ function showTimeSeries(x, y) {
             },
         ],
     };
-
+    let latitude = 49.5 - (y * 1.375) - .6875;
+    let longitude = -124.5 + (x * 8 / 7) + ((8 / 7) / 2);
     const config = {
         type: 'line',
         data: chartData,
         options: {
+            chartArea: {
+                backgroundColor: 'rgba(255, 255, 255, 1)'
+            },
             plugins: {
+                title: {
+                    font: {
+                        size: 24
+                    },
+                    color: 'white',
+                    display: true,
+                    text: '(Lat, Lon): (' + latitude.toFixed(2) + ', ' + longitude.toFixed(2) + ')',
+                },
                 legend: {
                     labels: {
                         font: {
@@ -127,6 +142,9 @@ function showTimeSeries(x, y) {
             },
             scales: {
                 y: {
+                    grid: {
+                      color: '#40444b'
+                    },
                     beginAtZero: true,
                     max: 100,
                     title: {
@@ -145,6 +163,9 @@ function showTimeSeries(x, y) {
                     }
                 },
                 x: {
+                    grid: {
+                        color: '#40444b'
+                    },
                     title: {
                         display: true,
                         text: 'Forecast Day',
@@ -167,9 +188,16 @@ function showTimeSeries(x, y) {
         timeSeriesCanvas.destroy();
     }
     timeSeriesCanvas = new Chart(
-        document.getElementById('time-series-chart-id'),
+        ctx,
         config
     );
+    timeSeriesCanvas.config.options.onClick = (e) => {
+        const canvasPosition = Chart.helpers.getRelativePosition(e, timeSeriesCanvas);
+
+        const dataX = timeSeriesCanvas.scales.x.getValueForPixel(canvasPosition.x);
+        const dataY = timeSeriesCanvas.scales.y.getValueForPixel(canvasPosition.y);
+        setDay(dataX + 1);
+    }
 }
 
 function toggleTimeSeriesVisibility() {
