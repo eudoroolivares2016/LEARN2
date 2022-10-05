@@ -85,6 +85,17 @@
           </div>
           <div id="time-series-id">
             <canvas id="time-series-chart-id"></canvas>
+            <div class="dropdown" style="text-align: left; padding-left: 10%;">
+              Chart Type:
+              <button class="btn btn-primary dropdown-toggle" id="button-chart-type-dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Line
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" id="option-line">Line</a></li>
+                <li><a class="dropdown-item" id="option-stacked">Stacked</a></li>
+                <li><a class="dropdown-item" id="option-bar">Bar</a></li>
+              </ul>
+            </div>
           </div>
         </div>
         <div class="col-sm-5 control-panel-section" id="control-panel-section-id">

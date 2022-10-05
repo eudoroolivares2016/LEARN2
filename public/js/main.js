@@ -18,6 +18,9 @@ let isTodayStored = false;
 let modelType = 'Voting';
 let currentInitialize = 5;
 let timeSeriesCanvas = null;
+let chartType = 'line';
+let chartStacked = false;
+let chartConfig = {};
 
 let forecastImageCache = [];
 let votingCache = [];
@@ -54,6 +57,33 @@ function getChartArrays(x, y) {
         );
     }
     return tempArray;
+}
+
+function capitalizeFirstLetter(str) {
+    return str[0].toUpperCase() + str.slice(1);
+}
+
+function updateChart(type, shouldStack) {
+    let ctx = document.getElementById('time-series-chart-id');
+    let dropdown = document.getElementById('button-chart-type-dropdown');
+
+    dropdown.innerText = type === 'stacked' ? 'Stacked' : capitalizeFirstLetter(type);
+
+    chartType = type;
+    chartStacked = shouldStack;
+
+    chartConfig.type = chartType;
+    chartConfig.options.scales.y.stacked = chartStacked;
+
+    if(timeSeriesCanvas != null) {
+        timeSeriesCanvas.destroy();
+    }
+
+    timeSeriesCanvas = new Chart(
+        ctx,
+        chartConfig
+    );
+
 }
 
 const forecastLabels = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
@@ -107,8 +137,8 @@ function showTimeSeries(x, y) {
     };
     let latitude = 49.5 - (y * 1.375) - .6875;
     let longitude = -124.5 + (x * 8 / 7) + ((8 / 7) / 2);
-    const config = {
-        type: 'line',
+    chartConfig = {
+        type: chartType,
         data: chartData,
         options: {
             chartArea: {
@@ -142,6 +172,7 @@ function showTimeSeries(x, y) {
             },
             scales: {
                 y: {
+                    stacked: chartStacked,
                     grid: {
                       color: '#40444b'
                     },
@@ -189,7 +220,7 @@ function showTimeSeries(x, y) {
     }
     timeSeriesCanvas = new Chart(
         ctx,
-        config
+        chartConfig
     );
     timeSeriesCanvas.config.options.onClick = (e) => {
         const canvasPosition = Chart.helpers.getRelativePosition(e, timeSeriesCanvas);
@@ -298,7 +329,7 @@ function cleanTimeSeries() {
     };
 
     const config = {
-        type: 'line',
+        type: chartType,
         data: chartData,
         options: {
             plugins: {
@@ -926,6 +957,19 @@ document.getElementById('option-ecmwf').addEventListener('click', function() {
 
 document.getElementById('option-gefs').addEventListener('click', function() {
     updateModel('GEFS');
+});
+
+// Chart Type Selection
+document.getElementById('option-line').addEventListener('click', function() {
+    updateChart('line', false);
+});
+
+document.getElementById('option-stacked').addEventListener('click', function() {
+    updateChart('line', true);
+});
+
+document.getElementById('option-bar').addEventListener('click', function() {
+    updateChart('bar', false);
 });
 
 // Resolution Selection
