@@ -30,6 +30,7 @@ let ecmwfCache = [];
 let gefsCache = [];
 let mapArray = [];
 let allCSVArray = [];
+let clickedCoordinates = [];
 let csvCache = Array(10);
 
 // On-Load Functionality
@@ -237,6 +238,8 @@ function toggleTimeSeriesVisibility() {
 }
 
 function updateValueBox(x, y) {
+    clickedCoordinates = [x, y];
+
     let exceedanceValue = document.getElementById('exceedance-id');
     let coordinates = document.getElementById('coordinate-id');
     exceedanceValue.innerHTML = mapArray[y][x] < 0 ? '--' : (100 * mapArray[y][x]).toFixed(0) + '%';
