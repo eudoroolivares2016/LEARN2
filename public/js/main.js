@@ -20,6 +20,7 @@ let currentInitialize = 5;
 let timeSeriesCanvas = null;
 let chartType = 'line';
 let chartStacked = false;
+let chartLocalMax = 100;
 let chartConfig = {};
 
 let forecastImageCache = [];
@@ -38,6 +39,14 @@ window.onload = function() {
     initializePreview();
     initializeTheme();
 }
+
+Array.prototype.max = function() {
+    return Math.max.apply(null, this);
+};
+
+Array.prototype.min = function() {
+    return Math.min.apply(null, this);
+};
 
 function getChartArrays(x, y) {
     let tempArray = [];
@@ -68,13 +77,18 @@ function updateChart(type, shouldStack) {
     let ctx = document.getElementById('time-series-chart-id');
     let dropdown = document.getElementById('button-chart-type-dropdown');
 
-    dropdown.innerText = type === 'stacked' ? 'Stacked' : capitalizeFirstLetter(type);
+    dropdown.innerText = shouldStack ? 'Stacked' : capitalizeFirstLetter(type);
 
     chartType = type;
     chartStacked = shouldStack;
 
     chartConfig.type = chartType;
     chartConfig.options.scales.y.stacked = chartStacked;
+    chartConfig.options.scales.y.max = chartStacked ? chartLocalMax : 100;
+
+    for(let i = 0; i < chartConfig.data.datasets.length; i++) {
+        chartConfig.data.datasets[i].fill = getFill(i);
+    }
 
     if(timeSeriesCanvas != null) {
         timeSeriesCanvas.destroy();
@@ -87,6 +101,25 @@ function updateChart(type, shouldStack) {
 
 }
 
+const fillColors = [
+    'rgb(0,197,255)',
+    'rgb(0,255,64)',
+    'rgb(186,255,0)',
+    'rgb(255,111,0)',
+    'rgb(255,0,0)'
+]
+
+function getFill(index) {
+    if(chartStacked) {
+        return {
+            target: 'origin',
+            below: fillColors[index]
+        }
+    } else {
+        return {}
+    }
+}
+
 const forecastLabels = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 function showTimeSeries(x, y) {
     if(mapArray[y][x] < 0) {
@@ -97,6 +130,7 @@ function showTimeSeries(x, y) {
     timeSeriesChart.style.display = 'block';
 
     let chartArrays = getChartArrays(x, y);
+    chartLocalMax = chartArrays[0].max() + chartArrays[0].max() + chartArrays[0].max() + chartArrays[0].max();
     const chartData = {
         labels: forecastLabels,
         datasets: [{
@@ -105,6 +139,7 @@ function showTimeSeries(x, y) {
                 borderColor: 'rgb(0,196,255)',
                 borderWidth: 1.5,
                 data: chartArrays[0],
+                fill: getFill(0)
             },
             {
                 label: '60th Percentile',
@@ -112,6 +147,7 @@ function showTimeSeries(x, y) {
                 borderColor: 'rgb(0,255,64)',
                 borderWidth: 1.5,
                 data: chartArrays[1],
+                fill: getFill(1)
             },
             {
                 label: '70th Percentile',
@@ -119,6 +155,7 @@ function showTimeSeries(x, y) {
                 borderColor: 'rgb(186,255,0)',
                 borderWidth: 1.5,
                 data: chartArrays[2],
+                fill: getFill(2)
             },
             {
                 label: '80th Percentile',
@@ -126,6 +163,7 @@ function showTimeSeries(x, y) {
                 borderColor: 'rgb(255,111,0)',
                 borderWidth: 1.5,
                 data: chartArrays[3],
+                fill: getFill(3)
             },
             {
                 label: '90th Percentile',
@@ -133,6 +171,7 @@ function showTimeSeries(x, y) {
                 borderColor: 'rgb(255,0,0)',
                 borderWidth: 1.5,
                 data: chartArrays[4],
+                fill: getFill(4)
             },
         ],
     };
@@ -178,7 +217,7 @@ function showTimeSeries(x, y) {
                       color: '#40444b'
                     },
                     beginAtZero: true,
-                    max: 100,
+                    max: chartStacked ? chartLocalMax : 100,
                     title: {
                         display: true,
                         text: 'Likelihood of Exceedance',
