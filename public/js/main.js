@@ -49,6 +49,14 @@ Array.prototype.min = function() {
 };
 
 function getChartArrays(x, y) {
+    // Trimming Likeliness of Exceedance values to prevent a higher percentile value surpassing a lower one
+    for(let i = 0; i < 10; i++) {
+        for(let j = 4; j > 0; j--) {
+            if(allCSVArray[(10 * j) + i][y][x] > allCSVArray[(10 * (j - 1) + i)][y][x]) {
+                allCSVArray[(10 * (j - 1) + i)][y][x] = allCSVArray[(10 * j) + i][y][x];
+            }
+        }
+    }
     let tempArray = [];
     for(let i = 0; i < 5; i++) {
         tempArray.push(
@@ -108,10 +116,9 @@ const fillColors = [
 ]
 
 function getFill(index) {
-    if(chartStacked && index === 4) {
+    if(chartStacked) {
         return {
-            //target: index === 1 ? '2' : '1',
-            target: -1,
+            target: index === 4 ? 'origin' : '+1',
             below: fillColors[index]
         }
     } else {
