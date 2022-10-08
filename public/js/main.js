@@ -83,8 +83,6 @@ function updateChart(type, shouldStack) {
     chartStacked = shouldStack;
 
     chartConfig.type = chartType;
-    chartConfig.options.scales.y.stacked = chartStacked;
-    chartConfig.options.scales.y.max = chartStacked ? chartLocalMax : 100;
 
     for(let i = 0; i < chartConfig.data.datasets.length; i++) {
         chartConfig.data.datasets[i].fill = getFill(i);
@@ -110,9 +108,10 @@ const fillColors = [
 ]
 
 function getFill(index) {
-    if(chartStacked) {
+    if(chartStacked && index === 4) {
         return {
-            target: 'origin',
+            //target: index === 1 ? '2' : '1',
+            target: -1,
             below: fillColors[index]
         }
     } else {
@@ -212,12 +211,11 @@ function showTimeSeries(x, y) {
             },
             scales: {
                 y: {
-                    stacked: chartStacked,
                     grid: {
                       color: '#40444b'
                     },
                     beginAtZero: true,
-                    max: chartStacked ? chartLocalMax : 100,
+                    max: 100,
                     title: {
                         display: true,
                         text: 'Likelihood of Exceedance',
