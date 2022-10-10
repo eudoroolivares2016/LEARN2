@@ -121,7 +121,7 @@
 }
 
 .extension {
-    padding-bottom: 160px;
+    padding-bottom: 380px;
 }
 
 .fixed-small {
@@ -153,6 +153,13 @@
     position: absolute;
     left: 170px;
     top: 5px;
+}
+
+.lock-image {
+    height: 40px;
+    padding-right: 2%;
+    padding-top: 2%;
+    cursor: pointer;
 }
 
 .main-header {

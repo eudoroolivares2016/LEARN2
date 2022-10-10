@@ -112,8 +112,17 @@
           </div>
           </div>
           <div class="control-panel" id="control-panel-id">
-            <div class="control-panel-title">
-              Control Panel
+            <div style="text-align: right;"><img id="lock-image-id" src="resources/unlocked.png" class="img-fluid lock-image" alt="Responsive image padding-image"></div>
+            <div class="container-fluid control-panel-title">
+              <div class="row">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-10">
+                  Control Panel
+                </div>
+                <div class="col-sm-1">
+
+                </div>
+              </div>
             </div>
             <div class="control-panel-settings">
               <div class="container-fluid">
@@ -301,31 +310,9 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-7 map-section extension padding-main" id="map-section-id-mirror" style="display: none;">
-          <div class="container-fluid">
-            <div class="row">
-              <div class="col-sm-7">
-                <div id="main-forecast-label-mirror">
-                  Extreme Precipitation Forecast:
-                  <div id="main-forecast-date-mirror">
-                    Jan 01, 2001
-                  </div>
-                </div>
-                <img id="forecast-image-mirror" src="resources/blankForecast.png" class="img-fluid padding-image" alt="Responsive image padding-image">
-              </div>
-              <div class="col-sm-5">
-                <br>
-                <div>
-                  Daily Rainfall Threshold
-                  <div id="mean-label-mirror" style="font-size: 20px;">PRISM Non-Zero Average + 0.5 &sigma;</div>
-                </div>
-                <img id="threshold-image-mirror" src="resources/High_res_0.5_sigma_threshold.png" class="img-fluid padding-image" alt="Responsive image padding-image">
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
-      <div class="extension"></div>
+      <div class="extension" id="ext-id">
+      </div>
     </div>
   </div>
   <script src="js/bootstrap.bundle.js"></script>

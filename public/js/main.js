@@ -9,17 +9,25 @@ const lightPreview = document.querySelectorAll('.preview-switch');
 const resolution = document.querySelectorAll('.button-resolution');
 const INITIALIZE_HISTORY_LIMIT = 5;
 
-let currentResolution = 'high';
 let currentSigma = .5;
-let dark = true;
 let forecastDayIndex = 1;
+let currentInitialize = 5;
+
 let previewsEnabled = false;
 let isTodayStored = false;
-let modelType = 'Voting';
-let currentInitialize = 5;
-let timeSeriesCanvas = null;
-let chartType = 'line';
 let chartStacked = false;
+let dataUpdated = false;
+let isPanelLocked = false;
+let dark = true;
+
+let timeSeriesCanvas = null;
+let savedX = null;
+let savedY = null;
+
+let modelType = 'Voting';
+let chartType = 'line';
+let currentResolution = 'high';
+
 let chartLocalMax = 100;
 let chartConfig = {};
 
@@ -47,6 +55,18 @@ Array.prototype.max = function() {
 Array.prototype.min = function() {
     return Math.min.apply(null, this);
 };
+
+function toggleControlPanelLock() {
+    let lockIcon = document.getElementById('lock-image-id');
+
+    isPanelLocked = !isPanelLocked;
+
+    lockIcon.src = isPanelLocked ? 'resources/locked.png' : 'resources/unlocked.png';
+
+    if(!isPanelLocked) {
+        $('#control-panel-section-id').stop().animate({'marginTop': getTopScrollPosition() + 'px', 'marginLeft':($(window).scrollLeft()) + 'px'}, 'fast' );
+    }
+}
 
 function getChartArrays(x, y) {
     // Trimming Likeliness of Exceedance values to prevent a higher percentile value surpassing a lower one
@@ -104,7 +124,6 @@ function updateChart(type, shouldStack) {
         ctx,
         chartConfig
     );
-
 }
 
 const fillColors = [
@@ -128,12 +147,20 @@ function getFill(index) {
 
 const forecastLabels = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 function showTimeSeries(x, y) {
+    if(x == null || y == null) {
+        return;
+    }
     if(mapArray[y][x] < 0) {
         return;
     }
+    savedX = x;
+    savedY = y;
     let ctx = document.getElementById('time-series-chart-id');
+    let ext = document.getElementById('ext-id');
     let timeSeriesChart = document.getElementById('time-series-id');
+
     timeSeriesChart.style.display = 'block';
+    ext.style.display = 'none';
 
     let chartArrays = getChartArrays(x, y);
     chartLocalMax = chartArrays[0].max() + chartArrays[0].max() + chartArrays[0].max() + chartArrays[0].max();
@@ -444,6 +471,7 @@ function cleanTimeSeries() {
     );
 }
 
+// showTimeSeries(savedX, savedY);
 function readCSV() {
     $.get(window.location.href + 'aws3', temp, function(date) {
         let csvParam = {
@@ -457,6 +485,9 @@ function readCSV() {
             mapArray = data[offset];
             loadAllCSVFiles(function() {
                 createGrid();
+                if(!dataUpdated) {
+                    showTimeSeries(savedX, savedY);
+                }
             });
         });
     });
@@ -639,6 +670,12 @@ function initializeTheme() {
     updateTheme(dark);
 }
 
+function getTopScrollPosition() {
+    let scrollPosition = $(window).scrollTop() - 100 < 0 ? 0 : $(window).scrollTop() - 100;
+    scrollPosition = scrollPosition > 400 ? 400 : scrollPosition;
+    return scrollPosition;
+}
+
 function initializeDates(date) {
     let forecastDateElement = document.getElementById('main-forecast-date');
     let initializeDateElement = document.getElementById('init');
@@ -764,7 +801,6 @@ function updateTheme(isChecked) {
     }
 }
 
-
 function setDay(day) {
     let forecast = document.getElementById('forecast-day');
     forecast.textContent = day;
@@ -808,7 +844,6 @@ function updateModel(type) {
         timeSeriesCanvas.destroy();
         cleanTimeSeries();
     }
-    setDay(1);
     updateImages();
 }
 
@@ -1070,6 +1105,11 @@ document.getElementById('init-up').addEventListener('click', function() {
     }
 });
 
+// Control Panel Lock
+document.getElementById('lock-image-id').addEventListener('click', function() {
+    toggleControlPanelLock();
+});
+
 document.getElementById('init-down').addEventListener('click', function() {
     if(currentInitialize > 0) {
         updateDate('down');
@@ -1082,6 +1122,13 @@ document.getElementById('theme-switch-id').addEventListener('change', function()
     localStorage.setItem('theme', this.checked);
     dark = this.checked;
     updateTheme(this.checked);
+});
+
+$(window).scroll(function(){
+    if(isPanelLocked) {
+        return;
+    }
+    $('#control-panel-section-id').stop().animate({'marginTop': getTopScrollPosition() + 'px', 'marginLeft':($(window).scrollLeft()) + 'px'}, 'fast' );
 });
 
 // If user resizes browser window, fix Forecast map coordinate positions
