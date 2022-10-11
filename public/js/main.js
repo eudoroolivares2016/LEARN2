@@ -28,6 +28,7 @@ let savedY = null;
 let modelType = 'Voting';
 let chartType = 'line';
 let currentResolution = 'high';
+let chartLocation = 'Left';
 
 let chartLocalMax = 100;
 let chartConfig = {};
@@ -64,7 +65,8 @@ function setChartLocation(location) {
     let leftChart = document.getElementById('time-series-id');
     let rightChart = document.getElementById('time-series-id-2');
 
-    switch(location) {
+    chartLocation = location;
+    switch(chartLocation) {
         case 'Left':
             leftChart.style.display = 'block';
             rightChart.style.display = 'none';
@@ -196,9 +198,23 @@ function showTimeSeries(x, y) {
     let ctx = document.getElementById('time-series-chart-id');
     let ctx2 = document.getElementById('time-series-chart-id-2');
     let ext = document.getElementById('ext-id');
-    let timeSeriesChart = document.getElementById('time-series-id');
+    let leftChart = document.getElementById('time-series-id');
+    let rightChart = document.getElementById('time-series-id-2');
 
-    timeSeriesChart.style.display = 'block';
+    switch(chartLocation) {
+        case 'Left':
+            leftChart.style.display = 'block';
+            rightChart.style.display = 'none';
+            break;
+        case 'Right':
+            leftChart.style.display = 'none';
+            rightChart.style.display = 'block';
+            break;
+        case 'Both':
+            leftChart.style.display = 'block';
+            rightChart.style.display = 'block';
+            break;
+    }
     ext.style.display = 'none';
 
     let chartArrays = getChartArrays(x, y);
