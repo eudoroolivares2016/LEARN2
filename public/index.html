@@ -85,34 +85,59 @@
           </div>
           <div id="time-series-id">
             <canvas id="time-series-chart-id"></canvas>
-            <div class="dropdown" style="text-align: left; padding-left: 10%;">
-              Chart Type:
-              <button class="btn btn-primary dropdown-toggle" id="button-chart-type-dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Line
-              </button>
-              <ul class="dropdown-menu">
-                <li><a class="dropdown-item" id="option-line">Line</a></li>
-                <li><a class="dropdown-item" id="option-stacked">Stacked</a></li>
-                <li><a class="dropdown-item" id="option-bar">Bar</a></li>
-              </ul>
+          </div>
+          <br>
+          <div class="container-fluid chart-settings">
+            <div class="row">
+              <div class="col-3" style="text-align: right;">
+                Chart Type:
+              </div>
+              <div class="col-9" style="text-align: left;">
+                <button class="btn btn-primary dropdown-toggle" id="button-chart-type-dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Line
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" id="option-line">Line</a></li>
+                  <li><a class="dropdown-item" id="option-stacked">Stacked</a></li>
+                  <li><a class="dropdown-item" id="option-bar">Bar</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="row" style="padding-top: 15px;">
+              <div class="col-3" style="text-align: right;">
+                Chart Location:
+              </div>
+              <div class="col-9" style="text-align: left;">
+                <button class="btn btn-primary dropdown-toggle" id="button-chart-location-dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Left
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" id="option-left">Left</a></li>
+                  <li><a class="dropdown-item" id="option-right">Right</a></li>
+                  <li><a class="dropdown-item" id="option-both">Both</a></li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
         <div class="col-sm-5 control-panel-section" id="control-panel-section-id">
           <div class="user-preface">
             <a href='/user_guide' target="_blank" style ="width:100%"><div class="btn btn-lg btn-primary users-manual" id="users-manual">User's Guide</div></a>
-          <div class="theme-selection">
-            <label class="theme-switch-label">
-              <input id="theme-switch-id" class="theme-switch" type="checkbox" checked>
-              <div class="slider round">
-                <span class="on">Dark</span>
-                <span class="off">Light</span>
-              </div>
-            </label>
+            <div class="theme-selection">
+              <label class="theme-switch-label">
+                <input id="theme-switch-id" class="theme-switch" type="checkbox" checked>
+                <div class="slider round">
+                  <span class="on">Dark</span>
+                  <span class="off">Light</span>
+                </div>
+              </label>
+            </div>
           </div>
-          </div>
+          <span id="time-series-id-2" style="display: none;">
+            <canvas id="time-series-chart-id-2"></canvas>
+          </span>
           <div class="control-panel" id="control-panel-id">
-            <div style="text-align: right;"><img id="lock-image-id" src="resources/unlocked.png" class="img-fluid lock-image" alt="Responsive image padding-image"></div>
+            <div style="text-align: right;"><img id="lock-image-id" src="resources/locked.png" class="img-fluid lock-image" alt="Responsive image padding-image"></div>
             <div class="container-fluid control-panel-title">
               <div class="row">
                 <div class="col-sm-1"></div>

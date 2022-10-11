@@ -16,11 +16,12 @@ let currentInitialize = 5;
 let previewsEnabled = false;
 let isTodayStored = false;
 let chartStacked = false;
-let dataUpdated = false;
-let isPanelLocked = false;
+let chartLoadedOnce = false;
+let isPanelLocked = true;
 let dark = true;
 
 let timeSeriesCanvas = null;
+let timeSeriesCanvas2 = null;
 let savedX = null;
 let savedY = null;
 
@@ -55,6 +56,29 @@ Array.prototype.max = function() {
 Array.prototype.min = function() {
     return Math.min.apply(null, this);
 };
+
+function setChartLocation(location) {
+    let locationButton = document.getElementById('button-chart-location-dropdown');
+    locationButton.innerText = location;
+
+    let leftChart = document.getElementById('time-series-id');
+    let rightChart = document.getElementById('time-series-id-2');
+
+    switch(location) {
+        case 'Left':
+            leftChart.style.display = 'block';
+            rightChart.style.display = 'none';
+            break;
+        case 'Right':
+            leftChart.style.display = 'none';
+            rightChart.style.display = 'block';
+            break;
+        case 'Both':
+            leftChart.style.display = 'block';
+            rightChart.style.display = 'block';
+            break;
+    }
+}
 
 function toggleControlPanelLock() {
     let lockIcon = document.getElementById('lock-image-id');
@@ -102,7 +126,12 @@ function capitalizeFirstLetter(str) {
 }
 
 function updateChart(type, shouldStack) {
+    if(!chartLoadedOnce) {
+        return;
+    }
+
     let ctx = document.getElementById('time-series-chart-id');
+    let ctx2 = document.getElementById('time-series-chart-id-2');
     let dropdown = document.getElementById('button-chart-type-dropdown');
 
     dropdown.innerText = shouldStack ? 'Stacked' : capitalizeFirstLetter(type);
@@ -119,9 +148,16 @@ function updateChart(type, shouldStack) {
     if(timeSeriesCanvas != null) {
         timeSeriesCanvas.destroy();
     }
+    if(timeSeriesCanvas2 != null) {
+        timeSeriesCanvas2.destroy();
+    }
 
     timeSeriesCanvas = new Chart(
         ctx,
+        chartConfig
+    );
+    timeSeriesCanvas2 = new Chart(
+        ctx2,
         chartConfig
     );
 }
@@ -153,9 +189,12 @@ function showTimeSeries(x, y) {
     if(mapArray[y][x] < 0) {
         return;
     }
+
+    chartLoadedOnce = true;
     savedX = x;
     savedY = y;
     let ctx = document.getElementById('time-series-chart-id');
+    let ctx2 = document.getElementById('time-series-chart-id-2');
     let ext = document.getElementById('ext-id');
     let timeSeriesChart = document.getElementById('time-series-id');
 
@@ -214,6 +253,9 @@ function showTimeSeries(x, y) {
         type: chartType,
         data: chartData,
         options: {
+            animation: {
+              duration: 0
+            },
             chartArea: {
                 backgroundColor: 'rgba(255, 255, 255, 1)'
             },
@@ -290,22 +332,26 @@ function showTimeSeries(x, y) {
     if(timeSeriesCanvas != null) {
         timeSeriesCanvas.destroy();
     }
+    if(timeSeriesCanvas2 != null) {
+        timeSeriesCanvas2.destroy();
+    }
+
     timeSeriesCanvas = new Chart(
         ctx,
         chartConfig
     );
-    timeSeriesCanvas.config.options.onClick = (e) => {
+    timeSeriesCanvas2 = new Chart(
+        ctx2,
+        chartConfig
+    );
+
+    timeSeriesCanvas.config.options.onClick = timeSeriesCanvas2.config.options.onClick = (e) => {
         const canvasPosition = Chart.helpers.getRelativePosition(e, timeSeriesCanvas);
 
         const dataX = timeSeriesCanvas.scales.x.getValueForPixel(canvasPosition.x);
         const dataY = timeSeriesCanvas.scales.y.getValueForPixel(canvasPosition.y);
-        setDay(dataX + 1);
+        setDay(dataX + 1); // change this to not refresh chart
     }
-}
-
-function toggleTimeSeriesVisibility() {
-    let timeSeriesDisplay = document.getElementById('time-series-id');
-    timeSeriesDisplay.style.display = timeSeriesDisplay.style.display === 'none' ? 'block' : 'none';
 }
 
 function updateValueBox(x, y) {
@@ -465,13 +511,20 @@ function cleanTimeSeries() {
     if(timeSeriesCanvas != null) {
         timeSeriesCanvas.destroy();
     }
+    if(timeSeriesCanvas2 != null) {
+        timeSeriesCanvas2.destroy();
+    }
+
     timeSeriesCanvas = new Chart(
         document.getElementById('time-series-chart-id'),
         config
     );
+    timeSeriesCanvas2 = new Chart(
+        document.getElementById('time-series-chart-id-2'),
+        config
+    );
 }
 
-// showTimeSeries(savedX, savedY);
 function readCSV() {
     $.get(window.location.href + 'aws3', temp, function(date) {
         let csvParam = {
@@ -485,9 +538,7 @@ function readCSV() {
             mapArray = data[offset];
             loadAllCSVFiles(function() {
                 createGrid();
-                if(!dataUpdated) {
-                    showTimeSeries(savedX, savedY);
-                }
+                showTimeSeries(savedX, savedY);
             });
         });
     });
@@ -844,6 +895,10 @@ function updateModel(type) {
         timeSeriesCanvas.destroy();
         cleanTimeSeries();
     }
+    if(timeSeriesCanvas2 != null) {
+        timeSeriesCanvas2.destroy();
+        cleanTimeSeries();
+    }
     updateImages();
 }
 
@@ -1052,6 +1107,19 @@ document.getElementById('option-stacked').addEventListener('click', function() {
 
 document.getElementById('option-bar').addEventListener('click', function() {
     updateChart('bar', false);
+});
+
+// Chart Location Selection
+document.getElementById('option-right').addEventListener('click', function() {
+    setChartLocation('Right');
+});
+
+document.getElementById('option-left').addEventListener('click', function() {
+    setChartLocation('Left');
+});
+
+document.getElementById('option-both').addEventListener('click', function() {
+    setChartLocation('Both');
 });
 
 // Resolution Selection

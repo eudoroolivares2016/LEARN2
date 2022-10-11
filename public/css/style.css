@@ -63,6 +63,10 @@
     font-size: 24px;
 }
 
+.chart-settings {
+    padding-bottom: 100px;
+}
+
 .content-links{
         text-decoration: none;
             color: #aac662;
@@ -118,6 +122,10 @@
     padding-left: 13%;
     padding-right: 13%;
     font-size: 12px;
+}
+
+.dropdown-toggle {
+    width: 100px;
 }
 
 .extension {
@@ -308,7 +316,9 @@
 
 #time-series-id {
     display: none;
-    padding: 3%;
+    padding-top: 3%;
+    padding-left: 3%;
+    padding-right: 3%;
 }
 
 .preview-switch + .off {
