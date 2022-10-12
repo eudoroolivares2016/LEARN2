@@ -383,6 +383,7 @@ table, th, td {
     background: rgba(51,65,85);
     padding: 1em;
     border-radius: 5px;
+    margin-bottom: 15px;
 }
 
 .user-guide-content {
