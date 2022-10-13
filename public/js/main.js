@@ -908,7 +908,7 @@ function updateTheme(isChecked) {
         mainHeader.style.backgroundColor = '#2d871933';
         mapSection.style.backgroundColor = '#efefef';
         dayChange.style.backgroundColor = '#fff';
-        dayChange.style.border = 'none';
+        dayChange.style.border = '0px solid black;';
         daySlider.style.accentColor = '#569630';
         thresholdSlider.style.accentColor = '#569630';
         pageBody.style.backgroundColor = '#2d871933';
