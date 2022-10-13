@@ -63,6 +63,11 @@
     font-size: 24px;
 }
 
+.chart {
+    border: 2px solid black;
+    border-radius: 10px;
+}
+
 .chart-settings {
     padding-bottom: 100px;
 }
@@ -87,9 +92,17 @@
     padding: 3%;
 }
 
+.control-panel-section-2 {
+    padding: 3%;
+}
+
 .control-panel-settings {
     padding-bottom: 2%;
     text-align: left;
+}
+
+.control-panel-settings-2 {
+    background-color: #292929;
 }
 
 .control-panel-label {
@@ -129,7 +142,7 @@
 }
 
 .extension {
-    padding-bottom: 380px;
+    padding-bottom: 100px;
 }
 
 .fixed-small {
@@ -149,7 +162,11 @@
 }
 
 #threshold-image {
-    width: 85%;
+    width: 40%;
+}
+
+#forecast-image {
+    width: 59%
 }
 
 .image-main-border {
@@ -357,10 +374,6 @@ table, th, td {
 
 .theme-switch:checked + .slider .off {
     display: none;
-}
-
-#threshold-image {
-
 }
 
 .threshold-slider {

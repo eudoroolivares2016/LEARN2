@@ -28,7 +28,7 @@ let savedY = null;
 let modelType = 'Voting';
 let chartType = 'line';
 let currentResolution = 'high';
-let chartLocation = 'Left';
+let chartLocation = 'Right';
 
 let chartLocalMax = 100;
 let chartConfig = {};
@@ -364,8 +364,8 @@ function showTimeSeries(x, y) {
     timeSeriesCanvas.config.options.onClick = timeSeriesCanvas2.config.options.onClick = (e) => {
         const canvasPosition = Chart.helpers.getRelativePosition(e, timeSeriesCanvas);
 
-        const dataX = timeSeriesCanvas.scales.x.getValueForPixel(canvasPosition.x);
-        const dataY = timeSeriesCanvas.scales.y.getValueForPixel(canvasPosition.y);
+        const dataX = timeSeriesCanvas2.scales.x.getValueForPixel(canvasPosition.x);
+        const dataY = timeSeriesCanvas2.scales.y.getValueForPixel(canvasPosition.y);
         setDay(dataX + 1); // change this to not refresh chart
     }
 }
@@ -376,13 +376,12 @@ function updateValueBox(x, y) {
     let exceedanceValue = document.getElementById('exceedance-id');
     let coordinates = document.getElementById('coordinate-id');
     exceedanceValue.innerHTML = mapArray[y][x] < 0 ? '--' : (100 * mapArray[y][x]).toFixed(0) + '%';
-
     let latitude = 49.5 - (y * 1.375) - .6875;
     let longitude = -124.5 + (x * 8 / 7) + ((8 / 7) / 2);
     coordinates.innerHTML = `(${latitude.toFixed(2)}, ${longitude.toFixed(2)})`;
 
     let thresholdValue = document.getElementById('threshold-value-id');
-    thresholdValue.innerHTML = csvCache[currentSigma * 2][y][x] === '-1.00' ? '--' : csvCache[currentSigma * 2][y][x];
+    thresholdValue.innerHTML = csvCache[currentSigma * 2][y][x] < 0 ? '--' : csvCache[currentSigma * 2][y][x];
 
 }
 
