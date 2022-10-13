@@ -11,7 +11,6 @@
     z-index: 98;
     padding: 21px;
     background-color: #0d6efd;
-
 }
 
 
@@ -66,6 +65,7 @@
 .chart {
     border: 2px solid black;
     border-radius: 10px;
+    background-color: #212121
 }
 
 .chart-settings {
@@ -390,13 +390,6 @@ table, th, td {
 .threshold-slider-wrapper {
     accent-color: #0d6efd;
     stroke: none;
-}
-
-#time-series-chart-id, #time-series-chart-id-2 {
-    background: rgba(51,65,85);
-    padding: 1em;
-    border-radius: 5px;
-    margin-bottom: 15px;
 }
 
 .user-guide-content {
