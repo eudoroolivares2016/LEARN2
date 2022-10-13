@@ -389,6 +389,12 @@ table, th, td {
     width: 70%;
 }
 
+#time-series-chart-id, #time-series-chart-id-2 {
+    background: rgba(51,65,85);
+    padding: 1em;
+    border-radius: 5px;
+}
+
 .threshold-slider-ticks {
     text-align: center;
     padding-left: 10%;
