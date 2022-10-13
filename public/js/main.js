@@ -845,6 +845,8 @@ function updateTheme(isChecked) {
     let buttonHighRes = document.getElementById('button-high-res');
     let buttonLowRes = document.getElementById('button-low-res');
     let mappedValues = document.getElementById('value-table');
+    let dayChange = document.getElementById('change-day');
+    let chartType = document.getElementById('button-chart-type-dropdown');
 
     if (isChecked) {
         // Set Dark Theme
@@ -862,6 +864,9 @@ function updateTheme(isChecked) {
         thresholdButton.style.backgroundColor = '#0d6efd';
         userManual.style.backgroundColor = '#0d6efd';
         modelButton.style.backgroundColor = '#0d6efd';
+        dayChange.style.backgroundColor = '#292929';
+        dayChange.style.border = '5px solid black;';
+        chartType.style.backgroundColor = '#0d6efd';
         buttonHighRes.style.backgroundColor = currentResolution === 'high' ? '#0d6efd' : '#212121';
         buttonHighRes.style.borderColor = '#0d6efd'
         buttonLowRes.style.backgroundColor = currentResolution === 'low' ? '#0d6efd' : '#212121';
@@ -898,9 +903,12 @@ function updateTheme(isChecked) {
         buttonLowRes.style.backgroundColor = currentResolution  === 'low' ? '#77c743' : '#6c757d';
         buttonLowRes.style.borderColor = '#77c743';
         userManual.style.backgroundColor = '#77c743';
+        chartType.style.backgroundColor = '#77c743';
         userManual.style.borderColor = '#77c743';
         mainHeader.style.backgroundColor = '#2d871933';
         mapSection.style.backgroundColor = '#efefef';
+        dayChange.style.backgroundColor = '#fff';
+        dayChange.style.border = 'none';
         daySlider.style.accentColor = '#569630';
         thresholdSlider.style.accentColor = '#569630';
         pageBody.style.backgroundColor = '#2d871933';

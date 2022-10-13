@@ -82,42 +82,127 @@
               </div>
             </div>
             <div class="control-panel-section-2">
-              <div class="control-panel control-panel-settings-2">
+              <div class="control-panel control-panel-settings-2" id="change-day">
                 <div class="container-fluid control-panel-settings">
                   <div class="row">
                     <div class="col-sm-5 extension padding-main control-panel-label">
-                      Threshold:
+                      Forecast Day:
                     </div>
                     <div class="col-sm-7 extension padding-main">
-                      <button class="btn btn-secondary" id="threshold-down">&#8592;</button>
-                      <div class="btn btn-primary button-no-pointer" id="threshold">60</div>
-                      <button class="btn btn-secondary" id="threshold-up">&#8594;</button>
-                      Percentile
+                      <button class="btn btn-secondary" id="forecast-down">&#8592;</button>
+                      <button class="btn btn-primary button-no-pointer" style="width: 50px;" id="forecast-day">1</button>
+                      <button class="btn btn-secondary" id="forecast-up">&#8594;</button>
                     </div>
-                    <div class="container-fluid">
+                    <div clas="container-fluid">
                       <div class="row">
-                        <div class="threshold-slider-wrapper centered-text">
-                          <input class="threshold-slider" type="range" id="threshold-slider-id" name="volume" min="0" max="2" step=".5" value=".5">
+                        <div class="day-slider-wrapper centered-text">
+                          <input class="day-slider" type="range" id="day-slider-id" name="volume" min="1" max="10" step="1" value="1">
                         </div>
                       </div>
-                      <div class="threshold-slider-ticks">
+                      <div class="day-slider-ticks">
                         <div class="row">
-                          <div class="col-sm">50</div>
-                          <div class="col-sm">60</div>
-                          <div class="col-sm">70</div>
-                          <div class="col-sm">80</div>
-                          <div class="col-sm">90</div>
+                          <div class="col-sm">1</div>
+                          <div class="col-sm">2</div>
+                          <div class="col-sm">3</div>
+                          <div class="col-sm">4</div>
+                          <div class="col-sm">5</div>
+                          <div class="col-sm">6</div>
+                          <div class="col-sm">7</div>
+                          <div class="col-sm">8</div>
+                          <div class="col-sm">9</div>
+                          <div class="col-sm">10</div>
                         </div>
                       </div>
                     </div>
                   </div>
+                  <div id="day-selection">
+                    <div class="row preview">
+                      <div class="col">
+                        <label class="scale-switch-label">
+                          <input id="preview-switch-id" class="theme-switch preview-switch" type="checkbox">
+                          <div class="slider round" id="preview-switch-background-id">
+                            <span class="on preview-on">Preview</span>
+                            <span class="off preview-off">Preview</span>
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="row" id="preview-thumbnails">
+                      <div class="container-fluid">
+                        <div class="row padding-main">
+                          <div class="col">
+                            <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(1)">1</button></span>
+                            <span class="preview-images"><img id="preview-image-1" onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
+                            <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(6)">6</button></span>
+                            <span class="preview-images"><img id="preview-image-6" onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
+                          </div>
+                        </div>
+                        <div class="row padding-main">
+                          <div class="col">
+                            <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(2)">2</button></span>
+                            <span class="preview-images"><img id="preview-image-2" onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
+                            <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(7)">7</button></span>
+                            <span class="preview-images"><img id="preview-image-7" onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
+                          </div>
+                        </div>
+                        <div class="row padding-main">
+                          <div class="col">
+                            <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(3)">3</button></span>
+                            <span class="preview-images"><img id="preview-image-3" onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
+                            <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(8)">8</button></span>
+                            <span class="preview-images"><img id="preview-image-8" onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
+                          </div>
+                        </div>
+                        <div class="row padding-main">
+                          <div class="col">
+                            <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(4)">4</button></span>
+                            <span class="preview-images"><img id="preview-image-4" onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
+                            <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(9)">9</button></span>
+                            <span class="preview-images"><img id="preview-image-9" onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
+                          </div>
+                        </div>
+                        <div class="row padding-main">
+                          <div class="col">
+                            <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(5)">5</button></span>
+                            <span class="preview-images"><img id="preview-image-5"  onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
+                            <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(10)">10</button></span>
+                            <span class="preview-images"><img id="preview-image-10"  onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" id="no-preview">
+                      <div class="container-fluid">
+                        <div class="row padding-main">
+                          <div class="col">
+                            <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-smaller" onclick="setDay(1)">1</button></span>
+                            <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-smaller" onclick="setDay(2)">2</button></span>
+                            <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-smaller" onclick="setDay(3)">3</button></span>
+                            <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-smaller" onclick="setDay(4)">4</button></span>
+                            <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-smaller" onclick="setDay(5)">5</button></span>
+                          </div>
+                        </div>
+                        <div class="row padding-main">
+                          <div class="col">
+                            <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-smaller" onclick="setDay(6)">6</button></span>
+                            <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-smaller" onclick="setDay(7)">7</button></span>
+                            <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-smaller" onclick="setDay(8)">8</button></span>
+                            <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-smaller" onclick="setDay(9)">9</button></span>
+                            <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-smaller" onclick="setDay(10)">10</button></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+            
                 </div>
               </div>
             </div>
 
             <!--- <button class="btn btn-primary" style="width: 150px;" onclick="showTimeSeries(0, 0);">Test</button> --->
           </div>
-          <div id="time-series-id" stlye="display: none;">
+          <div id="time-series-id" style="display: none;">
             <canvas id="time-series-chart-id"></canvas>
           </div>
           <div class="container-fluid chart-settings" style="padding-top: 20px; display: none;">
@@ -157,9 +242,9 @@
           <div style="padding-top: 10px"></div>
           <div class="control-panel" id="control-panel-id">
             <div style="text-align: right;"><img id="lock-image-id" src="resources/locked.png" class="img-fluid lock-image" alt="Responsive image padding-image"></div>
-            <span class="control-panel-title">
+            <!-- <span class="control-panel-title">
               Control Panel
-            </span>
+            </span> -->
             <div class="control-panel-settings">
               <div class="container-fluid">
                 <div class="row">
@@ -172,116 +257,35 @@
                     <button class="btn btn-secondary" id="init-up">&#8594;</button>
                   </div>
                 </div>
+
                 <div class="row">
                   <div class="col-sm-5 extension padding-main control-panel-label">
-                    Forecast Day:
+                    Threshold:
                   </div>
                   <div class="col-sm-7 extension padding-main">
-                    <button class="btn btn-secondary" id="forecast-down">&#8592;</button>
-                    <button class="btn btn-primary button-no-pointer" style="width: 50px;" id="forecast-day">1</button>
-                    <button class="btn btn-secondary" id="forecast-up">&#8594;</button>
+                    <button class="btn btn-secondary" id="threshold-down">&#8592;</button>
+                    <div class="btn btn-primary button-no-pointer" id="threshold">60</div>
+                    <button class="btn btn-secondary" id="threshold-up">&#8594;</button>
+                    Percentile
                   </div>
-                  <div clas="container-fluid">
+                  <div class="container-fluid">
                     <div class="row">
-                      <div class="day-slider-wrapper centered-text">
-                        <input class="day-slider" type="range" id="day-slider-id" name="volume" min="1" max="10" step="1" value="1">
+                      <div class="threshold-slider-wrapper centered-text">
+                        <input class="threshold-slider" type="range" id="threshold-slider-id" name="volume" min="0" max="2" step=".5" value=".5">
                       </div>
                     </div>
-                    <div class="day-slider-ticks">
+                    <div class="threshold-slider-ticks">
                       <div class="row">
-                        <div class="col-sm">1</div>
-                        <div class="col-sm">2</div>
-                        <div class="col-sm">3</div>
-                        <div class="col-sm">4</div>
-                        <div class="col-sm">5</div>
-                        <div class="col-sm">6</div>
-                        <div class="col-sm">7</div>
-                        <div class="col-sm">8</div>
-                        <div class="col-sm">9</div>
-                        <div class="col-sm">10</div>
+                        <div class="col-sm">50</div>
+                        <div class="col-sm">60</div>
+                        <div class="col-sm">70</div>
+                        <div class="col-sm">80</div>
+                        <div class="col-sm">90</div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div id="day-selection">
-                  <div class="row preview">
-                    <div class="col">
-                      <label class="scale-switch-label">
-                        <input id="preview-switch-id" class="theme-switch preview-switch" type="checkbox">
-                        <div class="slider round" id="preview-switch-background-id">
-                          <span class="on preview-on">Preview</span>
-                          <span class="off preview-off">Preview</span>
-                        </div>
-                      </label>
-                    </div>
-                  </div>
-                  <div class="row" id="preview-thumbnails">
-                    <div class="container-fluid">
-                      <div class="row padding-main">
-                        <div class="col">
-                          <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(1)">1</button></span>
-                          <span class="preview-images"><img id="preview-image-1" onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
-                          <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(6)">6</button></span>
-                          <span class="preview-images"><img id="preview-image-6" onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
-                        </div>
-                      </div>
-                      <div class="row padding-main">
-                        <div class="col">
-                          <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(2)">2</button></span>
-                          <span class="preview-images"><img id="preview-image-2" onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
-                          <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(7)">7</button></span>
-                          <span class="preview-images"><img id="preview-image-7" onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
-                        </div>
-                      </div>
-                      <div class="row padding-main">
-                        <div class="col">
-                          <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(3)">3</button></span>
-                          <span class="preview-images"><img id="preview-image-3" onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
-                          <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(8)">8</button></span>
-                          <span class="preview-images"><img id="preview-image-8" onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
-                        </div>
-                      </div>
-                      <div class="row padding-main">
-                        <div class="col">
-                          <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(4)">4</button></span>
-                          <span class="preview-images"><img id="preview-image-4" onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
-                          <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(9)">9</button></span>
-                          <span class="preview-images"><img id="preview-image-9" onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
-                        </div>
-                      </div>
-                      <div class="row padding-main">
-                        <div class="col">
-                          <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(5)">5</button></span>
-                          <span class="preview-images"><img id="preview-image-5"  onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
-                          <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-small" onclick="setDay(10)">10</button></span>
-                          <span class="preview-images"><img id="preview-image-10"  onmouseover="setWidth(this, 125);" onmouseleave="setWidth(this, 75);" class="img-thumbnail preview-size" src="resources/blankForecast.png"></span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row" id="no-preview">
-                    <div class="container-fluid">
-                      <div class="row padding-main">
-                        <div class="col">
-                          <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-smaller" onclick="setDay(1)">1</button></span>
-                          <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-smaller" onclick="setDay(2)">2</button></span>
-                          <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-smaller" onclick="setDay(3)">3</button></span>
-                          <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-smaller" onclick="setDay(4)">4</button></span>
-                          <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-smaller" onclick="setDay(5)">5</button></span>
-                        </div>
-                      </div>
-                      <div class="row padding-main">
-                        <div class="col">
-                          <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-smaller" onclick="setDay(6)">6</button></span>
-                          <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-smaller" onclick="setDay(7)">7</button></span>
-                          <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-smaller" onclick="setDay(8)">8</button></span>
-                          <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-smaller" onclick="setDay(9)">9</button></span>
-                          <span class="fixed-small-span"><button class="btn btn-light btn-outline-primary btn-lg fixed-smaller" onclick="setDay(10)">10</button></span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+               
                 <br>
                 <div class="row">
                   <div class="col-sm-5 extension padding-main control-panel-label">

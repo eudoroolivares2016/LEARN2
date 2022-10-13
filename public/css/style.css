@@ -86,7 +86,7 @@ body {
 }
 
 .control-panel {
-    background-color: #212121;
+    /* background-color: #212121; */
     border: 5px solid black;
     border-radius: 25px
 }
