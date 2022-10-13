@@ -36,27 +36,28 @@
       <div class="row centered-text">
         <div class="col-sm-7 map-section extension" id="map-section-id" style="padding: 1% 0;">
           <div class="container-fluid">
-              <div class="row">
-                <div class="col-sm-7">
-                  <div>
-                    Daily Rainfall Threshold
-                    <div id="mean-label" style="font-size: 20px; padding-bottom: 2%;">PRISM Threshold Percentile: 60</div>
-                  </div>
+            <div class="row">
+              <div class="col-sm-7">
+                <div>
+                  Daily Rainfall Threshold
+                  <div id="mean-label" style="font-size: 20px; padding-bottom: 2%;">PRISM Threshold Percentile: 60</div>
                 </div>
-                <div class="col-sm-5">
-                  <div style="padding-bottom: 2%;" id="main-forecast-label">
-                    Extreme Precipitation Forecast
-                    <div id="main-forecast-date">
-                      Jan 01, 2001
-                    </div>
+              </div>
+              <div class="col-sm-5">
+                <div style="padding-bottom: 2%;" id="main-forecast-label">
+                  Extreme Precipitation Forecast
+                  <div id="main-forecast-date">
+                    Jan 01, 2001
                   </div>
                 </div>
               </div>
-              <img id="forecast-image" usemap="#forecast-map" src="resources/blankForecast.png" class="img-fluid image-main-border" alt="Responsive image padding-image">
-              <span id="interactive-map-id">
-                  <map name="forecast-map"></map>
-              </span>
-              <img id="threshold-image" src="resources/High_res_60th_percentile_threshold.png" class="img-fluid image-main-border" alt="Responsive image padding-image">
+            </div>
+            <img id="forecast-image" usemap="#forecast-map" src="resources/blankForecast.png" class="img-fluid image-main-border" alt="Responsive image padding-image">
+            <canvas id="forecast-canvas" width="0" height="0"></canvas>
+            <span id="interactive-map-id">
+              <map name="forecast-map"></map>
+            </span>
+            <img id="threshold-image" src="resources/High_res_60th_percentile_threshold.png" class="img-fluid image-main-border" alt="Responsive image padding-image">
             <div style="padding-top: 10px;"></div>
             <div class="container-fluid" >
               <div class="row">

@@ -7,7 +7,10 @@ const extension = '.png'
 const dayButtons = document.querySelectorAll('.btn-light');
 const lightPreview = document.querySelectorAll('.preview-switch');
 const resolution = document.querySelectorAll('.button-resolution');
+
 const INITIALIZE_HISTORY_LIMIT = 5;
+const xRatio = 1313 / 3265; // ratios of inner-map to full image
+const yRatio = 2707 / 3517;
 
 let currentSigma = .5;
 let forecastDayIndex = 1;
@@ -57,6 +60,25 @@ Array.prototype.max = function() {
 Array.prototype.min = function() {
     return Math.min.apply(null, this);
 };
+
+function loadCanvas() {
+    let canvas = document.getElementById('forecast-canvas');
+    let img = document.getElementById('forecast-image');
+
+    let x = img.width / 7;
+    let y = img.height / 12;
+
+    x *= xRatio;
+    y *= yRatio;
+
+    let xOffset = img.width * (604 / 3265);
+    let yOffset = img.height * (129 / 3517);
+
+    canvas.height = img.height * yRatio;
+    canvas.width = img.width * xRatio;
+    canvas.style.left = (img.offsetLeft + 3 + xOffset) + 'px';
+    canvas.style.top = (img.offsetTop + 1 + yOffset) + 'px';
+}
 
 function setChartLocation(location) {
     let locationButton = document.getElementById('button-chart-location-dropdown');
@@ -191,7 +213,7 @@ function showTimeSeries(x, y) {
     if(mapArray[y][x] < 0) {
         return;
     }
-
+    updateCanvas(x, y);
     chartLoadedOnce = true;
     savedX = x;
     savedY = y;
@@ -368,6 +390,39 @@ function showTimeSeries(x, y) {
         const dataY = timeSeriesCanvas2.scales.y.getValueForPixel(canvasPosition.y);
         setDay(dataX + 1); // change this to not refresh chart
     }
+}
+
+function updateCanvas(x, y) {
+    let canvas = document.getElementById('forecast-canvas');
+    let ctx = canvas.getContext('2d');
+    let xStep = 0;
+    let yStep = 0;
+    if(currentResolution === 'high') {
+        xStep = canvas.width / 7;
+        yStep = canvas.height / 12;
+    } else {
+        let TODO = 'true';
+        xStep = canvas.width / 7;
+        yStep = canvas.height / 12;
+    }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    ctx.beginPath();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#ffffff';
+    ctx.rect(x * xStep, y * yStep, xStep, yStep);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = '#030303';
+    ctx.rect(x * xStep + 2, y * yStep + 2, xStep - 4, yStep - 4);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.strokeStyle = '#030303';
+    ctx.rect(x * xStep - 2, y * yStep - 2, xStep + 4, yStep + 4);
+    ctx.stroke();
 }
 
 function updateValueBox(x, y) {
@@ -569,10 +624,6 @@ function createGrid() {
     let x = width / 7;
     let y = height / 12;
 
-    // ratio of inner-map to full image
-    const xRatio = 1313 / 3265;
-    const yRatio = 2707 / 3517;
-
     x *= xRatio;
     y *= yRatio;
 
@@ -597,6 +648,7 @@ function createGrid() {
 
 
 function enableInteraction() {
+    loadCanvas();
     readCSV();
 }
 
@@ -1207,6 +1259,11 @@ document.getElementById('theme-switch-id').addEventListener('change', function()
     updateTheme(this.checked);
 });
 
+// Forecast Image onClick
+document.getElementById('forecast-canvas').addEventListener('click', function() {
+    log('1');
+});
+
 $(window).scroll(function(){
     if(isPanelLocked) {
         return;
@@ -1221,6 +1278,7 @@ window.addEventListener('resize', function(){
 
 $( window ).on( "load", function() {
     retrieveImages();
+    loadCanvas();
 });
 
 

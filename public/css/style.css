@@ -1,4 +1,8 @@
 
+body {
+    z-index: 1;
+}
+
 .res-light {
     background-color: #77c743;
     border-color: #77c743;
@@ -166,7 +170,12 @@
 }
 
 #forecast-image {
-    width: 59%
+    width: 58%;
+}
+
+#forecast-canvas {
+    position: absolute;
+    pointer-events:none;
 }
 
 .image-main-border {
