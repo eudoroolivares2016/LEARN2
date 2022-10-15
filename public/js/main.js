@@ -12,6 +12,15 @@ const INITIALIZE_HISTORY_LIMIT = 5;
 const xRatio = 1313 / 3265; // ratios of inner-map to full image
 const yRatio = 2707 / 3517;
 
+const chartSettingsDark = {
+    fontColor: 'white',
+    backgroundColor: '#212121'
+}
+const chartSettingsLight = {
+    fontColor: 'black',
+    backgroundColor: '#212121'
+}
+
 let currentSigma = .5;
 let forecastDayIndex = 1;
 let currentInitialize = 5;
