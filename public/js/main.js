@@ -21,6 +21,8 @@ const chartSettingsLight = {
     backgroundColor: '#212121'
 }
 
+let chartSettingsCurrent = chartSettingsDark;
+
 let currentSigma = .5;
 let forecastDayIndex = 1;
 let currentInitialize = 5;
@@ -311,7 +313,7 @@ function showTimeSeries(x, y) {
                     font: {
                         size: 24
                     },
-                    color: 'white',
+                    color: chartSettingsCurrent.fontColor,
                     display: true,
                     text: '(Lat, Lon): (' + latitude.toFixed(2) + ', ' + longitude.toFixed(2) + ')',
                 },
@@ -320,7 +322,7 @@ function showTimeSeries(x, y) {
                         font: {
                             size: 14
                         },
-                        color: 'white'
+                        color: chartSettingsCurrent.fontColor
                     }
                 },
                 tooltip: {
@@ -342,13 +344,13 @@ function showTimeSeries(x, y) {
                     title: {
                         display: true,
                         text: 'Likelihood of Exceedance',
-                        color: 'white',
+                        color: chartSettingsCurrent.fontColor,
                         font: {
                             size: 20
                         },
                     },
                     ticks: {
-                        color: 'white',
+                        color: chartSettingsCurrent.fontColor,
                         font: {
                             size: 14
                         },
@@ -361,13 +363,13 @@ function showTimeSeries(x, y) {
                     title: {
                         display: true,
                         text: 'Forecast Day',
-                        color: 'white',
+                        color: chartSettingsCurrent.fontColor,
                         font: {
                             size: 20
                         },
                     },
                     ticks: {
-                        color: 'white',
+                        color: chartSettingsCurrent.fontColor,
                         font: {
                             size: 14
                         },
@@ -537,7 +539,7 @@ function cleanTimeSeries() {
                         font: {
                             size: 14
                         },
-                        color: 'white'
+                        color: chartSettingsCurrent.fontColor
                     }
                 },
                 tooltip: {
@@ -556,13 +558,13 @@ function cleanTimeSeries() {
                     title: {
                         display: true,
                         text: 'Likelihood of Exceedance',
-                        color: 'white',
+                        color: chartSettingsCurrent.fontColor,
                         font: {
                             size: 20
                         },
                     },
                     ticks: {
-                        color: 'white',
+                        color: chartSettingsCurrent.fontColor,
                         font: {
                             size: 14
                         },
@@ -572,13 +574,13 @@ function cleanTimeSeries() {
                     title: {
                         display: true,
                         text: 'Forecast Day',
-                        color: 'white',
+                        color: chartSettingsCurrent.fontColor,
                         font: {
                             size: 20
                         },
                     },
                     ticks: {
-                        color: 'white',
+                        color: chartSettingsCurrent.fontColor,
                         font: {
                             size: 14
                         },
@@ -794,6 +796,7 @@ function initializeTheme() {
     let isChecked = localStorage.getItem("theme");
     themeCheckbox.checked = isChecked === 'true';
     dark = isChecked === 'true';
+    chartSettingsCurrent = dark ? chartSettingsDark : chartSettingsLight;
     updateTheme(dark);
 }
 
