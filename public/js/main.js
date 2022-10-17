@@ -18,7 +18,7 @@ const chartSettingsDark = {
 }
 const chartSettingsLight = {
     fontColor: 'black',
-    backgroundColor: '#212121'
+    backgroundColor: '#585858'
 }
 
 let chartSettingsCurrent = chartSettingsDark;
