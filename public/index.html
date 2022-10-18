@@ -57,7 +57,7 @@
             <span id="interactive-map-id">
               <map name="forecast-map"></map>
             </span>
-            <img id="threshold-image" src="resources/High_res_60th_percentile_threshold.png" class="img-fluid image-main-border" alt="Responsive image padding-image">
+            <img id="threshold-image" src="resources/Low_res_60th_percentile_threshold.png" class="img-fluid image-main-border" alt="Responsive image padding-image">
             <div style="padding-top: 10px;"></div>
             <div class="container-fluid" >
               <div class="row">
@@ -241,7 +241,7 @@
           </span>
           <div style="padding-top: 10px"></div>
           <div class="control-panel" id="control-panel-id">
-            <div style="text-align: right;"><img id="lock-image-id" src="resources/locked.png" class="img-fluid lock-image" alt="Responsive image padding-image"></div>
+            <div style="text-align: right; display: none;"><img id="lock-image-id" src="resources/locked.png" class="img-fluid lock-image" alt="Responsive image padding-image"></div>
             <!-- <span class="control-panel-title">
               Control Panel
             </span> -->
@@ -319,7 +319,7 @@
                     <div class="btn btn-primary button-resolution" id="button-low-res">Low</div>
                   </div>
                 </div>
-                <div class="row">
+                <div class="row" style="display: none;">
                   <div class="col-5 extension padding-main control-panel-label">
                     Chart Type:
                   </div>

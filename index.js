@@ -107,26 +107,26 @@ app.get('/aws2', async (req, res) => {
     let fileBase = req.query.file;
     let csvNames = [];
     for(let j = 0; j < 5; j++) {
-        let sigma = '';
+        let percentile = '';
         switch(j) {
             case 0:
-                sigma = '_0';
+                percentile = '_50th.csv';
                 break;
             case 1:
-                sigma = '_0.5';
+                percentile = '_60th.csv';
                 break;
             case 2:
-                sigma = '_1.0';
+                percentile = '_70th.csv';
                 break;
             case 3:
-                sigma = '_1.5';
+                percentile = '_80th.csv';
                 break;
             case 4:
-                sigma = '_2.0';
+                percentile = '_90th.csv';
                 break;
         }
         for(let i = 1; i <= 10; i++) {
-            csvNames.push(fileBase + i + '.csv' + sigma + '.csv');
+            csvNames.push(fileBase + i + percentile);
         }
     }
     gatherCSV(csvNames, function() {
@@ -134,61 +134,87 @@ app.get('/aws2', async (req, res) => {
     });
 });
 
-let recentDate = '';
-function mostRecentAvailableDate(dataArray, _callback) {
-    let latest = dataArray[0].Key.split('_');
-    latest = latest[2];
-    for(let i = 0; i < dataArray.length; i++) {
-        let tempDate = dataArray[i].Key.split('_');
-        tempDate = tempDate[2];
-        if(tempDate > latest) {
-            latest = tempDate;
+let s3DataContents = [];
+function s3ListObjects(params, _callback) {
+    s3.listObjects(params, function(err, data) {
+        if (err) {
+            console.log("listS3Objects Error:", err);
+        } else {
+            let contents = data.Contents;
+            console.log(contents[1].Key);
+            s3DataContents = s3DataContents.concat(contents);
+            if (data.IsTruncated) {
+                params.Marker = contents[contents.length / 4].Key;
+                s3ListObjects(params, _callback);
+            } else {
+                _callback();
+            }
         }
-    }
-    recentDate = latest;
-    _callback();
+    });
+}
+
+let recentDate = '';
+function mostRecentAvailableDate(dateObject, dateOffset, prefix, suffix, _callback) {
+    let date = dateObject.getFullYear() + '-' + pad(dateObject.getMonth() + 1) + '-' + pad(dateObject.getDate());
+    let keyName = prefix + date + suffix;
+    s3.headObject({Bucket: bucket, Key: keyName}, function(err, metadata) {
+        if(err) {
+            // console.log('Not Found: ' + keyName);
+            dateObject.setDate(dateObject.getDate() - 1);
+            mostRecentAvailableDate(dateObject, dateOffset, prefix, suffix, _callback);
+        } else {
+            // console.log('Found');
+            if(dateOffset > 0) {
+                dateObject.setDate(dateObject.getDate() - 1);
+                mostRecentAvailableDate(dateObject, dateOffset - 1, prefix, suffix, _callback);
+            } else {
+                recentDate = date;
+                _callback();
+            }
+        }
+    });
+}
+
+function pad(n) {
+    return (n < 10) ? ('0' + n) : n;
 }
 
 app.get('/aws3', async (req, res) => {
-    let rootName = req.query.file;
     let dateObject = new Date();
-    let today = dateObject.getFullYear() + '-' + dateObject.getMonth() + '-' + dateObject.getDay();
+    let dateOffset = parseInt(req.query.offset);
+    let prefix = req.query.prefix + req.query.model;
+    let suffix = '_1_' + req.query.suffix + '.png';
 
-    s3.listObjects({Bucket: bucket}, function (err, data) {
-        if(err)throw err;
-        mostRecentAvailableDate(data.Contents, function() {
-            res.send(recentDate);
-        });
+    mostRecentAvailableDate(dateObject, dateOffset, prefix, suffix, function() {
+        res.send(recentDate);
     });
 });
 
 app.get('/aws', async (req, res) => {
     let rootName = req.query.file;
-    let dateObject = new Date();
-    let today = dateObject.getFullYear() + '-' + dateObject.getMonth() + '-' + dateObject.getDay();
-
     let fileNames = [];
+
     for(let j = 0; j < 5; j++) {
-        let sigma = '';
+        let percentile = '';
         switch(j) {
             case 0:
-                sigma = '_0';
+                percentile = '_50th.png';
                 break;
             case 1:
-                sigma = '_0.5';
+                percentile = '_60th.png';
                 break;
             case 2:
-                sigma = '_1.0';
+                percentile = '_70th.png';
                 break;
             case 3:
-                sigma = '_1.5';
+                percentile = '_80th.png';
                 break;
             case 4:
-                sigma = '_2.0';
+                percentile = '_90th.png';
                 break;
         }
         for(let i = 1; i <= 10; i++) {
-            fileNames.push(rootName + i + sigma + '.png');
+            fileNames.push(rootName + i + percentile);
         }
     }
 

@@ -390,7 +390,7 @@ table, th, td {
 }
 
 #time-series-chart-id, #time-series-chart-id-2 {
-    background: rgba(51,65,85);
+    background: #212121;
     padding: 1em;
     border-radius: 5px;
 }

@@ -33,6 +33,7 @@ let chartStacked = false;
 let chartLoadedOnce = false;
 let isPanelLocked = true;
 let dark = true;
+let fullStop = true;
 
 let timeSeriesCanvas = null;
 let timeSeriesCanvas2 = null;
@@ -41,8 +42,10 @@ let savedY = null;
 
 let modelType = 'Voting';
 let chartType = 'line';
-let currentResolution = 'high';
+let currentResolution = 'low';
 let chartLocation = 'Right';
+let maxDate = '';
+let realDate = '';
 
 let chartLocalMax = 100;
 let chartConfig = {};
@@ -61,6 +64,7 @@ let csvCache = Array(10);
 // On-Load Functionality
 window.onload = function() {
     initializePreview();
+    updateResolution(currentResolution);
     initializeTheme();
 }
 
@@ -248,7 +252,7 @@ function showTimeSeries(x, y) {
             rightChart.style.display = 'block';
             break;
     }
-    ext.style.display = 'none';
+    // ext.style.display = 'none';
 
     let chartArrays = getChartArrays(x, y);
     chartLocalMax = chartArrays[0].max() + chartArrays[0].max() + chartArrays[0].max() + chartArrays[0].max();
@@ -408,7 +412,7 @@ function updateCanvas(x, y) {
     let ctx = canvas.getContext('2d');
     let xStep = 0;
     let yStep = 0;
-    if(currentResolution === 'high') {
+    if(currentResolution === 'low') {
         xStep = canvas.width / 7;
         yStep = canvas.height / 12;
     } else {
@@ -448,7 +452,6 @@ function updateValueBox(x, y) {
 
     let thresholdValue = document.getElementById('threshold-value-id');
     thresholdValue.innerHTML = csvCache[currentSigma * 2][y][x] < 0 ? '--' : csvCache[currentSigma * 2][y][x];
-
 }
 
 function loadAllCSVFiles(_callback) {
@@ -606,15 +609,25 @@ function cleanTimeSeries() {
     );
 }
 
-function readCSV() {
-    $.get(window.location.href + 'aws3', temp, function(date) {
-        let csvParam = {
-            file: '1.5_' + correctModelType() + '_' + date + '_'
-        };
+function getDateOffset() {
+    return INITIALIZE_HISTORY_LIMIT - currentInitialize;
+}
 
+function readCSV() {
+    let param = {
+        prefix: getPrefix(),
+        suffix: sigmaToPercentile(true),
+        model: getModel(),
+        offset: getDateOffset()
+    }
+    $.get(window.location.href + 'aws3', param, function(date) {
+        let csvParam = {
+            file: param.prefix + getModel() + date + '_',
+            suffix: param.suffix
+        };
+        updateDayLabel(date);
         $.get(window.location.href + 'aws2', csvParam, function(data) {
             allCSVArray = data;
-
             let offset = 10 * (currentSigma * 2);
             mapArray = data[offset];
             loadAllCSVFiles(function() {
@@ -691,6 +704,26 @@ const tempGEFS = {
 
 let temp = tempVote;
 
+
+function getModel() {
+    switch(modelType) {
+        case 'Voting':
+            return 'Vote_Full_';
+        case 'Convolutional':
+            return 'Convolutional_';
+        case 'Dense':
+            return 'Dense_';
+        case 'ECMWF':
+            return 'ECMWF_';
+        case 'GEFS':
+            return 'GEFS_';
+    }
+}
+
+function getPrefix() {
+    return currentResolution === 'high' ? '0.25_' : '0.5_'
+}
+
 function test() {
 
 }
@@ -699,20 +732,50 @@ function correctModelType() {
     return modelType === 'Voting' ? 'Vote' : modelType;
 }
 
+function underflow(value, reset) {
+    if(value < 0) {
+        return reset;
+    } else {
+        return value;
+    }
+}
+
+function updateDayLabel(date) {
+    realDate = date;
+    let realDateArray = realDate.split('-');
+    let realDateObject = new Date(parseInt(realDateArray[0]), underflow((parseInt(realDateArray[1]) - 1), 11), parseInt(realDateArray[2]));
+    let realDateObject2 = new Date(realDateObject);
+    realDateObject2.setDate(realDateObject2.getDate() - 1);
+    let dateInitialize = document.getElementById('init');
+    let forecastDateLabel = document.getElementById('main-forecast-date');
+    let newDateArr1 = realDateObject2.toDateString().split(' ');
+    let newDateArr2 = realDateObject.toDateString().split(' ');
+    dateInitialize.textContent = `${newDateArr2[1]} ${newDateArr2[2]} ${newDateArr2[3]} (00Z)`;
+    forecastDateLabel.textContent = `${newDateArr1[1]} ${newDateArr1[2]}, ${newDateArr1[3]} (12Z) - ${newDateArr2[1]} ${newDateArr2[2]}, ${newDateArr2[3]} (12Z)`;
+}
+
 function retrieveImages() {
     let spinner = document.getElementById('loading-spinner-id');
     let img = document.getElementById('forecast-image');
 
     enableInteraction();
 
-    $.get(window.location.href + 'aws3', temp, function(date) {
-        temp = {
-            file: '1.5_' + correctModelType() + '_' + date + '_'
+    let param = {
+        prefix: getPrefix(),
+        suffix: sigmaToPercentile(true),
+        model: getModel(),
+        offset: getDateOffset()
+    }
+    $.get(window.location.href + 'aws3', param, function(date) {
+        let imgParam = {
+            file: param.prefix + getModel() + date + '_',
+            suffix: param.suffix
         };
+        updateDayLabel(date);
         initializeDates(date);
         img.src = 'resources/blankForecast.png';
         spinner.style.display = 'block';
-        $.get(window.location.href + 'aws', temp, function(data) {
+        $.get(window.location.href + 'aws', imgParam, function(data) {
             forecastImageCache = [];
             for(let i = 0; i < 50; i++) {
                 forecastImageCache[i] = data[i];
@@ -807,16 +870,16 @@ function getTopScrollPosition() {
 }
 
 function initializeDates(date) {
+    if(maxDate !== '') {
+        return;
+    }
+    maxDate = date;
     let forecastDateElement = document.getElementById('main-forecast-date');
-    let initializeDateElement = document.getElementById('init');
     let today = date.split('-');
     let currentDate = new Date(`${today[0]} ${today[1]} ${today[2]}`);
     currentDate = currentDate.toDateString().split(' ')
-    let forecastDate = currentDate[3] + ' ' + currentDate[1] + ', ' + currentDate[2];
-    let initDate = currentDate[3] + ' ' + currentDate[1] + ' ' + currentDate[2] + ' (00Z)';
-
-    forecastDateElement.textContent = forecastDate;
-    initializeDateElement.textContent = initDate;
+    forecastDateElement.textContent = currentDate[3] + ' ' + currentDate[1] + ', ' + currentDate[2];
+    updateDate(0);
 }
 
 function updatePreview(isChecked) {
@@ -1037,7 +1100,6 @@ function updateImages() {
             }
             break;
     }
-    readCSV();
 }
 
 function updateDay(delta, modifyForecast) {
@@ -1059,7 +1121,7 @@ function updateDay(delta, modifyForecast) {
         currentDate2.setDate(currentDate2.getDate() + dayOffset);
         let newDateArr1 = currentDate1.toDateString().split(' ');
         let newDateArr2 = currentDate2.toDateString().split(' ');
-        forecastDateLabel.textContent = `${newDateArr1[1]} ${newDateArr1[2]}, ${newDateArr1[3]} (12Z) - ${newDateArr2[1]} ${newDateArr2[2]}, ${newDateArr2[3]} (12Z)`;
+        //forecastDateLabel.textContent = `${newDateArr1[1]} ${newDateArr1[2]}, ${newDateArr1[3]} (12Z) - ${newDateArr2[1]} ${newDateArr2[2]}, ${newDateArr2[3]} (12Z)`;
         updateForecastSlider(dayOffset)
         forecastDayIndex = dayOffset;
         let offset = (10 * (currentSigma * 2)) + (forecastDayIndex - 1);
@@ -1080,7 +1142,6 @@ function updateMean(newSigma) {
         let offset = (10 * (currentSigma * 2)) + (forecastDayIndex - 1);
         mapArray = allCSVArray[offset];
 
-        readCSV();
         updateImages();
         updateThresholdImage();
         updateThresholdSlider();
@@ -1103,11 +1164,9 @@ function updateDate(increment) {
         currentDate.setDate(currentDate.getDate() - 1);
     }
     let newDateArr = currentDate.toDateString().split(' ');
-    let newDateLabel = `${newDateArr[1]} ${newDateArr[2]}, ${newDateArr[3]}`;
-    currentDateId.textContent = `${newDateArr[3]} ${newDateArr[1]} ${newDateArr[2]} (00Z)`;
-    forecastDateLabel.textContent = newDateLabel;
+    forecastDateLabel.textContent = `${newDateArr[1]} ${newDateArr[2]}, ${newDateArr[3]}`;
     setDay(1);
-    updateImages();
+    retrieveImages();
 }
 
 function sigmaToPercentile(suffix) {
@@ -1140,7 +1199,7 @@ function updateResolution(quality) {
         buttonHighRes.style.backgroundColor = dark ? '#0d6efd' : '#77c743';
         buttonLowRes.style.backgroundColor = dark ? '#212121' : '#6c757d';
         updateThresholdImage();
-        //setForecastImage(false);
+        retrieveImages();
     } else if(quality === 'low' && currentResolution === 'high') {
         currentResolution = 'low';
         buttonLowRes.style.fontWeight = 'bold';
@@ -1148,8 +1207,13 @@ function updateResolution(quality) {
         buttonLowRes.style.backgroundColor = dark ? '#0d6efd' : '#77c743';
         buttonHighRes.style.backgroundColor = dark ? '#212121' : '#6c757d';
         updateThresholdImage();
-        //setForecastImage(false);
+        retrieveImages();
     }
+}
+
+function incrementCallback(delta, _callback) {
+    currentInitialize += delta;
+    _callback();
 }
 
 function updateForecastSlider(day) {
@@ -1252,23 +1316,25 @@ document.getElementById('threshold-slider-id').addEventListener('input', functio
     updateMean(this.value);
 });
 
-// Initialize Buttons
-document.getElementById('init-up').addEventListener('click', function() {
-    if(currentInitialize < INITIALIZE_HISTORY_LIMIT) {
-        updateDate('up');
-        currentInitialize++;
-    }
-});
-
 // Control Panel Lock
 document.getElementById('lock-image-id').addEventListener('click', function() {
     toggleControlPanelLock();
 });
 
+// Initialize Buttons
+document.getElementById('init-up').addEventListener('click', function() {
+    if(currentInitialize < INITIALIZE_HISTORY_LIMIT) {
+        incrementCallback(1, function() {
+            updateDate('up');
+        })
+    }
+});
+
 document.getElementById('init-down').addEventListener('click', function() {
     if(currentInitialize > 0) {
-        updateDate('down');
-        currentInitialize--;
+        incrementCallback(-1, function() {
+            updateDate('down');
+        })
     }
 });
 
@@ -1281,7 +1347,7 @@ document.getElementById('theme-switch-id').addEventListener('change', function()
 
 // Forecast Image onClick
 document.getElementById('forecast-canvas').addEventListener('click', function() {
-    log('1');
+
 });
 
 $(window).scroll(function(){
