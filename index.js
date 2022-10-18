@@ -156,14 +156,18 @@ function s3ListObjects(params, _callback) {
 let recentDate = '';
 function mostRecentAvailableDate(dateObject, dateOffset, prefix, suffix, _callback) {
     let date = dateObject.getFullYear() + '-' + pad(dateObject.getMonth() + 1) + '-' + pad(dateObject.getDate());
-    let keyName = prefix + date + suffix;
+    let tempPrefix = prefix;
+    if(prefix.includes('Vote_')) {
+        tempPrefix += dateObject.getFullYear() + '' + pad(dateObject.getMonth() + 1) + '' + pad(dateObject.getDate()) + '_';
+    }
+    let keyName = tempPrefix + date + suffix;
     s3.headObject({Bucket: bucket, Key: keyName}, function(err, metadata) {
         if(err) {
             // console.log('Not Found: ' + keyName);
             dateObject.setDate(dateObject.getDate() - 1);
             mostRecentAvailableDate(dateObject, dateOffset, prefix, suffix, _callback);
         } else {
-            // console.log('Found');
+            // console.log('Found: ' + keyName);
             if(dateOffset > 0) {
                 dateObject.setDate(dateObject.getDate() - 1);
                 mostRecentAvailableDate(dateObject, dateOffset - 1, prefix, suffix, _callback);
@@ -217,7 +221,6 @@ app.get('/aws', async (req, res) => {
             fileNames.push(rootName + i + percentile);
         }
     }
-
     gatherURL(fileNames, function() {
         res.send(imageURLS);
     });

@@ -617,14 +617,15 @@ function readCSV() {
     let param = {
         prefix: getPrefix(),
         suffix: sigmaToPercentile(true),
-        model: getModel(),
+        model: getModelPrefix(),
         offset: getDateOffset()
     }
     $.get(window.location.href + 'aws3', param, function(date) {
         let csvParam = {
-            file: param.prefix + getModel() + date + '_',
+            file: param.prefix + getModelPrefix() + fitVotePrefix(date) + date + '_',
             suffix: param.suffix
         };
+        log(csvParam.file);
         updateDayLabel(date);
         $.get(window.location.href + 'aws2', csvParam, function(data) {
             allCSVArray = data;
@@ -705,10 +706,10 @@ const tempGEFS = {
 let temp = tempVote;
 
 
-function getModel() {
+function getModelPrefix() {
     switch(modelType) {
         case 'Voting':
-            return 'Vote_Full_';
+            return 'Vote_';
         case 'Convolutional':
             return 'Convolutional_';
         case 'Dense':
@@ -754,6 +755,19 @@ function updateDayLabel(date) {
     forecastDateLabel.textContent = `${newDateArr1[1]} ${newDateArr1[2]}, ${newDateArr1[3]} (12Z) - ${newDateArr2[1]} ${newDateArr2[2]}, ${newDateArr2[3]} (12Z)`;
 }
 
+function pad(n) {
+    return (n < 10) ? ('0' + n) : n;
+}
+
+function fitVotePrefix(date) {
+    let dateArr = date.split('-');
+    if(modelType === 'Voting') {
+        return dateArr[0] + '' + pad(dateArr[1]) + '' + pad(dateArr[2]) + '_';
+    } else {
+        return '';
+    }
+}
+
 function retrieveImages() {
     let spinner = document.getElementById('loading-spinner-id');
     let img = document.getElementById('forecast-image');
@@ -763,12 +777,12 @@ function retrieveImages() {
     let param = {
         prefix: getPrefix(),
         suffix: sigmaToPercentile(true),
-        model: getModel(),
+        model: getModelPrefix(),
         offset: getDateOffset()
     }
     $.get(window.location.href + 'aws3', param, function(date) {
         let imgParam = {
-            file: param.prefix + getModel() + date + '_',
+            file: param.prefix + getModelPrefix() + fitVotePrefix(date) + date + '_',
             suffix: param.suffix
         };
         updateDayLabel(date);
