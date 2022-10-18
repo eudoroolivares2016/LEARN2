@@ -1059,6 +1059,7 @@ function updateImages() {
                 setForecastImage(false);
                 quickUpdateFromCache(votingCache);
                 setPreviewImages(votingCache);
+                readCSV();
             } else {
                 retrieveImages();
             }
@@ -1068,6 +1069,7 @@ function updateImages() {
                 setForecastImage(false);
                 quickUpdateFromCache(convolutionalCache);
                 setPreviewImages(convolutionalCache);
+                readCSV();
             } else {
                 retrieveImages();
             }
@@ -1077,6 +1079,7 @@ function updateImages() {
                 setForecastImage(false);
                 quickUpdateFromCache(denseCache);
                 setPreviewImages(denseCache);
+                readCSV();
             } else {
                 retrieveImages();
             }
@@ -1086,6 +1089,7 @@ function updateImages() {
                 setForecastImage(false);
                 quickUpdateFromCache(ecmwfCache);
                 setPreviewImages(ecmwfCache);
+                readCSV();
             } else {
                 retrieveImages();
             }
@@ -1095,6 +1099,7 @@ function updateImages() {
                 setForecastImage(false);
                 quickUpdateFromCache(gefsCache);
                 setPreviewImages(gefsCache);
+                readCSV();
             } else {
                 retrieveImages();
             }
