@@ -385,6 +385,11 @@ table, th, td {
     display: none;
 }
 
+#threshold-canvas {
+     position: absolute;
+     pointer-events:none;
+ }
+
 .threshold-slider {
     width: 70%;
 }

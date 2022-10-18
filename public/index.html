@@ -38,17 +38,17 @@
           <div class="container-fluid">
             <div class="row">
               <div class="col-sm-7">
-                <div>
-                  Daily Rainfall Threshold
-                  <div id="mean-label" style="font-size: 20px; padding-bottom: 2%;">PRISM Threshold Percentile: 60</div>
-                </div>
-              </div>
-              <div class="col-sm-5">
                 <div style="padding-bottom: 2%;" id="main-forecast-label">
                   Extreme Precipitation Forecast
                   <div id="main-forecast-date">
                     Jan 01, 2001
                   </div>
+                </div>
+              </div>
+              <div class="col-sm-5">
+                <div>
+                  Daily Rainfall Threshold
+                  <div id="mean-label" style="font-size: 20px; padding-bottom: 2%;">PRISM Threshold Percentile: 60</div>
                 </div>
               </div>
             </div>
@@ -58,6 +58,7 @@
               <map name="forecast-map"></map>
             </span>
             <img id="threshold-image" src="resources/Low_res_60th_percentile_threshold.png" class="img-fluid image-main-border" alt="Responsive image padding-image">
+            <canvas id="threshold-canvas" width="0" height="0"></canvas>
             <div style="padding-top: 10px;"></div>
             <div class="container-fluid" >
               <div class="row">

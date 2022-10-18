@@ -80,14 +80,14 @@ function loadCanvas() {
     let canvas = document.getElementById('forecast-canvas');
     let img = document.getElementById('forecast-image');
 
-    let x = img.width / 7;
-    let y = img.height / 12;
-
-    x *= xRatio;
-    y *= yRatio;
+    let thresholdCanvas = document.getElementById('threshold-canvas');
+    let thresholdImage = document.getElementById('threshold-image');
 
     let xOffset = img.width * (604 / 3265);
     let yOffset = img.height * (129 / 3517);
+
+    let xOffset2 = img.width * (604 / 3265);
+    let yOffset2 = img.height * (129 / 3517);
 
     canvas.height = img.height * yRatio;
     canvas.width = img.width * xRatio;
