@@ -9,8 +9,9 @@ const lightPreview = document.querySelectorAll('.preview-switch');
 const resolution = document.querySelectorAll('.button-resolution');
 
 const INITIALIZE_HISTORY_LIMIT = 5;
-const xRatio = 1313 / 3265; // ratios of inner-map to full image
-const yRatio = 2707 / 3517;
+const xRatio = 2010 / 4599; // ratios of inner-map to full image
+const yRatio = 3686 / 4768;
+const yRatioHigh = 3570 / 4768;
 
 const chartSettingsDark = {
     fontColor: 'white',
@@ -42,12 +43,11 @@ let savedY = null;
 
 let modelType = 'Voting';
 let chartType = 'line';
-let currentResolution = 'low';
+let currentResolution = 'high';
 let chartLocation = 'Right';
 let maxDate = '';
 let realDate = '';
 
-let chartLocalMax = 100;
 let chartConfig = {};
 
 let forecastImageCache = [];
@@ -64,7 +64,7 @@ let csvCache = Array(10);
 // On-Load Functionality
 window.onload = function() {
     initializePreview();
-    updateResolution(currentResolution);
+    //updateResolution(currentResolution);
     initializeTheme();
 }
 
@@ -83,13 +83,16 @@ function loadCanvas() {
     let thresholdCanvas = document.getElementById('threshold-canvas');
     let thresholdImage = document.getElementById('threshold-image');
 
-    let xOffset = img.width * (604 / 3265);
-    let yOffset = img.height * (129 / 3517);
+    let yHeight = currentResolution === 'high' ? 277 : 162;
+    let xOffset = img.width * (810 / 4599);
+    let yOffset = img.height * (yHeight / 4768);
 
-    let xOffset2 = img.width * (604 / 3265);
-    let yOffset2 = img.height * (129 / 3517);
+    let xOffset2 = img.width * (810 / 4599);
+    let yOffset2 = img.height * (yHeight / 4768);
 
-    canvas.height = img.height * yRatio;
+    let useYRatio = currentResolution === 'high' ? yRatioHigh : yRatio;
+
+    canvas.height = img.height * useYRatio;
     canvas.width = img.width * xRatio;
     canvas.style.left = (img.offsetLeft + 3 + xOffset) + 'px';
     canvas.style.top = (img.offsetTop + 1 + yOffset) + 'px';
@@ -133,30 +136,34 @@ function toggleControlPanelLock() {
 
 function getChartArrays(x, y) {
     // Trimming Likeliness of Exceedance values to prevent a higher percentile value surpassing a lower one
-    for(let i = 0; i < 10; i++) {
-        for(let j = 4; j > 0; j--) {
-            if(allCSVArray[(10 * j) + i][y][x] > allCSVArray[(10 * (j - 1) + i)][y][x]) {
-                allCSVArray[(10 * (j - 1) + i)][y][x] = allCSVArray[(10 * j) + i][y][x];
+    let tempArray = [];
+    let iSaved = 0;
+    try {
+        for(let i = 0; i < 10; i++) {
+            for(let j = 4; j > 0; j--) {
+                iSaved = j;
+                if(allCSVArray[(10 * j) + i][y][x] > allCSVArray[(10 * (j - 1) + i)][y][x]) {
+                    allCSVArray[(10 * (j - 1) + i)][y][x] = allCSVArray[(10 * j) + i][y][x];
+                }
             }
         }
-    }
-    let tempArray = [];
-    for(let i = 0; i < 5; i++) {
-        tempArray.push(
-            [
-                (allCSVArray[(10 * i)][y][x] * 100).toFixed(0),
-                (allCSVArray[(10 * i) + 1][y][x] * 100).toFixed(0),
-                (allCSVArray[(10 * i) + 2][y][x] * 100).toFixed(0),
-                (allCSVArray[(10 * i) + 3][y][x] * 100).toFixed(0),
-                (allCSVArray[(10 * i) + 4][y][x] * 100).toFixed(0),
-                (allCSVArray[(10 * i) + 5][y][x] * 100).toFixed(0),
-                (allCSVArray[(10 * i) + 6][y][x] * 100).toFixed(0),
-                (allCSVArray[(10 * i) + 7][y][x] * 100).toFixed(0),
-                (allCSVArray[(10 * i) + 8][y][x] * 100).toFixed(0),
-                (allCSVArray[(10 * i) + 9][y][x] * 100).toFixed(0)
-            ]
-        );
-    }
+        for(let i = 0; i < 5; i++) {
+            tempArray.push(
+                [
+                    (allCSVArray[(10 * i)][y][x] * 100).toFixed(0),
+                    (allCSVArray[(10 * i) + 1][y][x] * 100).toFixed(0),
+                    (allCSVArray[(10 * i) + 2][y][x] * 100).toFixed(0),
+                    (allCSVArray[(10 * i) + 3][y][x] * 100).toFixed(0),
+                    (allCSVArray[(10 * i) + 4][y][x] * 100).toFixed(0),
+                    (allCSVArray[(10 * i) + 5][y][x] * 100).toFixed(0),
+                    (allCSVArray[(10 * i) + 6][y][x] * 100).toFixed(0),
+                    (allCSVArray[(10 * i) + 7][y][x] * 100).toFixed(0),
+                    (allCSVArray[(10 * i) + 8][y][x] * 100).toFixed(0),
+                    (allCSVArray[(10 * i) + 9][y][x] * 100).toFixed(0)
+                ]
+            );
+        }
+    } catch(e) {}
     return tempArray;
 }
 
@@ -168,6 +175,7 @@ function updateChart(type, shouldStack) {
     if(!chartLoadedOnce) {
         return;
     }
+    chartSettingsCurrent = dark ? chartSettingsDark : chartSettingsLight;
 
     let ctx = document.getElementById('time-series-chart-id');
     let ctx2 = document.getElementById('time-series-chart-id-2');
@@ -221,15 +229,19 @@ function getFill(index) {
 }
 
 const forecastLabels = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
-function showTimeSeries(x, y) {
+function showTimeSeries(x, y, res) {
     if(x == null || y == null) {
         return;
     }
-    if(mapArray[y][x] < 0) {
-        return;
-    }
+    chartSettingsCurrent = dark ? chartSettingsDark : chartSettingsLight;
     updateCanvas(x, y);
     chartLoadedOnce = true;
+    try {
+        if(mapArray[y][x] < 0) {
+            cleanTimeSeries();
+            return;
+        }
+    } catch(e) {}
     savedX = x;
     savedY = y;
     let ctx = document.getElementById('time-series-chart-id');
@@ -255,17 +267,16 @@ function showTimeSeries(x, y) {
     // ext.style.display = 'none';
 
     let chartArrays = getChartArrays(x, y);
-    chartLocalMax = chartArrays[0].max() + chartArrays[0].max() + chartArrays[0].max() + chartArrays[0].max();
     const chartData = {
         labels: forecastLabels,
         datasets: [{
-                label: '50th Percentile',
-                backgroundColor: 'rgb(0,197,255)',
-                borderColor: 'rgb(0,196,255)',
-                borderWidth: 1.5,
-                data: chartArrays[0],
-                fill: getFill(0)
-            },
+            label: '50th Percentile',
+            backgroundColor: 'rgb(0,197,255)',
+            borderColor: 'rgb(0,196,255)',
+            borderWidth: 1.5,
+            data: chartArrays[0],
+            fill: getFill(0)
+        },
             {
                 label: '60th Percentile',
                 backgroundColor: 'rgb(0,255,64)',
@@ -300,14 +311,22 @@ function showTimeSeries(x, y) {
             },
         ],
     };
-    let latitude = 49.5 - (y * 1.375) - .6875;
-    let longitude = -124.5 + (x * 8 / 7) + ((8 / 7) / 2);
+    let latitude = 0;
+    let longitude = 0;
+
+    if(res === 'high') {
+        latitude = 49.5 - (y * 16.5 / 67) - ((16.5 / 67) / 2);
+        longitude = -124.5 + (x * 8 / 37) + ((8 / 37) / 2);
+    } else {
+        latitude = 49.5 - (y * 16.5 / 12) - .6875;
+        longitude = -124.5 + (x * 8 / 7) + ((8 / 7) / 2);
+    }
     chartConfig = {
         type: chartType,
         data: chartData,
         options: {
             animation: {
-              duration: 0
+                duration: 0
             },
             chartArea: {
                 backgroundColor: 'rgba(255, 255, 255, 1)'
@@ -341,7 +360,7 @@ function showTimeSeries(x, y) {
             scales: {
                 y: {
                     grid: {
-                      color: '#40444b'
+                        color: '#40444b'
                     },
                     beginAtZero: true,
                     max: 100,
@@ -403,7 +422,7 @@ function showTimeSeries(x, y) {
 
         const dataX = timeSeriesCanvas2.scales.x.getValueForPixel(canvasPosition.x);
         const dataY = timeSeriesCanvas2.scales.y.getValueForPixel(canvasPosition.y);
-        setDay(dataX + 1); // change this to not refresh chart
+        setDay(dataX + 1);
     }
 }
 
@@ -412,11 +431,10 @@ function updateCanvas(x, y) {
     let ctx = canvas.getContext('2d');
     let xStep = 0;
     let yStep = 0;
-    if(currentResolution === 'low') {
-        xStep = canvas.width / 7;
-        yStep = canvas.height / 12;
+    if(currentResolution === 'high') {
+        xStep = canvas.width / 37;
+        yStep = canvas.height / 67;
     } else {
-        let TODO = 'true';
         xStep = canvas.width / 7;
         yStep = canvas.height / 12;
     }
@@ -440,18 +458,35 @@ function updateCanvas(x, y) {
     ctx.stroke();
 }
 
-function updateValueBox(x, y) {
-    clickedCoordinates = [x, y];
+function updateValueBox(x, y, res) {
+    try {
+        clickedCoordinates = [x, y];
+        let exceedanceValue = document.getElementById('exceedance-id');
+        let coordinates = document.getElementById('coordinate-id');
+        try {
+            exceedanceValue.innerHTML = mapArray[y][x] < 0 ? '--' : (100 * mapArray[y][x]).toFixed(0) + '%';
+        } catch(e) {}
 
-    let exceedanceValue = document.getElementById('exceedance-id');
-    let coordinates = document.getElementById('coordinate-id');
-    exceedanceValue.innerHTML = mapArray[y][x] < 0 ? '--' : (100 * mapArray[y][x]).toFixed(0) + '%';
-    let latitude = 49.5 - (y * 1.375) - .6875;
-    let longitude = -124.5 + (x * 8 / 7) + ((8 / 7) / 2);
-    coordinates.innerHTML = `(${latitude.toFixed(2)}, ${longitude.toFixed(2)})`;
+        let latitude = 0;
+        let longitude = 0;
 
-    let thresholdValue = document.getElementById('threshold-value-id');
-    thresholdValue.innerHTML = csvCache[currentSigma * 2][y][x] < 0 ? '--' : csvCache[currentSigma * 2][y][x];
+        if(res === 'high') {
+            latitude = 49.5 - (y * 16.5 / 67) - ((16.5 / 67) / 2);
+            longitude = -124.5 + (x * 8 / 37) + ((8 / 37) / 2);
+        } else {
+            latitude = 49.5 - (y * 16.5 / 12) - .6875;
+            longitude = -124.5 + (x * 8 / 7) + ((8 / 7) / 2);
+        }
+
+        coordinates.innerHTML = `(${latitude.toFixed(2)}, ${longitude.toFixed(2)})`;
+
+        let thresholdValue = document.getElementById('threshold-value-id');
+        thresholdValue.innerHTML = csvCache[(currentSigma * 2) + resolutionOffset()][y][x] < 0 ? '--' : csvCache[(currentSigma * 2) + resolutionOffset()][y][x];
+    } catch(e) {}
+}
+
+function resolutionOffset() {
+    return currentResolution === 'high' ? 5 : 0;
 }
 
 function loadAllCSVFiles(_callback) {
@@ -625,15 +660,15 @@ function readCSV() {
             file: param.prefix + getModelPrefix() + fitVotePrefix(date) + date + '_',
             suffix: param.suffix
         };
-        log(csvParam.file);
         updateDayLabel(date);
         $.get(window.location.href + 'aws2', csvParam, function(data) {
             allCSVArray = data;
-            let offset = 10 * (currentSigma * 2);
+            let offset = (10 * (currentSigma * 2)) + (forecastDayIndex - 1);
             mapArray = data[offset];
             loadAllCSVFiles(function() {
+                updateDay(0, false, false);
                 createGrid();
-                showTimeSeries(savedX, savedY);
+                showTimeSeries(savedX, savedY, currentResolution);
             });
         });
     });
@@ -642,28 +677,43 @@ function readCSV() {
 function createGrid() {
     let image = document.getElementById('forecast-image');
     let mapSpan = document.getElementById('interactive-map-id');
-
     let width = image.width;
     let height = image.height;
 
-    let x = width / 7;
-    let y = height / 12;
+    let x = width;
+    let y = height;
+    let xSteps = 0;
+    let ySteps = 0;
+
+    if(currentResolution === 'high') {
+        x = x / 37;
+        y = y / 67;
+
+        xSteps = 37;
+        ySteps = 67;
+    } else {
+        x = x / 7;
+        y = y / 12;
+
+        xSteps = 7;
+        ySteps = 12;
+    }
 
     x *= xRatio;
-    y *= yRatio;
+    y *= currentResolution === 'high' ? yRatioHigh : yRatio;
 
-    let xOffset = width * (604 / 3265);
-    let yOffset = height * (129 / 3517);
+    let xOffset = width * (810 / 4599);
+    let yOffset = currentResolution === 'high' ? height * (277 / 4768) : height * (162 / 4768);
 
     let grid = '';
 
-    for(let i = 0; i < 12; i++) {
-        for(let j = 0; j < 7; j++) {
+    for(let i = 0; i < ySteps; i++) {
+        for(let j = 0; j < xSteps; j++) {
             let x1 = xOffset + (x * j);
             let x2 = xOffset + (x * j) + x;
             let y1 = yOffset + (y * i);
             let y2 = yOffset + (y * i) + y;
-            grid += `<area shape="rect" coords="${x1}, ${y1}, ${x2}, ${y2}" alt="grid" onclick="showTimeSeries(${j}, ${i});" onmouseover="updateValueBox(${j}, ${i});">\n`;
+            grid += `<area shape="rect" coords="${x1}, ${y1}, ${x2}, ${y2}" alt="grid" onclick="showTimeSeries(${j}, ${i}, currentResolution);" onmouseover="updateValueBox(${j}, ${i}, currentResolution);">\n`;
         }
     }
     mapSpan.innerHTML = '<map name="forecast-map">\n' +
@@ -814,14 +864,13 @@ function retrieveImages() {
                     gefsCache = forecastImageCache;
                     break;
             }
-            img.src = forecastImageCache[(10 * currentSigma * 2)];
+            img.src = forecastImageCache[(10 * currentSigma * 2) + (forecastDayIndex - 1)];
             setPreviewImages(forecastImageCache);
             if(!isTodayStored) {
                 localStorage.setItem('todayData', forecastImageCache[10]);
                 isTodayStored = true;
             }
             spinner.style.display = 'none';
-            setDay(1);
         });
     });
 }
@@ -936,6 +985,7 @@ function updateTheme(isChecked) {
     let mappedValues = document.getElementById('value-table');
     let dayChange = document.getElementById('change-day');
     let chartType = document.getElementById('button-chart-type-dropdown');
+    let chartBackground = document.getElementById('time-series-chart-id-2');
 
     if (isChecked) {
         // Set Dark Theme
@@ -965,6 +1015,7 @@ function updateTheme(isChecked) {
         modelButton.style.borderColor = '#0a53be';
         previewCheckbox.style.backgroundColor = previewsEnabled ? previewCheckbox.style.backgroundColor = '#0d6efd' : previewCheckbox.style.backgroundColor = '#393939';
         mappedValues.style.backgroundColor = '#212121';
+        chartBackground.style.backgroundColor = '#212121';
 
         dayButtons.forEach((dayButtons) => {
             dayButtons.style.borderColor = "#0a53be";
@@ -1004,6 +1055,7 @@ function updateTheme(isChecked) {
         pageBody.style.color = 'black';
         previewCheckbox.style.backgroundColor = previewsEnabled ? previewCheckbox.style.backgroundColor = '#77c743' : previewCheckbox.style.backgroundColor = '#393939';
         mappedValues.style.backgroundColor = '#fff';
+        chartBackground.style.backgroundColor = '#ffffff';
 
         dayButtons.forEach((dayButtons) => {
             dayButtons.style.borderColor = "#77c743";
@@ -1121,7 +1173,7 @@ function updateImages() {
     }
 }
 
-function updateDay(delta, modifyForecast) {
+function updateDay(delta, modifyForecast, shouldUpdateImages = true) {
     let dateInitialize = document.getElementById('init');
     let forecastDateLabel = document.getElementById('main-forecast-date');
     let forecast = document.getElementById('forecast-day');
@@ -1145,7 +1197,9 @@ function updateDay(delta, modifyForecast) {
         forecastDayIndex = dayOffset;
         let offset = (10 * (currentSigma * 2)) + (forecastDayIndex - 1);
         mapArray = allCSVArray[offset];
-        updateImages();
+        if(shouldUpdateImages) {
+            updateImages();
+        }
     }
 }
 
@@ -1184,7 +1238,6 @@ function updateDate(increment) {
     }
     let newDateArr = currentDate.toDateString().split(' ');
     forecastDateLabel.textContent = `${newDateArr[1]} ${newDateArr[2]}, ${newDateArr[3]}`;
-    setDay(1);
     retrieveImages();
 }
 
@@ -1208,15 +1261,33 @@ function updateThresholdImage() {
     thresholdImage.src = newThresholdURL;
 }
 
+function emptyCaches() {
+    votingCache = [];
+    convolutionalCache = [];
+    denseCache = [];
+    ecmwfCache = [];
+    gefsCache = [];
+
+    savedX = 0;
+    savedY = 0;
+
+    cleanTimeSeries();
+}
+
 function updateResolution(quality) {
     let buttonHighRes = document.getElementById('button-high-res');
     let buttonLowRes = document.getElementById('button-low-res');
+    let offset = (10 * (currentSigma * 2)) + (forecastDayIndex - 1);
+    mapArray = csvCache[offset];
     if(quality === 'high' && currentResolution === 'low') {
         currentResolution = 'high';
         buttonHighRes.style.fontWeight = 'bold';
         buttonLowRes.style.fontWeight = 'normal';
         buttonHighRes.style.backgroundColor = dark ? '#0d6efd' : '#77c743';
         buttonLowRes.style.backgroundColor = dark ? '#212121' : '#6c757d';
+
+        emptyCaches();
+
         updateThresholdImage();
         retrieveImages();
     } else if(quality === 'low' && currentResolution === 'high') {
@@ -1225,6 +1296,9 @@ function updateResolution(quality) {
         buttonHighRes.style.fontWeight = 'normal';
         buttonLowRes.style.backgroundColor = dark ? '#0d6efd' : '#77c743';
         buttonHighRes.style.backgroundColor = dark ? '#212121' : '#6c757d';
+
+        emptyCaches();
+
         updateThresholdImage();
         retrieveImages();
     }
@@ -1362,6 +1436,7 @@ document.getElementById('theme-switch-id').addEventListener('change', function()
     localStorage.setItem('theme', this.checked);
     dark = this.checked;
     updateTheme(this.checked);
+    showTimeSeries(savedX, savedY, currentResolution);
 });
 
 // Forecast Image onClick
@@ -1383,7 +1458,6 @@ window.addEventListener('resize', function(){
 
 $( window ).on( "load", function() {
     retrieveImages();
-    loadCanvas();
 });
 
 
