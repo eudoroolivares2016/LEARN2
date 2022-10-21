@@ -64,7 +64,6 @@ let csvCache = Array(10);
 // On-Load Functionality
 window.onload = function() {
     initializePreview();
-    //updateResolution(currentResolution);
     initializeTheme();
 }
 
