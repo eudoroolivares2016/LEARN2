@@ -263,7 +263,6 @@ function showTimeSeries(x, y, res) {
             rightChart.style.display = 'block';
             break;
     }
-    // ext.style.display = 'none';
 
     let chartArrays = getChartArrays(x, y);
     const chartData = {
@@ -1191,7 +1190,6 @@ function updateDay(delta, modifyForecast, shouldUpdateImages = true) {
         currentDate2.setDate(currentDate2.getDate() + dayOffset);
         let newDateArr1 = currentDate1.toDateString().split(' ');
         let newDateArr2 = currentDate2.toDateString().split(' ');
-        //forecastDateLabel.textContent = `${newDateArr1[1]} ${newDateArr1[2]}, ${newDateArr1[3]} (12Z) - ${newDateArr2[1]} ${newDateArr2[2]}, ${newDateArr2[3]} (12Z)`;
         updateForecastSlider(dayOffset)
         forecastDayIndex = dayOffset;
         let offset = (10 * (currentSigma * 2)) + (forecastDayIndex - 1);
