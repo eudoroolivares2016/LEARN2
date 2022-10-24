@@ -820,6 +820,8 @@ function retrieveImages() {
     let spinner = document.getElementById('loading-spinner-id');
     let img = document.getElementById('forecast-image');
 
+    spinner.style.display = 'block';
+
     enableInteraction();
 
     let param = {
@@ -836,7 +838,6 @@ function retrieveImages() {
         updateDayLabel(date);
         initializeDates(date);
         img.src = 'resources/blankForecast.png';
-        spinner.style.display = 'block';
         $.get(window.location.href + 'aws', imgParam, function(data) {
             forecastImageCache = [];
             for(let i = 0; i < 50; i++) {
