@@ -19,32 +19,9 @@ app.get('/user_guide', function(req,res) {
     });
 });
 
-app.get('/test', function(req,res) {
-    fs.readFile('public/interactive_map_test.html',   function (err, data) {
-        res.setHeader('Content-Type', 'text/html');
-        res.send(data);
-    });
-});
-
 const bucket = process.env.BUCKET_NAME;
 const s3 = new AWS.S3();
-
-let imageData = Array(50);
 let csvData = [];
-
-function getImageData(params, index) {
-    return new Promise(resolve => {
-        s3.getObject(params, function(err, data) {
-            if(err) {
-                console.log('Error:', err.code);
-            } else {
-                imageData[index] = data;
-            }
-            resolve();
-        });
-    });
-}
-
 async function makePromiseSet(fileNames, functionName, start) {
     const promise0 = functionName({Bucket: bucket, Key: fileNames[start + 0]}, start + 0);
     const promise1 = functionName({Bucket: bucket, Key: fileNames[start + 1]}, start + 1);
@@ -60,18 +37,6 @@ async function makePromiseSet(fileNames, functionName, start) {
         await promise4, await promise5, await promise6,
         await promise7, await promise8, await promise9,
     ];
-}
-
-function gatherImageData(fileNames, _callback) {
-    const promise0 = Promise.resolve(makePromiseSet(fileNames, getImageData, 0));
-    const promise1 = Promise.resolve(makePromiseSet(fileNames, getImageData, 10));
-    const promise2 = Promise.resolve(makePromiseSet(fileNames, getImageData, 20));
-    const promise3 = Promise.resolve(makePromiseSet(fileNames, getImageData, 30));
-    const promise4 = Promise.resolve(makePromiseSet(fileNames, getImageData, 40));
-    Promise.all([promise0, promise1, promise2, promise3, promise4
-    ]).then((values) => {
-        _callback();
-    });
 }
 
 let imageURLS = Array(50);
@@ -163,11 +128,9 @@ function mostRecentAvailableDate(dateObject, dateOffset, prefix, suffix, _callba
     let keyName = tempPrefix + date + suffix;
     s3.headObject({Bucket: bucket, Key: keyName}, function(err, metadata) {
         if(err) {
-            // console.log('Not Found: ' + keyName);
             dateObject.setDate(dateObject.getDate() - 1);
             mostRecentAvailableDate(dateObject, dateOffset, prefix, suffix, _callback);
         } else {
-            // console.log('Found: ' + keyName);
             if(dateOffset > 0) {
                 dateObject.setDate(dateObject.getDate() - 1);
                 mostRecentAvailableDate(dateObject, dateOffset - 1, prefix, suffix, _callback);
