@@ -182,6 +182,10 @@ body {
     border: 3px solid grey;
 }
 
+#init-up {
+    display: none;
+}
+
 .loading-spinner {
     display: none;
     position: absolute;

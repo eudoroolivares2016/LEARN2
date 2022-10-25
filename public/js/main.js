@@ -904,19 +904,26 @@ function retrieveImages() {
                 isTodayStored = true;
             }
             canMoveDays = true;
+            toggleInitButtons();
             spinner.style.display = 'none';
         });
     });
 }
 
-function checkImage(url) {
-    let request = new XMLHttpRequest();
-    request.open("GET", url, true);
-    request.send();
-    request.onload = function() {
-        log(request.status === 200);
-        return request.status === 200;
+function toggleInitButtons() {
+    let btnDown = document.getElementById('init-down');
+    let btnUp = document.getElementById('init-up');
+    if(currentInitialize === 0) {
+        btnUp.style.display = 'inline';
+        btnDown.style.display = 'none';
+        return;
+    } else if(currentInitialize === INITIALIZE_HISTORY_LIMIT) {
+        btnUp.style.display = 'none';
+        btnDown.style.display = 'inline';
+        return;
     }
+    btnUp.style.display = 'inline';
+    btnDown.style.display = 'inline';
 }
 
 function setPreviewImages(cache) {
@@ -1474,7 +1481,7 @@ document.getElementById('init-down').addEventListener('click', function() {
         canMoveDays = false;
         incrementCallback(-1, function() {
             updateDate('down');
-        })
+        });
     }
 });
 
