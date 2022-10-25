@@ -201,8 +201,6 @@ function showSavedTableData() {
             thresholdValue.innerHTML = '--';
             coordinates.innerHTML = '( , )';
         }
-
-
     } catch(e) {}
 }
 
@@ -1306,6 +1304,7 @@ function updateMean(newSigma) {
         updateImages();
         updateThresholdImage();
         updateThresholdSlider();
+        showSavedTableData();
     }
 }
 
