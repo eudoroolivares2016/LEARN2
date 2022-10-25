@@ -11,12 +11,10 @@ const resolution = document.querySelectorAll('.button-resolution');
 const INITIALIZE_HISTORY_LIMIT = 5;
 
 // ratios of inner-map to full forecast and threshold images image
-const xRatio = 2010 / 4599;
-const yRatio = 3686 / 4768;
-const yRatioHigh = 3570 / 4768;
-const xRatioThreshold = 1642 / 3463;
+const xRatio = 2118 / 4599;
+const yRatio = 3685 / 4768;
+const xRatioThreshold = 1732 / 3463;
 const yRatioThreshold = 3007 / 4092;
-const yRatioHighThreshold = 2915 / 4092;
 
 const chartSettingsDark = {
     fontColor: 'white',
@@ -42,6 +40,7 @@ let dark = true;
 let fullStop = true;
 let resetGrid = false;
 let canMoveDays = true;
+let hasSelectedCoordinate = false;
 
 let timeSeriesCanvas = null;
 let timeSeriesCanvas2 = null;
@@ -67,6 +66,7 @@ let gefsCache = [];
 let mapArray = [];
 let allCSVArray = [];
 let clickedCoordinates = [];
+let savedTableData = ['--', '--', '( , )'];
 let csvCache = Array(10);
 
 // On-Load Functionality
@@ -90,17 +90,17 @@ function loadCanvas() {
     let thresholdCanvas = document.getElementById('threshold-canvas');
     let thresholdImage = document.getElementById('threshold-image');
 
-    let yHeight = currentResolution === 'high' ? 277 : 162;
-    let yHeight2 = currentResolution === 'high' ? 254 : 163;
+    let yHeight = 162;
+    let yHeight2 = 163;
 
-    let xOffset = img.width * (810 / 4599);
+    let xOffset = img.width * (704 / 4599);
     let yOffset = img.height * (yHeight / 4768);
 
-    let xOffset2 = thresholdImage.width * (791 / 3463);
+    let xOffset2 = thresholdImage.width * (707 / 3463);
     let yOffset2 = thresholdImage.height * (yHeight2 / 4092);
 
-    let useYRatio = currentResolution === 'high' ? yRatioHigh : yRatio;
-    let useYRatioThreshold = currentResolution === 'high' ? yRatioHighThreshold : yRatioThreshold;
+    let useYRatio = yRatio;
+    let useYRatioThreshold = yRatioThreshold;
 
     forecastCanvas.height = img.height * useYRatio;
     forecastCanvas.width = img.width * xRatio;
@@ -186,6 +186,26 @@ function capitalizeFirstLetter(str) {
     return str[0].toUpperCase() + str.slice(1);
 }
 
+function showSavedTableData() {
+    try {
+        let exceedanceValue = document.getElementById('exceedance-id');
+        let coordinates = document.getElementById('coordinate-id');
+        let thresholdValue = document.getElementById('threshold-value-id');
+
+        if(hasSelectedCoordinate) {
+            exceedanceValue.innerHTML = savedTableData[0];
+            thresholdValue.innerHTML = savedTableData[1];
+            coordinates.innerHTML = savedTableData[2];
+        } else {
+            exceedanceValue.innerHTML = '--';
+            thresholdValue.innerHTML = '--';
+            coordinates.innerHTML = '( , )';
+        }
+
+
+    } catch(e) {}
+}
+
 function updateChart(type, shouldStack) {
     if(!chartLoadedOnce) {
         return;
@@ -251,6 +271,25 @@ function showTimeSeries(x, y, res) {
     chartSettingsCurrent = dark ? chartSettingsDark : chartSettingsLight;
     updateCanvas(x, y);
     chartLoadedOnce = true;
+
+    let latitude = 0;
+    let longitude = 0;
+
+    if(res === 'high') {
+        latitude = 49.5 - (y * 16.5 / 67) - ((16.5 / 67) / 2);
+        longitude = -124.5 + (x * 8 / 37) + ((8 / 37) / 2);
+    } else {
+        latitude = 49.5 - (y * 16.5 / 12) - .6875;
+        longitude = -124.5 + (x * 8 / 7) + ((8 / 7) / 2);
+    }
+
+    savedTableData = [
+        mapArray[y][x] < 0 ? '--' : (100 * mapArray[y][x]).toFixed(0) + '%',
+        csvCache[(currentSigma * 2) + resolutionOffset()][y][x] < 0 ? '--' : csvCache[(currentSigma * 2) + resolutionOffset()][y][x] + ' in',
+        '(' + latitude.toFixed(2) + ', ' + longitude.toFixed(2) + ')'
+    ];
+    hasSelectedCoordinate = true;
+
     try {
         if(mapArray[y][x] < 0) {
             cleanTimeSeries();
@@ -324,16 +363,13 @@ function showTimeSeries(x, y, res) {
             },
         ],
     };
-    let latitude = 0;
-    let longitude = 0;
 
-    if(res === 'high') {
-        latitude = 49.5 - (y * 16.5 / 67) - ((16.5 / 67) / 2);
-        longitude = -124.5 + (x * 8 / 37) + ((8 / 37) / 2);
-    } else {
-        latitude = 49.5 - (y * 16.5 / 12) - .6875;
-        longitude = -124.5 + (x * 8 / 7) + ((8 / 7) / 2);
-    }
+    savedTableData = [
+        mapArray[y][x] < 0 ? '--' : (100 * mapArray[y][x]).toFixed(0) + '%',
+        csvCache[(currentSigma * 2) + resolutionOffset()][y][x] < 0 ? '--' : csvCache[(currentSigma * 2) + resolutionOffset()][y][x] + ' in',
+        '(' + latitude.toFixed(2) + ', ' + longitude.toFixed(2) + ')'
+    ];
+
     chartConfig = {
         type: chartType,
         data: chartData,
@@ -728,10 +764,10 @@ function createGrid() {
     }
 
     x *= xRatio;
-    y *= currentResolution === 'high' ? yRatioHigh : yRatio;
+    y *= yRatio;
 
-    let xOffset = width * (810 / 4599);
-    let yOffset = currentResolution === 'high' ? height * (277 / 4768) : height * (162 / 4768);
+    let xOffset = width * (704 / 4599);
+    let yOffset = height * (163 / 4768);
 
     let grid = '';
     for(let i = 0; i < ySteps; i++) {
@@ -1243,7 +1279,6 @@ function updateDay(delta, modifyForecast, shouldUpdateImages = true) {
         currentDate1.setDate(currentDate1.getDate() + dayOffset - 1);
         currentDate2.setDate(currentDate2.getDate() + dayOffset);
         updateForecastSlider(dayOffset);
-        updateDayLabel(currentLabelDate);
         forecastDayIndex = dayOffset;
         let offset = (10 * (currentSigma * 2)) + (forecastDayIndex - 1);
         mapArray = allCSVArray[offset];
@@ -1321,8 +1356,12 @@ function emptyCaches() {
     ecmwfCache = [];
     gefsCache = [];
 
+    savedTableData = [];
+
     savedX = null;
     savedY = null;
+
+    hasSelectedCoordinate = false;
 
     cleanTimeSeries();
 }
@@ -1493,11 +1532,10 @@ document.getElementById('theme-switch-id').addEventListener('change', function()
     showTimeSeries(savedX, savedY, currentResolution);
 });
 
-// Forecast Image onClick
-document.getElementById('forecast-canvas').addEventListener('click', function() {
-
-});
-
+// Forecast Image mouseOut
+// document.getElementById('forecast-map-id').addEventListener('mouseout', function() {
+//
+// });
 
 $(window).scroll(function(){
     if(isPanelLocked) {
