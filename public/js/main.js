@@ -41,6 +41,7 @@ let isPanelLocked = true;
 let dark = true;
 let fullStop = true;
 let resetGrid = false;
+let canMoveDays = true;
 
 let timeSeriesCanvas = null;
 let timeSeriesCanvas2 = null;
@@ -53,6 +54,7 @@ let currentResolution = 'high';
 let chartLocation = 'Right';
 let maxDate = '';
 let realDate = '';
+let currentLabelDate = '';
 
 let chartConfig = {};
 
@@ -821,13 +823,16 @@ function updateDayLabel(date) {
     let realDateArray = realDate.split('-');
     let realDateObject = new Date(parseInt(realDateArray[0]), underflow((parseInt(realDateArray[1]) - 1), 11), parseInt(realDateArray[2]));
     let realDateObject2 = new Date(realDateObject);
-    realDateObject2.setDate(realDateObject2.getDate() - 1);
+    realDateObject2.setDate(realDateObject2.getDate() - 1 + forecastDayIndex);
+    let realDateObject3 = new Date();
+    realDateObject3.setDate(realDateObject2.getDate() + 1);
     let dateInitialize = document.getElementById('init');
     let forecastDateLabel = document.getElementById('main-forecast-date');
     let newDateArr1 = realDateObject2.toDateString().split(' ');
     let newDateArr2 = realDateObject.toDateString().split(' ');
+    let newDateArr3 = realDateObject3.toDateString().split(' ');
     dateInitialize.textContent = `${newDateArr2[1]} ${newDateArr2[2]} ${newDateArr2[3]} (00Z)`;
-    forecastDateLabel.textContent = `${newDateArr1[1]} ${newDateArr1[2]}, ${newDateArr1[3]} (12Z) - ${newDateArr2[1]} ${newDateArr2[2]}, ${newDateArr2[3]} (12Z)`;
+    forecastDateLabel.textContent = `${newDateArr1[1]} ${newDateArr1[2]}, ${newDateArr1[3]} (12Z) - ${newDateArr3[1]} ${newDateArr3[2]}, ${newDateArr3[3]} (12Z)`;
 }
 
 function pad(n) {
@@ -863,6 +868,7 @@ function retrieveImages() {
             file: param.prefix + getModelPrefix() + fitVotePrefix(date) + date + '_',
             suffix: param.suffix
         };
+        currentLabelDate = date;
         updateDayLabel(date);
         initializeDates(date);
 
@@ -897,9 +903,20 @@ function retrieveImages() {
                 localStorage.setItem('todayData', forecastImageCache[10]);
                 isTodayStored = true;
             }
+            canMoveDays = true;
             spinner.style.display = 'none';
         });
     });
+}
+
+function checkImage(url) {
+    let request = new XMLHttpRequest();
+    request.open("GET", url, true);
+    request.send();
+    request.onload = function() {
+        log(request.status === 200);
+        return request.status === 200;
+    }
 }
 
 function setPreviewImages(cache) {
@@ -1218,7 +1235,8 @@ function updateDay(delta, modifyForecast, shouldUpdateImages = true) {
         }
         currentDate1.setDate(currentDate1.getDate() + dayOffset - 1);
         currentDate2.setDate(currentDate2.getDate() + dayOffset);
-        updateForecastSlider(dayOffset)
+        updateForecastSlider(dayOffset);
+        updateDayLabel(currentLabelDate);
         forecastDayIndex = dayOffset;
         let offset = (10 * (currentSigma * 2)) + (forecastDayIndex - 1);
         mapArray = allCSVArray[offset];
@@ -1443,7 +1461,8 @@ document.getElementById('lock-image-id').addEventListener('click', function() {
 
 // Initialize Buttons
 document.getElementById('init-up').addEventListener('click', function() {
-    if(currentInitialize < INITIALIZE_HISTORY_LIMIT) {
+    if(currentInitialize < INITIALIZE_HISTORY_LIMIT && canMoveDays) {
+        canMoveDays = false;
         incrementCallback(1, function() {
             updateDate('up');
         })
@@ -1451,7 +1470,8 @@ document.getElementById('init-up').addEventListener('click', function() {
 });
 
 document.getElementById('init-down').addEventListener('click', function() {
-    if(currentInitialize > 0) {
+    if(currentInitialize > 0 && canMoveDays) {
+        canMoveDays = false;
         incrementCallback(-1, function() {
             updateDate('down');
         })
@@ -1470,6 +1490,7 @@ document.getElementById('theme-switch-id').addEventListener('change', function()
 document.getElementById('forecast-canvas').addEventListener('click', function() {
 
 });
+
 
 $(window).scroll(function(){
     if(isPanelLocked) {

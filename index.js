@@ -55,7 +55,11 @@ function gatherCSV(csvNames, _callback) {
     let csvStreams = [];
     for(let i = 0; i < 50; i++) {
         let fileData = [];
-        csvStreams[i] = s3.getObject({Bucket: bucket, Key: csvNames[i]}).createReadStream();
+        csvStreams[i] = s3.getObject({Bucket: bucket, Key: csvNames[i]}).createReadStream().on('error', err => {
+            // console.log('error');
+        }).on('data', data => {
+            // console.log('success');
+        });
         require('fast-csv').parseStream(csvStreams[i])
             .on('data', (data) => {
                 fileData.push(data);
