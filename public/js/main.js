@@ -905,7 +905,6 @@ function retrieveImages() {
         currentLabelDate = date;
         updateDayLabel(date);
         initializeDates(date);
-
         $.get(window.location.href + 'aws', imgParam, function(data) {
             forecastImageCache = [];
             for(let i = 0; i < 50; i++) {
