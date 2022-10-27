@@ -261,6 +261,13 @@ function getFill(index) {
     }
 }
 
+function getLegendLabel(index, x ,y) {
+    let label = csvCache[index + resolutionOffset()][y][x];
+    let percentile = 50 + (index * 10);
+    label += ' (' + percentile + 'th percentile)';
+    return label;
+}
+
 const forecastLabels = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 function showTimeSeries(x, y, res) {
     if(x == null || y == null || resetGrid === true) {
@@ -320,7 +327,7 @@ function showTimeSeries(x, y, res) {
     const chartData = {
         labels: forecastLabels,
         datasets: [{
-            label: '50th Percentile',
+            label: getLegendLabel(0, x, y), // '50th Percentile',
             backgroundColor: 'rgb(0,197,255)',
             borderColor: 'rgb(0,196,255)',
             borderWidth: 1.5,
@@ -328,7 +335,7 @@ function showTimeSeries(x, y, res) {
             fill: getFill(0)
         },
             {
-                label: '60th Percentile',
+                label: getLegendLabel(1, x, y), // '60th Percentile',
                 backgroundColor: 'rgb(0,255,64)',
                 borderColor: 'rgb(0,255,64)',
                 borderWidth: 1.5,
@@ -336,7 +343,7 @@ function showTimeSeries(x, y, res) {
                 fill: getFill(1)
             },
             {
-                label: '70th Percentile',
+                label: getLegendLabel(2, x, y), // '70th Percentile',
                 backgroundColor: 'rgb(186,255,0)',
                 borderColor: 'rgb(186,255,0)',
                 borderWidth: 1.5,
@@ -344,7 +351,7 @@ function showTimeSeries(x, y, res) {
                 fill: getFill(2)
             },
             {
-                label: '80th Percentile',
+                label: getLegendLabel(3, x, y), // '80th Percentile',
                 backgroundColor: 'rgb(255,111,0)',
                 borderColor: 'rgb(255,111,0)',
                 borderWidth: 1.5,
@@ -352,7 +359,7 @@ function showTimeSeries(x, y, res) {
                 fill: getFill(3)
             },
             {
-                label: '90th Percentile',
+                label: getLegendLabel(4, x, y), // '90th Percentile',
                 backgroundColor: 'rgb(255,0,0)',
                 borderColor: 'rgb(255,0,0)',
                 borderWidth: 1.5,
@@ -728,6 +735,7 @@ function readCSV(shouldSet = false) {
                 updateDay(0, false, false);
                 createGrid();
                 showTimeSeries(savedX, savedY, currentResolution);
+                showSavedTableData();
                 if(shouldSet) {
                     resetGrid = false;
                 }
@@ -1303,7 +1311,6 @@ function updateMean(newSigma) {
         updateImages();
         updateThresholdImage();
         updateThresholdSlider();
-        showSavedTableData();
     }
 }
 
