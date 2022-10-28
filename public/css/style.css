@@ -165,7 +165,20 @@ body {
     padding: 15px;
 }
 
-#threshold-image {
+.gui-section{
+    display: flex;
+}
+.gui-info-left, .gui-section-right {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+
+.showSingle {
+    cursor: pointer;
+}
+
+#threshold-image { 
     width: 40%;
 }
 
@@ -186,6 +199,9 @@ body {
     display: none;
 }
 
+li{
+    list-style: none;
+}
 .loading-spinner {
     display: none;
     position: absolute;

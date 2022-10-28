@@ -36,63 +36,13 @@
         <a href="#" id="toTopBtn" class="cd-top text-replace js-cd-top cd-top--is-visible cd-top--fade-out" data-abc="true"></a>
         
        
-            
-                <!-- <div style="text-align: center; padding-top: 20px;">
-                <a href='/' style="width:100%"><div class="btn btn-lg btn-primary button-home" id="button-home-id">Home</div></a>
-            
-            </div> -->
+        
            
             <div class="container-fluid user-guide-title">
                 User Guide
             
             </div>
-            <!-- <div class="container-fluid user-guide-control-panel">
-                <div class="row">
-                    <div class="col-sm-3 user-guide-left">
-                        Initialization:
-                    </div>
-                    <div class="col-sm-9 user-guide-right">
-                        The initialization date determines the date on which the forecast model was run. (i.e. 2022 Sept 15 (00Z) means the forecast was generated on that date at 00:00 GMT)
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-sm-3 user-guide-left">
-                        Forecast Day:
-                    </div>
-                    <div class="col-sm-9 user-guide-right">
-                        The initialization date determines the date on which the forecast model was run. (i.e. 2022 Sept 15 (00Z) means the forecast was generated on that date at 00:00 GMT)
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-sm-3 user-guide-left">
-                        Model:
-                    </div>
-                    <div class="col-sm-9 user-guide-right">
-                        The Model options can be selected to change the algorithm used for calculating the Forecasts (Voting, Convolutional, Dense, ECMWF GEFS).
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-sm-3 user-guide-left">
-                        Threshold:
-                    </div>
-                    <div class="col-sm-9 user-guide-right">
-                        TBD
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-sm-3 user-guide-left">
-                        Resolution:
-                    </div>
-                    <div class="col-sm-9 user-guide-right">
-                        The Resolution option determines the granularity of the Forecast and Daily Rainfall Threshold maps.
-                    </div>
-                </div>
-                <br>
-            </div> -->
+           
 <div class="container-fluid user-guide-control-panel">
             <div class="row user-guide-content">
               
@@ -104,13 +54,7 @@
                         <li><a class='content-links' href='#purpose'>Purpose</a></li>
                         <li><a class='content-links' href='#intended-audience'>Intended Audience</a></li>
                         <li><a class='content-links' href='#scope'>Scope</a></li>
-                        <li>
-                            <ul style="list-style: none;"><b>Learn2 Functional Guide</b>
-                            <li><i>i.</i> Overall Systems Architecture Description</li>
-                            <li><i>ii.</i> Using Graphical User Interface (GUI)</li>
-                        <li><i>iii.</i> Interacting with the Control Panel</li>
-                        </ul>
-                        </li>
+                        <li><a class='content-links' href='#functional-guide'>Learn2 Functional Guide</a></li>
                         <li><a class='content-links' href='#troubleshooting'>Troubleshooting</a></li>
                         <li><a class='content-links' href='#faq'>FAQ</a></li>
                         
@@ -203,23 +147,180 @@
             
             <br>
             <br>
-            <h2 id="architecture">Overall Systems Architecture</h2>
-            <hr>
+            <h2 id="functional-guide">Learn2 functional guide</h2>
+           <hr>
             <img src="/resources/Systems-arch-description.png">
 
             <br>
+            <p>The sections below describe 13 features of the LEARN2 GUI and how to interact with them to access the desired extreme precipitation forecast information.</p>
             <br>
-            <h2 id="gui">Using the Graphical Interface</h2>
+       <div class="gui-section">
+           <div class="gui-info-left">
+          <div class="showSingle content-links" target="1"><em>i. </em>Learn2 URL</div>
+          <div class="showSingle content-links" target="2"><em>ii. </em>Version Identifier</div>
+          <div class="showSingle content-links" target="3"><em>iii. </em>Definition Bar</div>
+          <div class="showSingle content-links" target="4"><em>iv. </em>Extreme precipitation forecast panel</div>
+          <div class="showSingle content-links" target="5"><em>v. </em>Daily Rainfall threshold panel</div>
+          <div class="showSingle content-links" target="6"><em>vi. </em>User's guide button</div>
+          <div class="showSingle content-links" target="7"><em>vii. </em>Comment button</div>
+          </div>
+          <div class="gui-info-right">
+          <div class="showSingle content-links" target="8"><em>viii. </em>Light/Dark switch</div>
+          <div class="showSingle content-links" target="9"><em>ix. </em>Time series panel</div>
+          <div class="showSingle content-links" target="10"><em>x. </em>Likelihood of exceedance table</div>
+          <div class="showSingle content-links" target="11"><em>xi. </em>Control Panel</div>
+          <div class="showSingle content-links" target="12"><em>xii. </em>Forecast day panel</div>
+          <div class="showSingle content-links" target="13"><em>xiii. </em>Cursor utilization</div>
+          </div>
+           
+       </div>
+       <hr>
+       <section class="cnt">
+        <div id="GI-1" class="targetDiv">
+            <h2>Learn2 URL</h2>
             <hr>
-            <img src="/resources/gui.png">
+            The LEARN2 extreme precipitation forecast tool is accessible at 
+            <a href='http://learn2.innovim.com/'>https://learn2.innovim.com/</a></div>
 
-            <br>
-            <br>
-            <h2 id="control-panel">Control Panel</h2>
-            <hr>
-            <img src="/resources/control-panel.png">
+            <div id="GI-2" class="targetDiv">
+                <h2>Version Identifier</h2>
+                <hr>
+                <img src="/resources/version-identifier.png">
+                <p>The version of the tool is identified here (not yet implemented; 
+                the current version is V1.0)</p>
+            </div>
 
+            <div id="GI-3" class="targetDiv">
+                <h2>Definition bar</h2>
+                <hr>
+                <img src="/resources/definition-bar.png">
+                <p>Defines the LEARN2 acronym and displays the LEARN2 logo</p>
+            </div>
+        
+            <div id="GI-4" class="targetDiv">
+                <h2>Extreme precipitation forecast panel</h2>
+                <hr>
+                <img src="/resources/extreme-precipitation-forecast-panel.png">
+                <p>This panel provides the likelihood that the 24-hour predicted precipitation across
+                     the grid will exceed the threshold set in the Control Panel. This panel is the 
+                     primary output of the LEARN2 tool. The forecast domain covers the entirety of 
+                     Washington and Oregon, the majority of California (except for a portion of the 
+                     southwest desert region (i.e., Mojave, Death Valley), and the western edge of Idaho. 
+                     Training of the LEARN2 tool included the entirety of the forecast domain. The display
+                     is a colorized map of 24-hour (12Z- 12Z) cumulative precipitation centered on 00Z of 
+                     the month, day, and year displayed. Other than latitude and longitude, the colors in 
+                     the display are mapped to seven (7) adjectival descriptors of the likelihood that the 
+                     cumulative precipitation will exceed the specified threshold. Note that this panel is 
+                     interactive with the cursor—a mouse click will enable the Time Series Panel (described in part xiii.)</p>
+            </div>
 
+            <div id="GI-5" class="targetDiv">
+                <h2>Daily rainfall threshold panel</h2>
+                <hr>
+                <img src="/resources/daily-rainfall-threshold-panel.png">
+                <p>Because of the spatial variability in climatological rainfall, the implication of cumulative
+                     precipitation exceeding a given threshold varies spatially. These values are based upon the
+                      PRISM (Parameter- elevation Relationships on Independent Slopes Model) dataset developed by 
+                      PRISM Climate Group researchers as documented <a href=' https://prism.oregonstate.edu/documents/' target="_blank">here.</a> 
+                      We computed the historical average 24-hour cumulative precipitation (inches) for the six months
+                       containing the majority of the west coast rainy season (October-March). For every point in the 
+                       grid, days when there was no measured/assessed precipitation were not included in the averages. 
+                       Therefore, these values are the average climatological values for rainy days only. This panel is
+                        an essential reference for interpreting the quantitative implications of the exceedance 
+                        likelihoods. The specific PRISM threshold percentile (as set in the Control Panel) is displayed
+                         at the top of the panel. As an example, for Initialization at 00Z on October 26, 2022, selection
+                          of Day 5 would display cumulative Extreme Precipitation Forecast information for the 24-hour
+                           period Oct 30, 2022 (12Z) - Oct 31, 2022 (12Z) in the Extreme Precipitation Forecast Panel.</p>
+            </div>
+
+            <div id="GI-6" class="targetDiv">
+                <h2>User's guide button</h2>
+                <hr>
+                <img src="/resources/users-guide-button.png">
+                <p>This button enables access to the User’s Guide.</p>
+            </div>
+
+            <div id="GI-7" class="targetDiv">
+                <h2>Comment button</h2>
+                <hr>
+                <img src="/resources/comment-button.png">
+                <p>This button enables users to quickly note comments that will enable improvements of the tool in a subsequent version.</p>
+            </div>
+
+            <div id="GI-8" class="targetDiv">
+                <h2>Light/Dark Switch</h2>
+                <hr>
+                <img src="/resources/light-dark-switch.png">
+                <p>This switch determines the background color of the user interface and can be set based 
+                    upon user preferences and the ambient background lighting.</p>
+            </div>
+
+            <div id="GI-9" class="targetDiv">
+                <h2>Time series panel</h2>
+                <hr>
+                <img src="/resources/time-series-panel.png">
+                <p>Once the user selects a point on the Extreme Precipitation Forecast Panel, 
+                    this panel displays all five (5) time series of percentile threshold exceedance 
+                    likelihoods (50%ile, 60%ile, 70%ile. 80%ile, and 90%ile) for all ten (10) forecast
+                     days. For the grid element that was selected on the Extreme Precipitation Forecast Panel, 
+                     the colors of each time series relate to the cumulative precipitation threshold values (inches) 
+                     which are enumerated immediately above. Note that a mouse click to a particular forecast day within 
+                     this Time Series Panel will correspondingly change the day displayed in the Extreme Precipitation
+                      Forecast Panel.</p>
+            </div>
+
+            <div id="GI-10" class="targetDiv">
+                <h2>Likelihood of exceedance table</h2>
+                <hr>
+                <img src="/resources/likelihood-of-exceedance-table.png">
+                <p>This table contains three pieces of information: (1) the numerical (%) likelihood of exceedance; 
+                    (2) the corresponding threshold value (inches); and (3) the latitude and longitude of the center
+                     of the grid element selected. This table is active only when a grid point has been selected by 
+                     the user by a mouse click on the Extreme Precipitation Forecast Panel.</p>
+            </div>
+
+            <div id="GI-11" class="targetDiv">
+
+                <h2>Control panel</h2>
+                <hr>
+                <img src="/resources/control-panel.png">
+                <p>This panel enables the user to select across four (4) different attributes of the LEARN2
+                     forecast tool: (1) Initialization ̶ this widget allows the user to switch between the most 
+                     recent NWP model 00Z initiatlization as well as four (4) previous 00Z initializations to examine
+                      how the forecasts are changing with time and more-or-less-recent information and their stability;
+                       (2) Threshold ̶ this widget enables the use to select which 24-hour cumulative precipitation 
+                       percentile threshold exceedance likelihoods (50%ile, 60%ile, 70%ile. 80%ile, and 90%ile) to 
+                       consider; (3) Model ̶ while the primary output of the LEARN2 tool is the Voting model, this 
+                       widget permits the user to consider each of the four input models: the Convolutional model, 
+                       the Dense Network model, the operational ECMWF medium-range forecast model, and the operational
+                        NWS/NCEP GEFSv12 model ; and (4) Resolution ̶ although the trained resolution of the LEARN2 is 
+                        on a native 1.5-degree latitude/longitude grid, we are able to make use of higher-resolution data
+                         available from the NWP centers. By selecting High resolution, the display is downscaled to
+                         0.25-degree resolution. This provides considerable additional spatial information, though with 
+                         some reduction in local accuracy. Toggling between the two spatial resolutions will provide a 
+                         sense of the relative information content.</p>
+            </div>
+
+            <div id="GI-12" class="targetDiv">
+                <h2>Forecast day control panel</h2>
+                <hr>
+                <img src="/resources/forecast-day-panel.png">
+                <p>This interactive widget enables the selection of the forecasted day of interest to be displayed in the
+                     Extreme Precipitation Forecast Panel. The LEARN2 tool is operable for forecasts in the range of 1-10
+                      days in advance of the date and time of initialization (as displayed in the Control Panel) of the
+                       pair of Numerical Weather Prediction (NWP) models used in this application.</p>
+            </div>
+
+            <div id="GI-13" class="targetDiv">
+                <h2>Cursor utilization</h2>
+                <hr>
+                <img src="/resources/cursor-utilization.png">
+                <p>When hovering over the Extreme Precipitation Forecast Panel, a mouse click will select a grid
+                     square of interest. The time series of predicted exceedance likelihoods for that grid element will
+                      display in the Time Series Panel for all ten (10) forecast days and all five (5) available 
+                      percentiles (50%ile to 90%ile).</p>
+            </div>
+      </section>
             <br>
             <br>
             <h2 id="troubleshooting">Troubleshooting</h2>
@@ -242,7 +343,8 @@
             With each forward pass through the network, input data is used to make a prediction of rainfall exceedance at the output
             layer of the network. As the data passes through the network, weights within the network as well as biased “activation
             functions” determine the result at the output layer. This prediction is then compared to a ground truth provided by the
-            <a class='content-links' href='https://prism.oregonstate.edu/' target='_blank'>PRISM</a> dataset. The success or failure of the predictions informs the way in which the weights and biases within the
+            <a class='content-links' href='https://prism.oregonstate.edu/' target='_blank'>PRISM</a> dataset. The success or failure of 
+            the predictions informs the way in which the weights and biases within the
             network are adjusted on the subsequent backwards pass through the network. The process then repeats until the process is
             terminated by a stopping condition (e.g., a fixed number of forward/backward passes have been made or evidence of
             overfitting begins to appear).</p>
@@ -343,9 +445,98 @@
             <p>At the heart of the efficacy of the LEARN2 system are the input parameters to the neural networks. In the Phase-I
             system, these inputs were chosen according to controlled information exclusion experiments to determine the candidate
             reanalysis products for optimum neural network performance. However, in Phase-II, the state space for such explorations
-            has grown much larger. In addition to</p>
+            has grown much larger.</p>
+            <p> In addition to reanalysis products from the GEFS, we have added those products from the ECMWF.
+             Since any combination of products is viable, doubling the number of products more than squares the number of input combinations.
+            Additionally, we have increased the domain of those products to encompass nearly the entirety of the Pacific Ocean north of the equator. 
+            This has two effects: (1) it is likely that only subsets of the domain are more effective as inputs to the neural network, 
+            and (2) the neural networks described previously are much larger, requiring more resources to train. Subsetting the domain 
+            further increases the number of viable inputs, since each subset is now a possible independent input. The increase in size, meanwhile, 
+            ensures that each training/testing pass takes significantly more resources (e.g., time, memory, etc.) to compute.</p>
 
-            <p>TBD</p>
+            <p>In effect, the possible parameters as input to the neural networks are no longer feasible to explore through exhaustive search. 
+            To this end, this portion of Phase-II has introduced the use of a genetic algorithm to explore the space of possible inputs to the neural network.</p>
+           <p>Genetic algorithms are inspired by the biological process of evolution. In our algorithm, a given selection of inputs constitutes an “individual.” 
+            A group of individuals constitute a “population.” In each “generation,” the best performing individuals (i.e., the inputs resulting in the best performing neural network) 
+            in the population are determined. The highest performers move into the next population along with newly generated individuals created using the high performers as a template 
+            but with slight modifications (termed “mutations”). In this way, the genetic algorithm can explore the entirety of the input space randomly, focusing attention on segments 
+            of the space that perform the most effectively. The algorithm is presented in more detail below.
+            </p>
+<br>
+
+<h3><b style="color:#e0f42b">What is a “Gene”?</b></h3>
+
+            <p>An individual in our genetic algorithm is composed of a set of “genes.” 
+                We have empirically determined that eight genes is an optimal number of genes from a performance/efficiency standpoint. 
+                These eight genes come in two types, seven “product genes” and one “teleconnection gene.”
+                 Any one of these genes may also be turned “off,” meaning it is not selected. Thus, the number of inputs 
+              to a given neural network may range from one to eight (inclusive).</p>
+
+            <br>
+            <h3><b style="color:#e0f42b">What is a “Product Gene”?</b></h3>
+
+            <p>A product gene determines which products from the ECMWF or GEFS to use as inputs to the neural network. 
+                There are two subcomponents of a product gene: the “box” and the “source.” The box constitutes the area
+                 of the earth over which the product values are used and the resolution of the product in question. 
+                 The northwest corner of the box is no further north than 60N and no further west than 100E. 
+                 The southeast corner of the box in no further south than 15S and no further east than 110W. Resolution may be
+                  one of 1.5, 3, or 4.5. The source is composed of the data source (GEFS, ECMWF, or None), a selection of product
+                   types to be used, and a lookahead. The possible product types are 24-hour cumulative rain, 
+                   temperature, IVT, convergence, vorticity, geopotential height, or none. For a dense network, 
+                   only a single product type can be selected and both the mean and standard deviation are used. 
+                   For a convolutional network, up to three products may be convolved together from the same source. 
+                   If more than one product is used, the means are convolved. A single product results in convolving
+                    the mean with the standard deviation. Lookahead is an integer from one to fourteen.</p>
+                    <br>
+                    <h3><b style="color:#e0f42b">What is a “Teleconnection Gene”?</b></h3>
+                    <p>A teleconnection gene determines which teleconnection to add to the network. 
+                        There is a single subcomponent, “name.” The name can be one of PNA, AO, NAO, QBO, Nino, none.
+                         There is no difference in how teleconnections are inserted into a neural network, regardless of
+                          network type.</p>
+                          <br>
+                          <h3><b style="color:#e0f42b">How does "Population Creation" work?</b></h3>
+                          <p>The initial population is composed of individuals with randomly selected genes. 
+                            Subsequently, the top two performing individuals in a population move unchanged into 
+                            the next generation. The remainder of the generation consists of “offspring” of the
+                             top two individuals. These offspring are created through a process of genetic crossover
+                              and mutation. When using the genetic algorithm to optimize the dense network, we create
+                               20 individuals per generation. The convolutional network is a more resource intensive 
+                               network and our system can only support 12 individuals per generation. We run the algorithm
+                                over 8 generations, finding this this be an acceptable tradeoff between performance and 
+                                resource utilization.</p>
+
+                                <br>
+                                <h3><b style="color:#e0f42b">How does "Crossover" work?</b></h3>
+                                <p>We adopt a uniform crossover strategy as the first step of genetic recombination.
+                                     When creating a new individual for the generation, we traverse the set of genes of
+                                      the two parents. For each subcomponent of the new individual, we select one of the
+                                       two parents to be the donor parent, using an equal probability for each parent. 
+                                       Thus, the new individual is a uniform mixture of the subcomponents of the genes 
+                                       of the parents.</p>
+
+                                       <br>
+                                       <h3><b style="color:#e0f42b">How does "Mutation" work?</b></h3>
+
+                                       <p>Once the selection of donor genes is achieved, the individual undergoes a mutation
+                                         process to further explore the input space. In the mutation process, each gene has a 10% chance
+                                          of undergoing a mutation. When a gene is selected for mutation, a random selection of the properties
+                                           of that gene are perturbed in a random way. The following properties are randomly reselected from the 
+                                           set of available values for the property: resolution, data source, product type, teleconnection name. 
+                                           The northeast and southwest corners may be shifted by up to 10 degrees in any direction (subject to 
+                                           remaining withing the greater bounding box). The lookahead may shift forward or backwards by up to 
+                                           three days (subject to remaining within the acceptable range). Note that during the process of mutation,
+                                            genes that had previously been turned “off” (by selecting none as a data source or product type) may be
+                                             turned “on” or vice versa.  </p>
+
+                                             <br>
+                                             <h3><b style="color:#e0f42b">What is the "Fitness Function"?</b></h3>
+                                             <p>Selecting which individuals perform “best” in our genetic algorithm requires 
+                                                us to define a fitness function. An individual that scores higher on our fitness 
+                                                function it more likely to have its genes used in the creation of the next generation.
+                                                 Our objective is to produce neural networks with the best possible F¬1-score. 
+                                                 Thus, the fitness function we have selected is the average F1-score of 16 neural networks.
+                                                  Each network uses inputs as defined by the genes of the individual and is trained on a random
+                                                   80% of our available data. The F1-score is calculated on the remaining 20%.</p>
             <!-- End User Guide -->
          </div>
        
@@ -357,6 +548,21 @@
         <div style="padding-bottom: 50%;"></div>
     </div>
     <script src="js/bootstrap.bundle.js"></script>
-    
+    <script>
+       jQuery(document).ready(function(){
+    $(".targetDiv").hide();
+});
+
+
+jQuery(function(){
+  
+   
+   jQuery('.showSingle').click(function(){
+      jQuery('.targetDiv').hide('.cnt');
+      jQuery('#GI-'+$(this).attr('target')).slideToggle();
+
+   }); 
+});
+          </script>
 </body>
 </html>
