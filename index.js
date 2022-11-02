@@ -2,7 +2,10 @@ require('dotenv').config();
 const fs = require('fs');
 const express = require('express');
 const app = express();
+const http = require('http');
+const https = require('https');
 const AWS = require('aws-sdk');
+const nodemailer = require('nodemailer');
 
 app.use(express.static('public/'));
 
@@ -161,6 +164,42 @@ app.get('/aws3', async (req, res) => {
     });
 });
 
+let transporter = nodemailer.createTransport({
+    service: 'Outlook365',
+    host: 'smtp.office365.com',
+    // port: '587',
+    tls: {
+        ciphers: "SSLv3",
+        rejectUnauthorized: false,
+    },
+    auth: {
+        user: process.env.EMAIL_USERNAME,
+        pass: process.env.EMAIL_PASSWORD
+    }
+});
+
+app.get('/feedback', async (req, res) => {
+    let emailText = req.query.text;
+
+    let mailOptions = {
+        from: 'learn2.feedback@outlook.com',
+        to: 'pesallandrew@gmail.com',
+        subject: 'LEARN2 Feedback Submission',
+        text: emailText
+    };
+
+    transporter.sendMail(mailOptions, (error, info) =>{
+        if(error) {
+            console.log(error);
+            res.sendStatus(401);
+        }
+        else {
+            // console.log(info);
+            res.sendStatus(200);
+        }
+    });
+});
+
 app.get('/aws', async (req, res) => {
     let rootName = req.query.file;
     let fileNames = [];
@@ -193,6 +232,30 @@ app.get('/aws', async (req, res) => {
     });
 });
 
-app.listen(8080,()=>{
-    console.log('Web Server running on port', 8080);
-});
+const args = process.argv;
+if(args[2] !== 'https') {
+    app.listen(8080,()=>{
+        console.log('Web Server running on port', 8080);
+    });
+} else {
+    const privateKey = fs.readFileSync('/etc/letsencrypt/live/learn2.innovim.com/privkey.pem', 'utf8');
+    const certificate = fs.readFileSync('/etc/letsencrypt/live/learn2.innovim.com/cert.pem', 'utf8');
+    const ca = fs.readFileSync('/etc/letsencrypt/live/learn2.innovim.com/chain.pem', 'utf8');
+
+    const credentials = {
+        key: privateKey,
+        cert: certificate,
+        ca: ca
+    }
+
+    const httpPort = 80
+    const httpsPort = 443
+    const httpsServer = https.createServer(credentials, app);
+    const httpServer = http.createServer(app);
+    httpServer.listen(httpPort, () => {
+        console.log("HTTP Server running on port", httpPort);
+    });
+    httpsServer.listen(httpsPort, () => {
+        console.log("HTTPS Server running on port", httpsPort);
+    });
+}

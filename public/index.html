@@ -30,7 +30,7 @@
       <img src="resources/logo.png" class="img-fluid" style="width: 200px" alt="Responsive image">
       LEARN&sup2;
       </div>
-      <h3 class="learn2">Landfalling Event Atmospheric River Neural Network</h3>
+      <h3 class="learn2">Landfalling Event Atmospheric River Neural Network - Extreme Precipitation Tool</h3>
     </div>
     <div class="container-fluid">
       <div class="row centered-text">
@@ -39,7 +39,7 @@
             <div class="row">
               <div class="col-sm-7">
                 <div style="padding-bottom: 2%;" id="main-forecast-label">
-                  Extreme Precipitation Forecast
+                  Likelihood of Threshold Exceedance
                   <div id="main-forecast-date">
                     Jan 01, 2001
                   </div>
@@ -86,15 +86,32 @@
               <div class="control-panel control-panel-settings-2" id="change-day">
                 <div class="container-fluid control-panel-settings">
                   <div class="row">
-                    <div class="col-sm-5 extension padding-main control-panel-label">
-                      Forecast Day:
+                    <div class="container-fluid">
+                      <div class="row" style="text-align: center;">
+                        <div class="col-sm-4">
+                          <div class="extension padding-main control-panel-label">
+                            Forecast Day:
+                          </div>
+                        </div>
+                        <div class="col-sm-4">
+                          <div class="extension padding-main">
+                            <button class="btn btn-secondary" id="forecast-down">&#8592;</button>
+                            <div class="btn btn-primary button-no-pointer" style="width: 50px;" id="forecast-day">1</div>
+                            <button class="btn btn-secondary" id="forecast-up">&#8594;</button>
+                          </div>
+                        </div>
+                        <div class="col-sm-4" style="text-align: right; padding-top: 1%;">
+                          <label class="scale-switch-label preview">
+                            <input id="preview-switch-id" class="theme-switch preview-switch" type="checkbox">
+                            <span class="slider round" id="preview-switch-background-id">
+                              <span class="on preview-on">Previews</span>
+                              <span class="off preview-off">Previews</span>
+                            </span>
+                          </label>
+                        </div>
+                      </div>
                     </div>
-                    <div class="col-sm-7 extension padding-main">
-                      <button class="btn btn-secondary" id="forecast-down">&#8592;</button>
-                      <button class="btn btn-primary button-no-pointer" style="width: 50px;" id="forecast-day">1</button>
-                      <button class="btn btn-secondary" id="forecast-up">&#8594;</button>
-                    </div>
-                    <div clas="container-fluid">
+                    <div class="container-fluid">
                       <div class="row">
                         <div class="day-slider-wrapper centered-text">
                           <input class="day-slider" type="range" id="day-slider-id" name="volume" min="1" max="10" step="1" value="1">
@@ -117,17 +134,6 @@
                     </div>
                   </div>
                   <div id="day-selection">
-                    <div class="row preview">
-                      <div class="col">
-                        <label class="scale-switch-label">
-                          <input id="preview-switch-id" class="theme-switch preview-switch" type="checkbox">
-                          <div class="slider round" id="preview-switch-background-id">
-                            <span class="on preview-on">Preview</span>
-                            <span class="off preview-off">Preview</span>
-                          </div>
-                        </label>
-                      </div>
-                    </div>
                     <div class="row" id="preview-thumbnails">
                       <div class="container-fluid">
                         <div class="row padding-main">
@@ -195,13 +201,121 @@
                       </div>
                     </div>
                   </div>
-
-            
                 </div>
               </div>
             </div>
-
-            <!--- <button class="btn btn-primary" style="width: 150px;" onclick="showTimeSeries(0, 0);">Test</button> --->
+            <div class="btn btn-primary button-feedback" id="button-feedback-id">Submit Feedback</div>
+            <div class="padding-main"></div>
+            <div class="container-fluid" id="feedback-section">
+              <div class="row" id="issue-section">
+                <div class="container-fluid">
+                  <div class="row">
+                    <div class="col-sm-4 feedback-left">
+                      Initialization Date:
+                    </div>
+                    <div class="col-sm-8 feedback-fields">
+                      <label>
+                        <input type="text" id="feedback-init" class="feedback-input">
+                      </label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-4 feedback-left">
+                      Threshold:
+                    </div>
+                    <div class="col-sm-8 feedback-fields">
+                      <label>
+                        <input type="text" id="feedback-threshold" class="feedback-input">
+                      </label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-4 feedback-left">
+                      Model:
+                    </div>
+                    <div class="col-sm-8 feedback-fields">
+                      <label>
+                        <input type="text" id="feedback-model" class="feedback-input">
+                      </label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-4 feedback-left">
+                      Resolution:
+                    </div>
+                    <div class="col-sm-8 feedback-fields">
+                      <label>
+                        <input type="text" id="feedback-res" class="feedback-input">
+                      </label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-4 feedback-left">
+                      Forecast Day:
+                    </div>
+                    <div class="col-sm-8 feedback-fields">
+                      <label>
+                        <input type="text" id="feedback-day" class="feedback-input">
+                      </label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-4 feedback-left" style="padding: 0 10px 10px 10px;">
+                      Issue Description:
+                    </div>
+                    <div class="col-8 feedback-fields">
+                      <label for="additional-details-box"></label>
+                      <textarea id="additional-details-box" name="feedback-box-name"></textarea>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="padding-main"></div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-4 feedback-left">
+                      <div title="Check this box if you would like to be contacted about this issue and notified when it is resolved.">
+                        Request for Contact:
+                      </div>
+                    </div>
+                    <div class="col-sm-8 feedback-fields">
+                      <div class="form-check" style="padding-top: 8px;">
+                        <input class="form-check-input" type="checkbox" value="" id="contact-checkbox" title="Check this box if you would like to be contacted about this issue and notified when it is resolved.">
+                        <label class="form-check-label" for="contact-checkbox"></label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row" style="display: none;" id="email-row">
+                    <div class="col-4 feedback-left" style="padding: 0 10px 10px 10px;">
+                      Email:
+                    </div>
+                    <div class="col-8 feedback-fields">
+                      <label for="feedback-email"></label>
+                      <input type="text" id="feedback-email" class="feedback-input">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row" id="feedback-submit-section" style="display: none;">
+                <div class="col-sm">
+                  <div class="padding-main"></div>
+                  <div class="btn btn-primary button-feedback" id="button-submit-id">Submit</div>
+                  <span class="spinner-border text-success submit-spinner" role="status" id="submit-spinner-id">
+                    <span class="sr-only"></span>
+                  </span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="padding-main"></div>
+              </div>
+              <div class="row" id="feedback-success-id" style="display: none;">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-6">
+                  Feedback has been sent!
+                </div>
+                <div class="col-sm-3"></div>
+                <div class="padding-main"></div>
+              </div>
+            </div>
           </div>
           <div id="time-series-id" style="display: none;">
             <canvas id="time-series-chart-id"></canvas>
@@ -305,7 +419,7 @@
                         <li><a class="dropdown-item" id="option-gefs">GEFS</a></li>
                       </ul>
                       <span class="spinner-border text-primary loading-spinner" id="loading-spinner-id">
-                        <span class="visually-hidden "></span>
+                        <span class="visually-hidden"></span>
                       </span>
                     </div>
                   </div>
@@ -340,6 +454,7 @@
           </div>
         </div>
       </div>
+
       <div class="extension" id="ext-id">
       </div>
     </div>

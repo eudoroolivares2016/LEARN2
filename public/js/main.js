@@ -9,10 +9,16 @@ const lightPreview = document.querySelectorAll('.preview-switch');
 const resolution = document.querySelectorAll('.button-resolution');
 
 const INITIALIZE_HISTORY_LIMIT = 5;
+const DAY_MS = 86400000;
 
 // ratios of inner-map to full forecast and threshold images image
-const xRatio = 2118 / 4599;
-const yRatio = 3685 / 4768;
+const topToImage = 162;
+const leftToImage = 810;
+const xWidth = 3910;
+const yHeight = 4768;
+
+const xRatio = 2011 / xWidth;
+const yRatio = 3686 / yHeight;
 const xRatioThreshold = 1732 / 3463;
 const yRatioThreshold = 3007 / 4092;
 
@@ -83,6 +89,96 @@ Array.prototype.min = function() {
     return Math.min.apply(null, this);
 };
 
+function submitFeedback() {
+    let feedbackType = document.getElementById('button-feedback-dropdown').innerText;
+    let initValue = document.getElementById('feedback-init').value;
+    let threshValue = document.getElementById('feedback-threshold').value;
+    let modelValue = document.getElementById('feedback-model').value;
+    let resValue = document.getElementById('feedback-res').value;
+    let dayValue = document.getElementById('feedback-day').value;
+    let requestForContact = document.getElementById('contact-checkbox').checked;
+    let requestForContactSuggestion = document.getElementById('contact-checkbox-suggestion').checked;
+    let emailValue = document.getElementById('feedback-email').value;
+    let emailSuggestionValue = document.getElementById('suggestion-email').value;
+
+    let submitSpinner = document.getElementById('submit-spinner-id');
+    submitSpinner.style.display = 'inline-block';
+
+    let description = '';
+    if(feedbackType === 'Issue') {
+        description = document.getElementById('additional-details-box').value;
+    } else {
+        description = document.getElementById('feedback-box').value;
+    }
+
+    let feedbackInfo = {};
+    if(feedbackType === 'Issue') {
+        feedbackInfo = `Type: ${feedbackType}\nInitialization Date: ${initValue}\nThreshold Value:${threshValue}\nModel: ${modelValue}\nResolution: ${resValue}\nForecast Day: ${dayValue}\nDescription: ${description}\nRequest For Contact: ${requestForContact}`;
+        if(requestForContact) {
+            feedbackInfo += '\nEmail: ' + emailValue;
+        }
+    } else {
+        feedbackInfo = `Type: ${feedbackType}\nSuggestion: ${description}\nRequest For Contact: ${requestForContactSuggestion}`;
+        if(requestForContactSuggestion) {
+            feedbackInfo += '\nEmail: ' + emailSuggestionValue;
+        }
+    }
+    let param = {
+        text: feedbackInfo
+    }
+    $.get(window.location.href + 'feedback', param, function(code) {
+        if(code === 'OK') {
+            let successText = document.getElementById('feedback-success-id');
+            successText.style.display = 'flex';
+        } else {
+            log('Failed to send feedback. Code: ' + code);
+        }
+        submitSpinner.style.display = 'none';
+    });
+}
+
+function toggleFeedback() {
+    let feedbackSection = document.getElementById('feedback-section');
+    feedbackSection.style.display = feedbackSection.style.display === 'block' ? 'none' : 'block';
+}
+
+function updateFeedbackType(type) {
+    let suggestion = document.getElementById('suggestion-section');
+    let issue = document.getElementById('issue-section');
+    let feedbackType = document.getElementById('button-feedback-dropdown');
+    let submitButton = document.getElementById('feedback-submit-section');
+
+    submitButton.style.display = 'flex';
+    feedbackType.innerText = type;
+
+    switch(type) {
+        case 'Suggestion':
+            suggestion.style.display = 'flex';
+            issue.style.display = 'none';
+            break;
+        case 'Issue':
+            suggestion.style.display = 'none';
+            issue.style.display = 'flex';
+            populateIssueBoxes();
+            break;
+    }
+}
+
+function populateIssueBoxes() {
+    let initBox = document.getElementById('feedback-init');
+    let threshBox = document.getElementById('feedback-threshold');
+    let modelBox = document.getElementById('feedback-model');
+    let resBox = document.getElementById('feedback-res');
+    let dayBox = document.getElementById('feedback-day');
+
+    initBox.value = currentLabelDate;
+    threshBox.value = sigmaToPercentile(false);
+    modelBox.value = modelType;
+    resBox.value = currentResolution === 'high' ? 'High' : 'Low';
+    dayBox.value = forecastDayIndex;
+}
+
+
 function loadCanvas() {
     let forecastCanvas = document.getElementById('forecast-canvas');
     let img = document.getElementById('forecast-image');
@@ -90,14 +186,11 @@ function loadCanvas() {
     let thresholdCanvas = document.getElementById('threshold-canvas');
     let thresholdImage = document.getElementById('threshold-image');
 
-    let yHeight = 162;
-    let yHeight2 = 163;
-
-    let xOffset = img.width * (704 / 4599);
-    let yOffset = img.height * (yHeight / 4768);
+    let xOffset = img.width * (leftToImage / xWidth);
+    let yOffset = img.height * (topToImage / yHeight);
 
     let xOffset2 = thresholdImage.width * (707 / 3463);
-    let yOffset2 = thresholdImage.height * (yHeight2 / 4092);
+    let yOffset2 = thresholdImage.height * (topToImage / 4092);
 
     let useYRatio = yRatio;
     let useYRatioThreshold = yRatioThreshold;
@@ -771,9 +864,8 @@ function createGrid() {
 
     x *= xRatio;
     y *= yRatio;
-
-    let xOffset = width * (704 / 4599);
-    let yOffset = height * (163 / 4768);
+    let xOffset = width * ((leftToImage + 20) / (xWidth + 20));
+    let yOffset = height * (topToImage / yHeight);
 
     let grid = '';
     for(let i = 0; i < ySteps; i++) {
@@ -865,9 +957,9 @@ function updateDayLabel(date) {
     let realDateArray = realDate.split('-');
     let realDateObject = new Date(parseInt(realDateArray[0]), underflow((parseInt(realDateArray[1]) - 1), 11), parseInt(realDateArray[2]));
     let realDateObject2 = new Date(realDateObject);
-    realDateObject2.setDate(realDateObject2.getDate() - 1 + forecastDayIndex);
+    realDateObject2.setTime(realDateObject2.getTime() - DAY_MS + (DAY_MS * forecastDayIndex));
     let realDateObject3 = new Date();
-    realDateObject3.setDate(realDateObject2.getDate() + 1);
+    realDateObject3.setTime(realDateObject2.getTime() + DAY_MS);
     let dateInitialize = document.getElementById('init');
     let forecastDateLabel = document.getElementById('main-forecast-date');
     let newDateArr1 = realDateObject2.toDateString().split(' ');
@@ -884,13 +976,19 @@ function pad(n) {
 function fitVotePrefix(date) {
     let dateArr = date.split('-');
     if(modelType === 'Voting') {
-        return dateArr[0] + '' + pad(dateArr[1]) + '' + pad(dateArr[2]) + '_';
+        return dateArr[0] + '' + dateArr[1] + '' + dateArr[2] + '_';
     } else {
         return '';
     }
 }
 
+function hideFeedbackSuccessText() {
+    let feedbackSuccess = document.getElementById('feedback-success-id');
+    feedbackSuccess.style.display = 'none';
+}
+
 function retrieveImages() {
+    hideFeedbackSuccessText();
     let spinner = document.getElementById('loading-spinner-id');
     let img = document.getElementById('forecast-image');
 
@@ -1040,6 +1138,8 @@ function initializeDates(date) {
 }
 
 function updatePreview(isChecked) {
+    toggleDaySelection(isChecked);
+
     previewsEnabled = isChecked;
     let previewCheckbox = document.getElementById('preview-switch-background-id');
     if(dark) {
@@ -1165,14 +1265,12 @@ function updateTheme(isChecked) {
 function setDay(day) {
     let forecast = document.getElementById('forecast-day');
     forecast.textContent = day;
-    let daySelection = document.getElementById('day-selection');
-    daySelection.style.display = 'none';
     updateDay(0, false);
 }
 
-function toggleDaySelection() {
+function toggleDaySelection(isChecked) {
     let daySelection = document.getElementById('day-selection');
-    daySelection.style.display = daySelection.style.display === 'block' ? 'none' : 'block';
+    daySelection.style.display = isChecked ? 'block' : 'none';
 }
 
 function quickUpdateFromCache(cache) {
@@ -1270,8 +1368,6 @@ function updateImages() {
 function updateDay(delta, modifyForecast, shouldUpdateImages = true) {
     let dateInitialize = document.getElementById('init');
     let forecast = document.getElementById('forecast-day');
-    let daySelection = document.getElementById('day-selection');
-    daySelection.style.display = 'none';
     let currentDateArr = dateInitialize.textContent.split(' ');
     let currentDate1 = new Date(`${currentDateArr[1]} ${currentDateArr[2]} ${currentDateArr[0]}`);
     let currentDate2 = new Date(`${currentDateArr[1]} ${currentDateArr[2]} ${currentDateArr[0]}`);
@@ -1410,28 +1506,19 @@ function updateForecastSlider(day) {
     forecastSlider.value = day;
 }
 
-// Day Selection
-document.getElementById('forecast-day').addEventListener('click', function() {
-    toggleDaySelection();
-});
-
 // Model Selection
 document.getElementById('option-dense').addEventListener('click', function() {
     updateModel('Dense');
 });
-
 document.getElementById('option-convolutional').addEventListener('click', function() {
     updateModel('Convolutional');
 });
-
 document.getElementById('option-voting').addEventListener('click', function() {
     updateModel('Voting');
 });
-
 document.getElementById('option-ecmwf').addEventListener('click', function() {
     updateModel('ECMWF');
 });
-
 document.getElementById('option-gefs').addEventListener('click', function() {
     updateModel('GEFS');
 });
@@ -1440,11 +1527,9 @@ document.getElementById('option-gefs').addEventListener('click', function() {
 document.getElementById('option-line').addEventListener('click', function() {
     updateChart('line', false);
 });
-
 document.getElementById('option-stacked').addEventListener('click', function() {
     updateChart('line', true);
 });
-
 document.getElementById('option-bar').addEventListener('click', function() {
     updateChart('bar', false);
 });
@@ -1453,11 +1538,9 @@ document.getElementById('option-bar').addEventListener('click', function() {
 document.getElementById('option-right').addEventListener('click', function() {
     setChartLocation('Right');
 });
-
 document.getElementById('option-left').addEventListener('click', function() {
     setChartLocation('Left');
 });
-
 document.getElementById('option-both').addEventListener('click', function() {
     setChartLocation('Both');
 });
@@ -1466,18 +1549,32 @@ document.getElementById('option-both').addEventListener('click', function() {
 document.getElementById('button-high-res').addEventListener('click', function() {
     updateResolution('high');
 });
-
 document.getElementById('button-low-res').addEventListener('click', function() {
     updateResolution('low');
+});
+
+// Feedback Toggle Button
+document.getElementById('button-feedback-id').addEventListener('click', function() {
+    toggleFeedback();
+    hideFeedbackSuccessText();
+});
+
+// Feedback Submit Button
+document.getElementById('button-submit-id').addEventListener('click', function() {
+    submitFeedback();
 });
 
 // Forecast Increment Buttons
 document.getElementById('forecast-up').addEventListener('click', function() {
     updateDay(1, true);
 });
-
 document.getElementById('forecast-down').addEventListener('click', function() {
     updateDay(-1, true);
+});
+
+document.getElementById('contact-checkbox').addEventListener('change', function() {
+    let emailField = document.getElementById('email-row');
+    emailField.style.display = this.checked ? 'flex' : 'none';
 });
 
 // Forecast Slider
@@ -1495,7 +1592,6 @@ document.getElementById('preview-switch-id').addEventListener('change', function
 document.getElementById('threshold-up').addEventListener('click', function() {
     updateMean(currentSigma + .5);
 });
-
 document.getElementById('threshold-down').addEventListener('click', function() {
     updateMean(currentSigma - .5);
 });
@@ -1519,7 +1615,6 @@ document.getElementById('init-up').addEventListener('click', function() {
         })
     }
 });
-
 document.getElementById('init-down').addEventListener('click', function() {
     if(currentInitialize > 0 && canMoveDays) {
         canMoveDays = false;

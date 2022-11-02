@@ -54,7 +54,7 @@
                         <li><a class='content-links' href='#purpose'>Purpose</a></li>
                         <li><a class='content-links' href='#intended-audience'>Intended Audience</a></li>
                         <li><a class='content-links' href='#scope'>Scope</a></li>
-                        <li><a class='content-links' href='#functional-guide'>Learn2 Functional Guide</a></li>
+                        <li><a class='content-links' href='#functional-guide'>Learn&sup2 Functional Guide</a></li>
                         <li><a class='content-links' href='#troubleshooting'>Troubleshooting</a></li>
                         <li><a class='content-links' href='#faq'>FAQ</a></li>
                         
@@ -75,34 +75,34 @@
                 looking for insights that might support these critical decisions and another tool in the toolbox could be particularly
                 beneficial, especially if, indeed, equivalent forecast skill is pushed out an additional 1 to 2 days.</p>
                 <br>
-            <p>The Landfalling Event Atmospheric River Neural Network (LEARN2) is a neural-network-based decision support tool that
+            <p>The Landfalling Event Atmospheric River Neural Network (LEARN&sup2) is a neural-network-based decision support tool that
             considers Numerical Weather Prediction (NWP) forecast guidance from <a class='content-links' href='https://www.noaa.gov/' target="_blank">NOAA</a>/National Centers for Environmental Prediction
             <a class='content-links' href='https://www.weather.gov/ncep/' target="_blank">(NCEP’s)</a> Global Ensemble Forecast System <a class='content-links' href='https://www.ncei.noaa.gov/products/weather-climate-models/global-ensemble-forecast' target="_blank">(GEFS)</a> and the European Center for Medium-Range Weather Forecasting Ensembles
             <a class='content-links' href='https://www.ecmwf.int/' target="_blank">(ECMWF)</a>, remotely sensed fields, and several subseasonal-to-seasonal teleconnection indices, to produce extreme rainfall
-            predictions. In LEARN2, products are run through both convolutional and fully connected neural networks and a novel
+            predictions. In LEARN&sup2, products are run through both convolutional and fully connected neural networks and a novel
             “voting” algorithm that leverages the power of ensemble forecast systems to predict whether rainfall will exceed
             thresholds of interest at discrete points in a grid for lookaheads of up to 10 days. The structure of each neural
-            network is determined for each forecast day via custom genetic algorithms to optimize LEARN2 performance.</p>
+            network is determined for each forecast day via custom genetic algorithms to optimize LEARN&sup2 performance.</p>
 <br>
             <p>Rainfall prediction is known to be a difficult problem. One difficulty is that it rains far less frequently than it
             doesn’t rain. Though performing a cube root on the rainfall begins to address this problem, it remains the case that the
             dataset is highly unbalanced. Therefore, simple metrics like accuracy of prediction can distort the reported efficacy of
-            the system. To evaluate the LEARN2 system more fairly and compare it against state-of-the-art NWP models, we use the
+            the system. To evaluate the LEARN&sup2 system more fairly and compare it against state-of-the-art NWP models, we use the
             commonly used F1-score. This score attempts to balance “recall” in which the system can correctly identify all positive
             cases with “precision” in which the system attempts to avoid “false alarms.” The neural networks are tested and trained
             on 20 years of historical data, split randomly into 80% training and 20% testing data. These splits are performed
             multiple times and the F1-score determined on each split to achieve a statistically stable average F1-score for the
             classification behavior of the neural networks.</p>
 <br>
-            <p>LEARN2 is trained on Open Data, including the operational Global Ensemble Forecast System (GEFSv12 with 5 ensemble
+            <p>LEARN&sup2 is trained on Open Data, including the operational Global Ensemble Forecast System (GEFSv12 with 5 ensemble
             members) and ECMWF’s (11 ensemble members) reforecasts spanning 2000-2019, using an Amazon Web Services machine with 48
-            CPUs, 196 GB RAM, 50Gb/s network bandwidth, and 4 NVIDIA Tesla T4 GPUs. LEARN2 is evaluated against the Parameter
+            CPUs, 196 GB RAM, 50Gb/s network bandwidth, and 4 NVIDIA Tesla T4 GPUs. LEARN&sup2 is evaluated against the Parameter
             elevation Regression on Independent Slopes Model (PRISM) gridded precipitation ground truth dataset. This project's
             results are, in fact, highly promising in delivering additional value in this most critical window. Not surprisingly,
             the development work has been particularly challenging and has required creative and exhaustive
             <br>
             exploration of the associated forecast space including a variety of input models, AI/ML tools, and model configurations.
-            Using F1-score as our primary metric, LEARN2’s overall network produces predictions that significantly outperform both
+            Using F1-score as our primary metric, LEARN&sup2’s overall network produces predictions that significantly outperform both
             the GEFS and ECMWF, delivering between one and two additional days of lead time for skillful extreme rainfall prediction
             when validated on fully independent data (see the below figures). Notably, adding the Pacific/North American (PNA),
             Arctic Oscillation (AO), North Atlantic Oscillation (NAO), and El Niño/Southern Oscillation (ENSO) teleconnection
@@ -116,17 +116,17 @@
             Research <a class='content-links' href='https://www.sbir.gov/' target='_blank'>(SBIR)</a> program.</p>
     <div class="row">
             <div class="col-md-6">  
-            <img src="resources/Userguide-example-1..png">
+            <img width='100%' src="resources/Userguide-example-1..png">
         </div>
          <div class="col-md-6">
-            <img src="resources/Userguide-example-2.png">
+            <img width='100%' src="resources/Userguide-example-2.png">
          </div>
          </div>  
          <br>
          <br>
         <h2 id="intended-audience">Intended Audience</h2>
         <hr>
-        <p>The Landfalling Event Atmospheric River Neural Network (LEARN2) forecast tool was developed to provided decision
+        <p>The Landfalling Event Atmospheric River Neural Network (LEARN&sup2) forecast tool was developed to provided decision
             makers,
             including operational meteorologists and hydrologists, with high-confidence predictions of extreme precipitation
             events,
@@ -139,7 +139,7 @@
             <br>
             <h2 id="scope">Scope</h2>
             <hr>
-            <p>This version of the Users’ Guide describes the LEARN2 tool and how to interact with it to achieve near-real-time
+            <p>This version of the Users’ Guide describes the LEARN&sup2 tool and how to interact with it to achieve near-real-time
             forecasts of potential rain events in the western United States for “look-aheads” of 1-10 days.</p>
             
             <p>It does not describe how to maintain the two neural networks and genetic algorithm that are collectively the fundamental
@@ -147,16 +147,17 @@
             
             <br>
             <br>
-            <h2 id="functional-guide">Learn2 functional guide</h2>
+            <h2 id="functional-guide">LEARN&sup2 functional guide</h2>
            <hr>
+           <div class="gui-img">
             <img src="/resources/Systems-arch-description.png">
-
+</div>
             <br>
-            <p>The sections below describe 13 features of the LEARN2 GUI and how to interact with them to access the desired extreme precipitation forecast information.</p>
+            <p>The sections below describe 13 features of the LEARN&sup2 GUI and how to interact with them to access the desired extreme precipitation forecast information.</p>
             <br>
        <div class="gui-section">
            <div class="gui-info-left">
-          <div class="showSingle content-links" target="1"><em>i. </em>Learn2 URL</div>
+          <div class="showSingle content-links" target="1"><em>i. </em>LEARN&sup2 URL</div>
           <div class="showSingle content-links" target="2"><em>ii. </em>Version Identifier</div>
           <div class="showSingle content-links" target="3"><em>iii. </em>Definition Bar</div>
           <div class="showSingle content-links" target="4"><em>iv. </em>Extreme precipitation forecast panel</div>
@@ -177,15 +178,17 @@
        <hr>
        <section class="cnt">
         <div id="GI-1" class="targetDiv">
-            <h2>Learn2 URL</h2>
+            <h2>LEARN&sup2 URL</h2>
             <hr>
-            The LEARN2 extreme precipitation forecast tool is accessible at 
-            <a href='http://learn2.innovim.com/'>https://learn2.innovim.com/</a></div>
+            The LEARN&sup2 extreme precipitation forecast tool is accessible at 
+            <a class='content-links' href='http://learn2.innovim.com/'>https://learn2.innovim.com/</a></div>
 
             <div id="GI-2" class="targetDiv">
                 <h2>Version Identifier</h2>
                 <hr>
+                <div class="gui-img">
                 <img src="/resources/version-identifier.png">
+                </div>
                 <p>The version of the tool is identified here (not yet implemented; 
                 the current version is V1.0)</p>
             </div>
@@ -193,20 +196,24 @@
             <div id="GI-3" class="targetDiv">
                 <h2>Definition bar</h2>
                 <hr>
+                <div class="gui-img">
                 <img src="/resources/definition-bar.png">
-                <p>Defines the LEARN2 acronym and displays the LEARN2 logo</p>
+                </div>
+                <p>Defines the LEARN&sup2 acronym and displays the LEARN&sup2 logo</p>
             </div>
         
             <div id="GI-4" class="targetDiv">
                 <h2>Extreme precipitation forecast panel</h2>
                 <hr>
+                <div class="gui-img">
                 <img src="/resources/extreme-precipitation-forecast-panel.png">
+                </div>
                 <p>This panel provides the likelihood that the 24-hour predicted precipitation across
                      the grid will exceed the threshold set in the Control Panel. This panel is the 
-                     primary output of the LEARN2 tool. The forecast domain covers the entirety of 
+                     primary output of the LEARN&sup2 tool. The forecast domain covers the entirety of 
                      Washington and Oregon, the majority of California (except for a portion of the 
                      southwest desert region (i.e., Mojave, Death Valley), and the western edge of Idaho. 
-                     Training of the LEARN2 tool included the entirety of the forecast domain. The display
+                     Training of the LEARN&sup2 tool included the entirety of the forecast domain. The display
                      is a colorized map of 24-hour (12Z- 12Z) cumulative precipitation centered on 00Z of 
                      the month, day, and year displayed. Other than latitude and longitude, the colors in 
                      the display are mapped to seven (7) adjectival descriptors of the likelihood that the 
@@ -217,11 +224,13 @@
             <div id="GI-5" class="targetDiv">
                 <h2>Daily rainfall threshold panel</h2>
                 <hr>
+                <div class="gui-img">
                 <img src="/resources/daily-rainfall-threshold-panel.png">
+             </div>
                 <p>Because of the spatial variability in climatological rainfall, the implication of cumulative
                      precipitation exceeding a given threshold varies spatially. These values are based upon the
                       PRISM (Parameter- elevation Relationships on Independent Slopes Model) dataset developed by 
-                      PRISM Climate Group researchers as documented <a href=' https://prism.oregonstate.edu/documents/' target="_blank">here.</a> 
+                      PRISM Climate Group researchers as documented <a class='content-links' href=' https://prism.oregonstate.edu/documents/' target="_blank">here.</a> 
                       We computed the historical average 24-hour cumulative precipitation (inches) for the six months
                        containing the majority of the west coast rainy season (October-March). For every point in the 
                        grid, days when there was no measured/assessed precipitation were not included in the averages. 
@@ -236,21 +245,27 @@
             <div id="GI-6" class="targetDiv">
                 <h2>User's guide button</h2>
                 <hr>
+                <div class="gui-img">
                 <img src="/resources/users-guide-button.png">
+                </div>
                 <p>This button enables access to the User’s Guide.</p>
             </div>
 
             <div id="GI-7" class="targetDiv">
                 <h2>Comment button</h2>
                 <hr>
+                <div class="gui-img">
                 <img src="/resources/comment-button.png">
+                </div>
                 <p>This button enables users to quickly note comments that will enable improvements of the tool in a subsequent version.</p>
             </div>
 
             <div id="GI-8" class="targetDiv">
                 <h2>Light/Dark Switch</h2>
                 <hr>
+                <div class="gui-img">
                 <img src="/resources/light-dark-switch.png">
+                </div>
                 <p>This switch determines the background color of the user interface and can be set based 
                     upon user preferences and the ambient background lighting.</p>
             </div>
@@ -258,7 +273,9 @@
             <div id="GI-9" class="targetDiv">
                 <h2>Time series panel</h2>
                 <hr>
+                <div class="gui-img">
                 <img src="/resources/time-series-panel.png">
+                </div>
                 <p>Once the user selects a point on the Extreme Precipitation Forecast Panel, 
                     this panel displays all five (5) time series of percentile threshold exceedance 
                     likelihoods (50%ile, 60%ile, 70%ile. 80%ile, and 90%ile) for all ten (10) forecast
@@ -272,7 +289,9 @@
             <div id="GI-10" class="targetDiv">
                 <h2>Likelihood of exceedance table</h2>
                 <hr>
+                <div class="gui-img">
                 <img src="/resources/likelihood-of-exceedance-table.png">
+                </div>
                 <p>This table contains three pieces of information: (1) the numerical (%) likelihood of exceedance; 
                     (2) the corresponding threshold value (inches); and (3) the latitude and longitude of the center
                      of the grid element selected. This table is active only when a grid point has been selected by 
@@ -283,17 +302,19 @@
 
                 <h2>Control panel</h2>
                 <hr>
+                <div class="gui-img">
                 <img src="/resources/control-panel.png">
-                <p>This panel enables the user to select across four (4) different attributes of the LEARN2
+                </div>
+                <p>This panel enables the user to select across four (4) different attributes of the LEARN&sup2
                      forecast tool: (1) Initialization ̶ this widget allows the user to switch between the most 
                      recent NWP model 00Z initiatlization as well as four (4) previous 00Z initializations to examine
                       how the forecasts are changing with time and more-or-less-recent information and their stability;
                        (2) Threshold ̶ this widget enables the use to select which 24-hour cumulative precipitation 
                        percentile threshold exceedance likelihoods (50%ile, 60%ile, 70%ile. 80%ile, and 90%ile) to 
-                       consider; (3) Model ̶ while the primary output of the LEARN2 tool is the Voting model, this 
+                       consider; (3) Model ̶ while the primary output of the LEARN&sup2 tool is the Voting model, this 
                        widget permits the user to consider each of the four input models: the Convolutional model, 
                        the Dense Network model, the operational ECMWF medium-range forecast model, and the operational
-                        NWS/NCEP GEFSv12 model ; and (4) Resolution ̶ although the trained resolution of the LEARN2 is 
+                        NWS/NCEP GEFSv12 model ; and (4) Resolution ̶ although the trained resolution of the LEARN&sup2 is 
                         on a native 1.5-degree latitude/longitude grid, we are able to make use of higher-resolution data
                          available from the NWP centers. By selecting High resolution, the display is downscaled to
                          0.25-degree resolution. This provides considerable additional spatial information, though with 
@@ -304,9 +325,11 @@
             <div id="GI-12" class="targetDiv">
                 <h2>Forecast day control panel</h2>
                 <hr>
+                <div class="gui-img">
                 <img src="/resources/forecast-day-panel.png">
+                </div>
                 <p>This interactive widget enables the selection of the forecasted day of interest to be displayed in the
-                     Extreme Precipitation Forecast Panel. The LEARN2 tool is operable for forecasts in the range of 1-10
+                     Extreme Precipitation Forecast Panel. The LEARN&sup2 tool is operable for forecasts in the range of 1-10
                       days in advance of the date and time of initialization (as displayed in the Control Panel) of the
                        pair of Numerical Weather Prediction (NWP) models used in this application.</p>
             </div>
@@ -314,7 +337,9 @@
             <div id="GI-13" class="targetDiv">
                 <h2>Cursor utilization</h2>
                 <hr>
+                <div class="gui-img">
                 <img src="/resources/cursor-utilization.png">
+                </div>
                 <p>When hovering over the Extreme Precipitation Forecast Panel, a mouse click will select a grid
                      square of interest. The time series of predicted exceedance likelihoods for that grid element will
                       display in the Time Series Panel for all ten (10) forecast days and all five (5) available 
@@ -326,7 +351,7 @@
             <h2 id="faq">FAQ</h2>
             <hr>
             <h3><b style="color:#e0f42b">What is the general description of this tool?</b></h3>
-            <p>Predictions made by the LEARN2 system are the result of postprocessing and recombining <a class='content-links' href='ecmwf.int' target="_blank"> ECMWF</a> forecasts, <a class='content-links' href='https://www.ncei.noaa.gov/products/weather-climate-models/global-ensemble-forecast' target='_blank'>GEFS</a> forecasts,
+            <p>Predictions made by the LEARN&sup2 system are the result of postprocessing and recombining <a class='content-links' href='ecmwf.int' target="_blank"> ECMWF</a> forecasts, <a class='content-links' href='https://www.ncei.noaa.gov/products/weather-climate-models/global-ensemble-forecast' target='_blank'>GEFS</a> forecasts,
             and subseasonal-to-seasonal teleconnection indices using a neural network specifically trained to identify rainfall
             events exceeding defined thresholds of interest. The neural network is tested and trained on 20 years of historical
             data, split randomly into 80% training and 20% testing data. These splits are performed multiple times and the F1-score
@@ -343,7 +368,7 @@
             terminated by a stopping condition (e.g., a fixed number of forward/backward passes have been made or evidence of
             overfitting begins to appear).</p>
             
-            <p>The LEARN2 system is composed of two different neural networks combined in a “voting” algorithm. All of which are
+            <p>The LEARN&sup2 system is composed of two different neural networks combined in a “voting” algorithm. All of which are
             described below.</p>
 <br>
             <h3><b style="color:#e0f42b">What are the inputs to the tool?</b></h3>
@@ -367,10 +392,10 @@
             classification problem. That is, given a particular set of inputs, we aim to discover to which of the possible classes
             does this input belong (if any). For this problem, each class is “anomalous rainfall at a specified latitude, longitude
             pair.” The ground truth is created by examining each point of interest (a regular grid of points in Washington, Oregon,
-            and California) and determining the average and standard deviation of the 24-hour rainfall (removing 0 rain days) at
-            that point. A positive case is defined as a specified number of standard deviations (σ) above the mean. LEARN2 has been
-            trained using σ values of 0, 0.5, 1, 1.5, and 2. The output of neural network for a given point will fall between 0 and
-            1. Numbers closer to 1 indicate a prediction of the positive class (i.e., the network predicts rainfall amounts will
+            and California) and determining the average (50th percentile), 60th%ile, 70th%ile, 80th%ile, and 90th%ile of the 24-hour 
+            rainfall (removing all 0 rain days) at that point. A positive case is defined as exceeding a specified percentile. LEARN&sup2 
+            has been trained using values from 50th to 90th percentile.. The output of neural network for a given point will fall 
+            between 0 and 1. Numbers closer to 1 indicate a prediction of the positive class (i.e., the network predicts rainfall amounts will
             cross the mean+ σ threshold at that point).</p>
 <br>
             <h3><b style="color:#e0f42b">What is the definition of the “F1-score”?</b></h3>
@@ -378,7 +403,7 @@
             <p>Rainfall prediction is known to be a difficult problem. One difficulty is that it rains far less than it doesn’t rain.
             Though performing a cube root on the rainfall begins to address this problem, it remains the case that the dataset is
             highly unbalanced. Therefore, simple metrics like accuracy of prediction can distort the reported efficacy of the
-            system. To evaluate the LEARN2 system more fairly and compare it against state-of-the-art weather prediction such as
+            system. To evaluate the LEARN&sup2 system more fairly and compare it against state-of-the-art weather prediction such as
             GEFS and ECMWF, we use the commonly used F1-score. This score attempts to balance “recall” in which the system can
             correctly identify all positive cases with “precision” in which the system attempts to avoid “false alarms.” Expressed
             in terms of true positives (TP), false positives (FP), and false negatives (FN), the F1-score can be computed as:
@@ -412,7 +437,7 @@
 <br>
             <h3><b style="color:#e0f42b">How does the Voting Algorithm work?</b></h3>
 
-            <p>Ultimately, LEARN2 provides a binary prediction based on a final “voting” algorithm. This algorithm has been more fully
+            <p>Ultimately, LEARN&sup2 provides a binary prediction based on a final “voting” algorithm. This algorithm has been more fully
             explored in this quarter of Phase-II. In this algorithm, the results of the Dense and Convolutional networks (described
             above) are combined with a prediction from the ECMWF ensemble model to provide a final, binary prediction of rain.
             Experiments with the GEFS model were not shown to improve the performance of this model and so are omitted from the
@@ -431,12 +456,12 @@
             recall indicates that all three system err on the side of caution, maximizing precision at the expensive of recall
             (i.e., ensuring that there are few false alarms while missing heavy rain events). In fact, selecting a likelihood
             threshold of 0.3 provides the best F1 score for each system by capture more heavy rain events at the expensive of some
-            false positives. Using 0.3 as a likelihood threshold, we have seen that the LEARN2 system outperforms the GEFS by
+            false positives. Using 0.3 as a likelihood threshold, we have seen that the LEARN&sup2 system outperforms the GEFS by
             providing 2-3 days more lead time with predictions and the ECMWF by 1-2 days.</p>
 <br>
            <a id="genetic-algorythm"> <h3><b style="color:#e0f42b">What is the Genetic Algorithm and how does it work?</b></h3></a>
 
-            <p>At the heart of the efficacy of the LEARN2 system are the input parameters to the neural networks. In the Phase-I
+            <p>At the heart of the efficacy of the LEARN&sup2 system are the input parameters to the neural networks. In the Phase-I
             system, these inputs were chosen according to controlled information exclusion experiments to determine the candidate
             reanalysis products for optimum neural network performance. However, in Phase-II, the state space for such explorations
             has grown much larger.</p>
